@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Objetos Perdidos CU1 BUAP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: barra institucional arriba; cada vista es panel + mapa en dos columnas que se apilan en el celular */
+  --bg:#f1f4f8; --surface:#ffffff; --surface-2:#f6f8fb; --ink:#0e1c2c; --muted:#56677c; --line:#d5dde7;
+  --brand:#0a3a6e; --on-brand:#ffffff;
+  --accent:#0a4a8c; --accent-soft:#e2ecf8; --on-accent:#ffffff;
+  --cyan:#0592c4;
+  --resg:#d39400; --resg-soft:#fcf1d2; --resg-ink:#664700;
+  --ok:#1b7a52; --ok-soft:#ddf2e7;
+  --pend:#5f6b7a; --pend-soft:#e9edf2;
+  --bad:#b42318; --bad-soft:#fde8e6;
+  --m-campus:#e3e9f0; --m-zone:#ffffff; --m-zone-c:#edf4e8; --m-road:#c4cfdc; --m-walk:#d3dce7; --m-plaza:#d3e6c8; --m-line:#b5c3d3; --m-ink:#1b2b3d; --m-bld:#9fb3c9; --m-bld-line:#7f97b2; --m-street:#ffffff; --m-block:#e1e8ef; --m-park:#cfd8e2; --m-field:#c5d0db; --m-water:#8cc8de;
+  --font-d:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --font-b:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-m:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --r:12px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0a131e; --surface:#111d2b; --surface-2:#162434; --ink:#e5edf5; --muted:#93a4b8; --line:#26384c;
+    --brand:#0c2643; --on-brand:#ffffff;
+    --accent:#5ea4ee; --accent-soft:#15304e; --on-accent:#06121f;
+    --cyan:#3cc0f5;
+    --resg:#f0b42a; --resg-soft:#382b0b; --resg-ink:#f6d48a;
+    --ok:#46c38c; --ok-soft:#0f3325;
+    --pend:#a3afbe; --pend-soft:#213041;
+    --bad:#ff8a80; --bad-soft:#3a1514;
+    --m-campus:#13212f; --m-zone:#1a2a3c; --m-zone-c:#192f27; --m-road:#2b3d52; --m-walk:#223347; --m-plaza:#1d3829; --m-line:#30465e; --m-ink:#dbe5ef; --m-bld:#3b5675; --m-bld-line:#4c6a8c; --m-street:#26374b; --m-block:#15243a; --m-park:#1b2c41; --m-field:#203248; --m-water:#1f5a73;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0a131e; --surface:#111d2b; --surface-2:#162434; --ink:#e5edf5; --muted:#93a4b8; --line:#26384c;
+  --brand:#0c2643; --on-brand:#ffffff;
+  --accent:#5ea4ee; --accent-soft:#15304e; --on-accent:#06121f;
+  --cyan:#3cc0f5;
+  --resg:#f0b42a; --resg-soft:#382b0b; --resg-ink:#f6d48a;
+  --ok:#46c38c; --ok-soft:#0f3325;
+  --pend:#a3afbe; --pend-soft:#213041;
+  --bad:#ff8a80; --bad-soft:#3a1514;
+  --m-campus:#13212f; --m-zone:#1a2a3c; --m-zone-c:#192f27; --m-road:#2b3d52; --m-walk:#223347; --m-plaza:#1d3829; --m-line:#30465e; --m-ink:#dbe5ef; --m-bld:#3b5675; --m-bld-line:#4c6a8c; --m-street:#26374b; --m-block:#15243a; --m-park:#1b2c41; --m-field:#203248; --m-water:#1f5a73;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.5 var(--font-b);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--font-d);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(24px,3.2vw,32px);font-weight:800;line-height:1.1}
+h2{font-size:20px;font-weight:700}
+h3{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:2px;border-radius:6px}
+.tab-num{font-variant-numeric:tabular-nums}
+
+/* ---------- header ---------- */
+.top{background:var(--brand);color:var(--on-brand)}
+.top-in{max-width:1400px;margin:0 auto;padding:14px 20px 0;display:flex;flex-direction:column;gap:12px}
+.brand{display:flex;align-items:center;gap:12px}
+.seal{font:800 13px/1 var(--font-d);letter-spacing:.08em;border:2px solid currentColor;border-radius:8px;padding:8px 8px 7px}
+.brand b{display:block;font:800 19px/1.1 var(--font-d)}
+.brand small{display:block;opacity:.78;font-size:12.5px}
+.nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin:0 -4px}
+.nav::-webkit-scrollbar{display:none}
+.nav a{color:var(--on-brand);text-decoration:none;font-weight:600;font-size:14.5px;padding:10px 14px 12px;border-radius:10px 10px 0 0;white-space:nowrap;opacity:.82;display:flex;align-items:center;gap:7px}
+.nav a:hover{opacity:1;background:rgba(255,255,255,.08)}
+.nav a[aria-current="page"]{opacity:1;background:var(--bg);color:var(--ink)}
+.nav .dot-live{width:7px;height:7px;border-radius:50%;background:#4ade80}
+
+main{max-width:1400px;margin:0 auto;padding:24px 20px 40px}
+.view{display:none}
+.view.on{display:block}
+.intro{display:flex;flex-direction:column;gap:6px;margin-bottom:18px;max-width:760px}
+.intro p{color:var(--muted);font-size:15.5px}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+label,.lbl{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+.sub{color:var(--muted);font-size:13px;font-weight:400}
+input[type=text],input[type=search],input[type=date],input[type=time],input[type=password],select,textarea{
+  width:100%;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px}
+textarea{min-height:84px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+.field{display:flex;flex-direction:column}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.err{color:var(--bad);font-size:13px;margin-top:6px;display:none}
+.err.on{display:block}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 14px;min-height:42px;font-weight:600;cursor:pointer;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.ghost{background:transparent}
+.btn.sm{min-height:34px;padding:6px 11px;font-size:13.5px}
+.btn.danger{color:var(--bad)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip-btn{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:5px 11px;font-size:13.5px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.chip-btn b{font-variant-numeric:tabular-nums;color:var(--accent)}
+.chip-btn:hover{border-color:var(--accent)}
+.chip-btn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.chip-btn[aria-pressed="true"] b{color:var(--on-accent)}
+
+.st{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.st-pend{background:var(--pend-soft);color:var(--pend)}
+.st-res{background:var(--accent-soft);color:var(--accent)}
+.st-ok{background:var(--ok-soft);color:var(--ok)}
+.st-bad{background:var(--bad-soft);color:var(--bad)}
+.folio{font:500 12px var(--font-m);color:var(--muted);letter-spacing:.02em}
+
+/* ---------- map ---------- */
+.map{position:relative;border-radius:10px;overflow:hidden;background:var(--m-campus);touch-action:manipulation}
+.map svg{display:block;width:100%;height:auto;cursor:crosshair;user-select:none;-webkit-user-select:none}
+.map.no-click svg{cursor:default}
+.m-campus{fill:var(--m-campus);stroke:var(--m-line);stroke-width:1}
+.m-bg{fill:var(--bg)}
+.m-road rect,.m-road line{fill:none;stroke:var(--m-road);stroke-width:14;stroke-linecap:round}
+.m-road .av{stroke-width:26}
+.m-road .av2{stroke-width:18}
+.m-walk line{stroke:var(--m-walk);stroke-width:7;stroke-linecap:round}
+.m-plaza{fill:var(--m-plaza);stroke:var(--m-line)}
+.zone .zs{fill:transparent;stroke:none;transition:fill-opacity .15s}
+.zone:hover .zs{fill:var(--accent);fill-opacity:.06}
+.zone.hl .zs{fill:var(--accent);fill-opacity:.10;stroke:var(--accent);stroke-width:2.5;stroke-linejoin:round}
+.zone.hl2 .zs{fill:var(--resg);fill-opacity:.16;stroke:var(--resg);stroke-width:2.5;stroke-linejoin:round}
+.m-ext{fill:none;stroke:var(--m-road);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+.m-street{fill:var(--m-street);stroke:var(--m-line);stroke-width:1}
+.m-block{fill:var(--m-block)}
+.m-park{fill:var(--m-park)}
+.m-green{fill:var(--m-plaza)}
+.m-field{fill:var(--m-field);stroke:var(--m-street);stroke-width:.8}
+.m-water{fill:var(--m-water)}
+.m-bld{fill:var(--m-bld);stroke:var(--m-bld-line);stroke-width:.6;stroke-linejoin:round}
+.road-label{font:600 7.5px var(--font-b);letter-spacing:.1em;fill:var(--muted);paint-order:stroke;stroke:var(--m-street);stroke-width:2.5px;pointer-events:none}
+.road-label.out{font-size:9.5px;stroke:var(--bg)}
+.z-labels text{fill:var(--m-ink);pointer-events:none;paint-order:stroke;stroke:var(--m-block);stroke-width:3px;stroke-linejoin:round}
+.z-code{font:800 12.5px var(--font-d);letter-spacing:.02em}
+.z-name{font:500 9px var(--font-b);fill:var(--muted) !important}
+.zone.hl .zs{stroke:var(--accent);stroke-width:3}
+.zone.hl2 .zs{stroke:var(--resg);stroke-width:3}
+.z-lbl{font:600 9.5px var(--font-b)}
+.map-label{font:600 11px var(--font-b);fill:var(--muted)}
+.scale line{stroke:var(--muted);stroke-width:2}
+.resg rect{fill:var(--resg);stroke:var(--surface);stroke-width:1.5}
+.resg path{fill:none;stroke:#1d1400;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.resg.hl rect{stroke:var(--ink);stroke-width:3}
+.resg{cursor:pointer}
+.ov-area{fill:var(--accent);fill-opacity:.10;stroke:var(--accent);stroke-width:2;stroke-dasharray:6 5}
+.ov-buf{fill:none;stroke:var(--accent);stroke-opacity:.13;stroke-linecap:round;stroke-linejoin:round}
+.ov-route{fill:none;stroke:var(--accent);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:9 6}
+.ov-vtx circle{fill:var(--accent);stroke:var(--surface);stroke-width:2}
+.ov-vtx text{fill:var(--on-accent);font:700 11px var(--font-b);text-anchor:middle;pointer-events:none}
+.dot{cursor:pointer}
+.dot .hit{fill:transparent}
+.dot .d{fill:var(--muted);stroke:var(--surface);stroke-width:2;opacity:.75}
+.dot.q .d{fill:var(--cyan);opacity:1}
+.dot.m .d{fill:var(--accent);opacity:1}
+.dot.ok .d{fill:var(--ok)}
+.dot.sel .d{stroke:var(--ink);stroke-width:3}
+.ov-link{stroke:var(--resg);stroke-width:2.5;stroke-dasharray:4 5;fill:none}
+.pin path{fill:var(--bad);stroke:var(--surface);stroke-width:2}
+.pin circle{fill:var(--surface)}
+.pin.found path{fill:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--muted);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.lg{width:12px;height:12px;border-radius:50%;display:inline-block}
+.lg.sq{border-radius:3px;background:var(--resg)}
+.lg.pin{background:var(--bad)}
+.lg.dot{background:var(--accent)}
+.lg.dotg{background:var(--muted);opacity:.75}
+.lg.line{width:18px;height:0;border-top:3px dashed var(--accent);border-radius:0}
+.map-note{font-size:12px;color:var(--muted);margin-top:6px}
+.map-scroll-hint{display:none;font-size:12px;color:var(--muted);margin-bottom:6px}
+.lg.dotc{background:var(--cyan)}
+
+/* ---------- buscar ---------- */
+.s-grid{display:grid;grid-template-columns:minmax(300px,380px) 1fr;grid-template-areas:"ctl map" "res map";gap:18px;align-items:start}
+.s-grid>*,.g-grid>*,.step-b,.r-wrap>*{min-width:0}
+.s-ctl{grid-area:ctl;display:flex;flex-direction:column;gap:16px}
+.s-map{grid-area:map;position:sticky;top:12px}
+.s-res{grid-area:res;display:flex;flex-direction:column;gap:14px}
+.searchbox{position:relative}
+.searchbox svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:2}
+.searchbox input{padding-left:38px;font-size:16px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:4px}
+.seg button{border:0;background:transparent;border-radius:7px;padding:8px 6px;font-weight:600;font-size:13.5px;cursor:pointer;color:var(--muted);min-height:38px}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--accent);box-shadow:0 1px 3px rgba(10,30,60,.15)}
+.hint{font-size:13.5px;color:var(--muted);background:var(--surface-2);border-left:3px solid var(--accent);padding:8px 10px;border-radius:0 8px 8px 0}
+.maptools{display:flex;gap:8px;flex-wrap:wrap}
+.summary{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:var(--r);padding:14px 16px}
+.summary .big{font:800 44px/1 var(--font-d);color:var(--accent);font-variant-numeric:tabular-nums;min-width:48px;text-align:center}
+.summary b{display:block;font-size:16px}
+.summary span{color:var(--muted);font-size:13.5px;display:block}
+.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.it{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.it.match{border-left:4px solid var(--accent)}
+.it.sel{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.it-head{all:unset;box-sizing:border-box;display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:start;width:100%;padding:12px 14px;cursor:pointer}
+.it-head:focus-visible{outline:3px solid var(--cyan);outline-offset:-3px}
+.it-when{display:flex;flex-direction:column;font-variant-numeric:tabular-nums}
+.it-when b{font-size:13.5px}
+.it-when span{font-size:13px;color:var(--muted)}
+.it-body{display:flex;flex-direction:column;gap:2px;min-width:0}
+.it-title{font-weight:600;font-size:15px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.it-line{font-size:13.5px;color:var(--muted)}
+.it-line b{color:var(--ink);font-weight:600}
+.why{font-size:12.5px;font-weight:600;color:var(--accent);margin-top:3px}
+.it-detail{border-top:1px dashed var(--line);padding:12px 14px 14px;background:var(--surface-2);display:flex;flex-direction:column;gap:8px;font-size:14px}
+.it-detail ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:18px;color:var(--muted);font-size:14px}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:4px}
+
+/* ---------- reportar ---------- */
+.r-wrap{max-width:980px;display:flex;flex-direction:column;gap:14px}
+.step{display:grid;grid-template-columns:34px 1fr;gap:14px}
+.step-n{width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:800 15px var(--font-d)}
+.step-b{display:flex;flex-direction:column;gap:10px;min-width:0}
+.step-b h2{font-size:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
+.cat{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:10px;text-align:left;cursor:pointer;font-weight:600;font-size:14px;min-height:44px}
+.cat:hover{border-color:var(--accent)}
+.cat[aria-checked="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.zone-info{display:flex;gap:10px;align-items:center;font-size:14px;background:var(--surface-2);border-radius:10px;padding:10px 12px;border:1px solid var(--line)}
+.zone-info .tag{font:800 12px var(--font-d);background:var(--accent);color:var(--on-accent);padding:3px 7px;border-radius:6px}
+.resg-card{display:flex;gap:12px;align-items:flex-start;background:var(--resg-soft);border:1px solid var(--resg);border-radius:10px;padding:12px 14px;font-size:14px}
+.resg-card .ico{width:30px;height:30px;border-radius:7px;background:var(--resg);flex:none;display:grid;place-items:center}
+.resg-card .ico svg{width:18px;height:18px;stroke:#1d1400;fill:none;stroke-width:1.8}
+.resg-card b{display:block}
+.resg-card span{color:var(--muted);display:block;font-size:13.5px}
+.privacy{font-size:12.5px;color:var(--muted);display:flex;gap:6px;align-items:flex-start}
+.privacy svg{flex:none;width:14px;height:14px;margin-top:3px;stroke:currentColor;fill:none;stroke-width:2}
+.admin-banner{background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok);border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600}
+.confirm{text-align:left;display:flex;flex-direction:column;gap:14px;border-top:5px solid var(--ok)}
+.confirm .fol{font:500 30px var(--font-m);letter-spacing:.03em;color:var(--ink)}
+
+/* ---------- resguardo ---------- */
+.g-grid{display:grid;grid-template-columns:1fr minmax(300px,380px);gap:18px;align-items:start}
+.g-list{display:flex;flex-direction:column;gap:8px;max-height:760px;overflow:auto;padding-right:2px}
+.g-card{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.g-card:hover{border-color:var(--resg)}
+.g-card.sel{border-color:var(--resg);box-shadow:0 0 0 2px var(--resg-soft)}
+.g-card:focus-visible{outline:3px solid var(--cyan)}
+.g-code{font:800 13px var(--font-d);background:var(--resg);color:#1d1400;border-radius:6px;padding:4px 7px;min-width:44px;text-align:center}
+.g-card b{display:block;font-size:14.5px}
+.g-card span{display:block;font-size:13px;color:var(--muted)}
+.g-n{text-align:right;font-variant-numeric:tabular-nums}
+.g-n b{font:800 20px var(--font-d);color:var(--ink)}
+.g-n span{font-size:11.5px}
+
+/* ---------- admin ---------- */
+.login{max-width:420px;margin:10px auto;display:flex;flex-direction:column;gap:14px}
+.demo-note{font-size:13px;background:var(--resg-soft);color:var(--resg-ink);border-radius:8px;padding:9px 12px}
+.a-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.a-head small{color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:12px}
+.a-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.a-tools select{width:auto;min-width:220px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.tile b{font:800 28px/1.1 var(--font-d);font-variant-numeric:tabular-nums}
+.tile span{font-size:13px;color:var(--muted)}
+.tile.t-res{border-top:4px solid var(--accent)}
+.tile.t-pend{border-top:4px solid var(--pend)}
+.tile.t-ok{border-top:4px solid var(--ok)}
+.tile.t-all{border-top:4px solid var(--resg)}
+.subtabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.subtabs button{border:0;background:none;padding:10px 14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}
+.subtabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.toolbar input[type=search]{flex:1 1 220px;width:auto}
+.toolbar select{width:auto}
+.check{display:flex;align-items:center;gap:8px;font-weight:500;font-size:14px;margin:0;cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:13.5px}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td .pv{color:var(--muted);font-size:13px;max-width:260px}
+td .s{color:var(--muted);font-size:12.5px;display:block}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+.priv-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--bad);background:var(--bad-soft);border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+
+/* ---------- modal / toast ---------- */
+.modal{position:fixed;inset:0;background:rgba(5,15,28,.55);display:none;align-items:flex-start;justify-content:center;padding:5vh 16px;z-index:50;overflow:auto}
+.modal.on{display:flex}
+.modal-card{background:var(--surface);border-radius:14px;max-width:560px;width:100%;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.modal-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.x{border:0;background:none;font-size:22px;line-height:1;cursor:pointer;color:var(--muted);padding:4px 8px}
+.verify{background:var(--resg-soft);border:1px solid var(--resg);border-radius:10px;padding:10px 12px;font-size:14px}
+.verify small{display:block;font-weight:700;text-transform:uppercase;font-size:11.5px;letter-spacing:.05em;color:var(--resg-ink)}
+.m-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:10px;font-weight:500;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:60;max-width:calc(100% - 32px)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+footer{max-width:1400px;margin:0 auto;padding:0 20px 30px;color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:4px}
+
+@media (max-width:900px){
+  .s-grid{grid-template-columns:1fr;grid-template-areas:"ctl" "map" "res"}
+  .s-map{position:static}
+  .g-grid{grid-template-columns:1fr}
+  .g-list{max-height:none}
+  .tiles{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:640px){
+  .map{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .map svg{width:920px;max-width:none}
+  .map-scroll-hint{display:block}
+}
+@media (max-width:480px){
+  main{padding:18px 14px 32px}
+  .top-in{padding:12px 14px 0}
+  .row2{grid-template-columns:1fr}
+  .it-head{grid-template-columns:1fr auto;}
+  .it-when{flex-direction:row;gap:8px;grid-column:1/-1;order:-1}
+  .step{grid-template-columns:1fr}
+  .step-n{width:28px;height:28px;font-size:13px}
+  .panel{padding:14px}
+  .brand small{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="seal" aria-hidden="true">BUAP</span>
+      <div><b>Objetos Perdidos CU1</b><small>Ciudad Universitaria · Benemérita Universidad Autónoma de Puebla</small></div>
+    </div>
+    <nav class="nav" id="nav" aria-label="Secciones">
+      <a href="#buscar" data-v="buscar">Busco algo</a>
+      <a href="#reportar" data-v="reportar">Encontré algo</a>
+      <a href="#resguardo" data-v="resguardo">Puntos de resguardo</a>
+      <a href="#admin" data-v="admin">Administración</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- ================= BUSCAR ================= -->
+  <section class="view" id="view-buscar" aria-labelledby="h-buscar">
+    <div class="intro">
+      <h1 id="h-buscar">¿Perdiste algo en CU1?</h1>
+      <p>Escribe qué perdiste y marca en el mapa dónde lo viste por última vez, o la ruta que hiciste. Te mostramos cuántos se han registrado como encontrados, cuándo, dónde y en qué punto de resguardo están.</p>
+    </div>
+    <div class="s-grid">
+      <div class="s-ctl panel">
+        <div class="field">
+          <label for="q">¿Qué perdiste?</label>
+          <div class="searchbox">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+            <input id="q" type="search" placeholder="Ej. botella, cargador, llaves" autocomplete="off" list="dl-cats">
+            <datalist id="dl-cats"></datalist>
+          </div>
+        </div>
+        <div class="chips" id="qchips" aria-label="Objetos registrados por tipo"></div>
+        <div class="row2">
+          <div class="field">
+            <label for="lostDate">¿Qué día lo perdiste?</label>
+            <input type="date" id="lostDate">
+          </div>
+          <div class="field">
+            <label for="radius">Radio de búsqueda</label>
+            <select id="radius">
+              <option value="60">Cerca · 60 m</option>
+              <option value="110" selected>Zona · 110 m</option>
+              <option value="180">Amplio · 180 m</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <span class="lbl" id="lbl-mode">¿Dónde lo viste por última vez?</span>
+          <div class="seg" role="group" aria-labelledby="lbl-mode">
+            <button type="button" data-mode="punto" aria-pressed="true">Marcar punto</button>
+            <button type="button" data-mode="ruta" aria-pressed="false">Trazar ruta</button>
+            <button type="button" data-mode="none" aria-pressed="false">No recuerdo</button>
+          </div>
+        </div>
+        <p class="hint" id="modeHint"></p>
+        <div class="maptools">
+          <button class="btn sm" id="undoPt" type="button">Deshacer último punto</button>
+          <button class="btn sm ghost" id="clearPts" type="button">Borrar del mapa</button>
+        </div>
+      </div>
+      <div class="s-map panel">
+        <p class="map-scroll-hint">Desliza el mapa a los lados para ver todo el campus.</p>
+        <div class="map" id="mapBuscar"></div>
+        <div class="legend">
+          <span><i class="lg pin"></i>Tu marcador</span>
+          <span><i class="lg line"></i>Tu ruta</span>
+          <span><i class="lg dot"></i>Coincide con tu lugar</span>
+          <span><i class="lg dotc"></i>Lo que buscas</span>
+          <span><i class="lg dotg"></i>Otros objetos</span>
+          <span><i class="lg sq"></i>Punto de resguardo</span>
+        </div>
+        <p class="map-note">Mapa de CU1 trazado del plano oficial de la BUAP. Pasa o toca una zona para ver a qué facultad pertenece.</p>
+      </div>
+      <div class="s-res" id="results" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ================= REPORTAR ================= -->
+  <section class="view" id="view-reportar" aria-labelledby="h-reportar">
+    <div class="intro">
+      <h1 id="h-reportar">¿Encontraste algo?</h1>
+      <p>Regístralo en un minuto y llévalo al punto de resguardo que elijas. Así quien lo perdió sabe dónde recogerlo. Cualquier persona puede reportar.</p>
+    </div>
+    <div class="r-wrap" id="reportWrap"></div>
+  </section>
+
+  <!-- ================= RESGUARDO ================= -->
+  <section class="view" id="view-resguardo" aria-labelledby="h-resguardo">
+    <div class="intro">
+      <h1 id="h-resguardo">Puntos de resguardo</h1>
+      <p>Cada facultad guarda los objetos encontrados en su punto de resguardo. Solo ahí se recogen, presentando credencial BUAP o identificación. Toca una facultad en el mapa o en la lista.</p>
+    </div>
+    <div class="g-grid">
+      <div class="panel">
+        <p class="map-scroll-hint">Desliza el mapa a los lados para ver todo el campus.</p>
+        <div class="map" id="mapResg"></div>
+        <div class="legend"><span><i class="lg sq"></i>Punto de resguardo</span></div>
+        <p class="map-note">Ubicaciones y horarios de ejemplo. Cada facultad confirma su punto real.</p>
+      </div>
+      <div class="g-list" id="resgList"></div>
+    </div>
+  </section>
+
+  <!-- ================= ADMIN ================= -->
+  <section class="view" id="view-admin" aria-labelledby="h-admin">
+    <div id="adminWrap"></div>
+  </section>
+</main>
+
+<footer>
+  <span>Prototipo de interfaz · En esta demostración los datos se guardan solo en este navegador.</span>
+  <span>Proyecto «Recuperación de Objetos Perdidos en CU1»: Juan David Reynoso Carranza, Guillermo Martínez Hernández, Josué Benedicto Ramírez Centeno y Gabriel Flores Calderón.</span>
+</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-card" id="modalCard"></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* =================================================================
+   Datos base
+   ================================================================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+const DAY = 864e5;
+const KEEP_DAYS = 7; // días que un objeto entregado sigue visible en el buscador
+
+const CATS = {
+  botella:    {name:'Botella o termo',     sing:'botella',     plural:'botellas o termos', g:'f', kw:['botella','termo','cilindro','vaso','agua','stanley','hydro']},
+  cargador:   {name:'Cargador',            sing:'cargador',    plural:'cargadores',      g:'m', kw:['cargador','cable','eliminador','power bank','powerbank','bateria']},
+  llaves:     {name:'Llaves',              sing:'juego de llaves', plural:'juegos de llaves', g:'m', kw:['llave','llaves','llavero']},
+  sueter:     {name:'Suéter o chamarra',   sing:'suéter o chamarra', plural:'suéteres o chamarras', g:'m', kw:['sueter','sudadera','chamarra','chaqueta','hoodie','ropa','abrigo']},
+  libreta:    {name:'Libreta o cuaderno',  sing:'libreta',     plural:'libretas o cuadernos', g:'f', kw:['libreta','cuaderno','apuntes','carpeta','agenda']},
+  audifonos:  {name:'Audífonos',           sing:'par de audífonos', plural:'audífonos', g:'m', kw:['audifonos','audifono','airpods','auriculares','headphones','diadema']},
+  laptop:     {name:'Laptop',              sing:'laptop',      plural:'laptops',         g:'f', kw:['laptop','computadora','compu','notebook','macbook','portatil']},
+  celular:    {name:'Celular',             sing:'celular',     plural:'celulares',       g:'m', kw:['celular','telefono','iphone','movil','smartphone']},
+  credencial: {name:'Credencial',          sing:'credencial',  plural:'credenciales',    g:'f', kw:['credencial','identificacion','ine','tarjeta','gafete']},
+  cartera:    {name:'Cartera',             sing:'cartera',     plural:'carteras',        g:'f', kw:['cartera','billetera','monedero']},
+  calculadora:{name:'Calculadora',         sing:'calculadora', plural:'calculadoras',    g:'f', kw:['calculadora','casio']},
+  lentes:     {name:'Lentes',              sing:'par de lentes', plural:'lentes',        g:'m', kw:['lentes','gafas','anteojos','lente']},
+  paraguas:   {name:'Paraguas',            sing:'paraguas',    plural:'paraguas',        g:'m', kw:['paraguas','sombrilla']},
+  mochila:    {name:'Mochila o bolsa',     sing:'mochila',     plural:'mochilas o bolsas', g:'f', kw:['mochila','bolsa','backpack','morral','lonchera']},
+  usb:        {name:'Memoria USB',         sing:'memoria USB', plural:'memorias USB',    g:'f', kw:['usb','memoria','pendrive']},
+  tablet:     {name:'Tablet',              sing:'tablet',      plural:'tablets',         g:'f', kw:['tablet','ipad','tableta']},
+  libro:      {name:'Libro',               sing:'libro',       plural:'libros',          g:'m', kw:['libro','libros']},
+  casco:      {name:'Casco',               sing:'casco',       plural:'cascos',          g:'m', kw:['casco','cascos','casco de moto','casco de bici','helmet']},
+  otro:       {name:'Otro',                sing:'objeto',      plural:'objetos',         g:'m', kw:[]}
+};
+
+/* Zonas del mapa de CU1, trazadas sobre el plano oficial (1 unidad ≈ 1.6 m) */
+const MPU = 1.6;
+const VB = {x: 20, y: 140, w: 1250, h: 840};
+const ZONES = [
+  {id:'fcc',  code:'FCC',  short:'Ciencias de la Computación',   type:'fac',   resg:'fcc',  l:[282,252], polys:[[[212,193],[292,193],[292,261],[181,261]]]},
+  {id:'fcq',  code:'FCQ',  short:'Ciencias Químicas',            type:'fac',   resg:'fcq',  l:[312,292], polys:[[[292,193],[336,193],[336,320],[300,318],[230,300],[178,283],[181,261],[292,261]], [[586,318],[686,318],[686,357],[586,357]]]},
+  {id:'fiq',  code:'FIQ',  short:'Ingeniería Química',           type:'fac',   resg:'fiq',  l:[385,262], polys:[[[337,203],[434,203],[434,320],[337,320]]]},
+  {id:'ifuap',code:'IF',   short:'Instituto de Física',          type:'fac',   resg:'fcfm', l:[505,251], polys:[[[435,204],[531,204],[531,288],[435,288]]]},
+  {id:'fce',  code:'FCE',  short:'Ciencias de la Electrónica',   type:'fac',   resg:'fce',  l:[546,259], polys:[[[435,288],[529,288],[529,238],[562,238],[562,278],[531,278],[531,322],[435,322]], [[436,323],[516,324],[522,356],[436,356]]]},
+  {id:'fcfm', code:'FCFM', short:'Ciencias Físico Matemáticas',  type:'fac',   resg:'fcfm', l:[578,235], polys:[[[531,204],[596,204],[596,322],[533,322],[533,280],[564,280],[564,236],[531,236]]]},
+  {id:'adm',  code:'ADM',  short:'Administración',               type:'fac',   resg:'adm',  l:[640,289], polys:[[[598,196],[663,196],[663,256],[687,256],[687,290],[700,290],[700,306],[733,306],[733,332],[598,332]]]},
+  {id:'der',  code:'DER',  short:'Derecho y Ciencias Sociales',  type:'fac',   resg:'der',  l:[750,300], polys:[[[663,196],[790,196],[790,314],[760,332],[733,332],[733,306],[700,306],[700,290],[687,290],[687,256],[663,256]]]},
+  {id:'eco',  code:'ECO',  short:'Economía',                     type:'fac',   resg:'eco',  l:[826,252], polys:[[[790,196],[865,196],[865,300],[790,314]]]},
+  {id:'len',  code:'LEN',  short:'Lenguas',                      type:'fac',   resg:'len',  l:[915,272], polys:[[[869,196],[982,196],[982,293],[869,297]]]},
+  {id:'fcf',  code:'FCF',  short:'Cultura Física',               type:'fac',   resg:'fcf',  l:[1012,278],polys:[[[982,196],[1104,196],[1104,290],[982,293]]]},
+  {id:'arq',  code:'ARQ',  short:'Arquitectura',                 type:'fac',   resg:'arq',  l:[396,351], polys:[[[298,320],[436,322],[436,356],[424,356],[424,444],[408,444],[408,480],[338,472],[298,422]]]},
+  {id:'ing',  code:'ING',  short:'Ingeniería',                   type:'fac',   resg:'ing',  l:[478,440], polys:[[[424,356],[522,356],[540,444],[470,464],[408,480],[408,444],[424,444]]]},
+  {id:'bio',  code:'FCB',  short:'Ciencias Biológicas',          type:'fac',   resg:'bio',  l:[560,370], polys:[[[524,322],[586,320],[586,357],[686,357],[686,445],[546,450]]]},
+  {id:'cont', code:'FCP',  short:'Contaduría Pública',           type:'fac',   resg:'cont', l:[404,722], polys:[[[408,624],[450,626],[402,770],[354,752]]]},
+  {id:'laguna',code:'',    short:'Laguna y jardín poniente',     type:'comun', resg:'arq',  l:[248,352], lines:['Laguna'], polys:[[[166,280],[298,320],[298,422],[338,472],[318,478]]]},
+  {id:'parque',code:'',    short:'Parque y lago de CU',          type:'comun', resg:'vig',  l:[775,392], lines:['Parque y lago'], polys:[[[686,318],[700,330],[780,330],[870,300],[1104,300],[1104,446],[686,446]]]},
+  {id:'este', code:'',     short:'Zona este (DAE, FIL, SUA, STU)', type:'comun', resg:'vig', l:[1188,486],lines:['Zona este'], polys:[[[1118,196],[1142,196],[1228,420],[1224,548],[1188,602],[1118,602]]]},
+  {id:'cc',   code:'CC',   short:'Edificio CC, alberca y DCF',   type:'comun', resg:'vig',  l:[600,512], lines:['y alberca'], polys:[[[548,452],[742,452],[742,560],[552,578]]]},
+  {id:'arena',code:'AB',   short:'Arena BUAP',                   type:'comun', resg:'vig',  l:[483,565], polys:[[[422,498],[548,476],[552,610],[505,632],[438,576]]]},
+  {id:'ema',  code:'EMA',  short:'Multiaulas EMA 4 a 6',         type:'comun', resg:'vig',  l:[618,708], polys:[[[538,684],[692,690],[702,780],[650,792],[608,772],[538,700]]]},
+  {id:'canchas',code:'',   short:'Campos deportivos',            type:'comun', resg:'vig',  l:[650,630], lines:['Campos','deportivos'], polys:[[[742,452],[868,452],[948,708],[702,780],[692,690],[538,684],[552,610],[552,578],[742,560]]]},
+  {id:'estadio',code:'EU', short:'Estadio Universitario',        type:'comun', resg:'vig',  l:[1012,582],lines:['Estadio'], polys:[[[870,452],[1104,452],[1104,575],[1064,642],[992,692],[950,708]]]},
+  {id:'bib',  code:'BC',   short:'Biblioteca Central',           type:'comun', resg:'bib',  l:[704,862], lines:['Biblioteca'], polys:[[[652,792],[764,768],[858,890],[800,942],[772,944],[700,882]]]},
+  {id:'sur',  code:'',     short:'Zona sur (DCyTIC, US, DASU)',  type:'comun', resg:'vig',  l:[818,792], lines:['Zona sur'], polys:[[[764,768],[950,712],[966,742],[906,820],[870,880],[858,890]]]},
+  {id:'inst', code:'',     short:'Institutos (IC, IFI)',         type:'comun', resg:'vig',  l:[150,214], lines:['Institutos'], polys:[[[46,166],[206,178],[176,272],[140,252]]]}
+];
+const ANDADOR = {id:'and', code:'', short:'Áreas comunes de CU1', type:'comun', resg:'vig'};
+const ZMAP = Object.fromEntries([...ZONES, ANDADOR].map(z => [z.id, z]));
+const zTag = z => z.code || z.short;
+
+const RESG_INFO = {
+  fcc:  ['Secretaría Administrativa FCC', 'Edificio CCO1, planta baja', 'Lun a vie · 8:00–20:00', 204,224],
+  fcq:  ['Secretaría Administrativa FCQ', 'Edificio FCQ1, planta baja', 'Lun a vie · 8:00–19:00', 320,262],
+  fiq:  ['Secretaría Administrativa FIQ', 'Edificio FIQ1, planta baja', 'Lun a vie · 8:00–19:00', 420,212],
+  fcfm: ['Secretaría Administrativa FCFM', 'Edificio FM1, planta baja', 'Lun a vie · 8:00–19:00', 586,212],
+  fce:  ['Secretaría Administrativa FCE', 'Edificio FCE1, planta baja', 'Lun a vie · 8:00–19:00', 446,302],
+  ing:  ['Control Escolar de Ingeniería', 'Edificio ING1, planta baja', 'Lun a vie · 8:00–20:00', 514,366],
+  arq:  ['Secretaría Administrativa ARQ', 'Edificio ARQ1, planta baja', 'Lun a vie · 8:00–20:00', 312,338],
+  der:  ['Secretaría Administrativa DER', 'Edificio DER1, planta baja', 'Lun a vie · 8:00–20:00', 748,236],
+  adm:  ['Secretaría Administrativa ADM', 'Edificio ADM1, planta baja', 'Lun a vie · 7:00–21:00', 608,210],
+  eco:  ['Secretaría Administrativa ECO', 'Edificio ECO1, planta baja', 'Lun a vie · 8:00–19:00', 830,214],
+  len:  ['Secretaría Administrativa LEN', 'Edificio LEN1, planta baja', 'Lun a vie · 8:00–19:00', 877,208],
+  fcf:  ['Coordinación Administrativa FCF', 'Edificio FCF1, planta baja', 'Lun a vie · 7:00–20:00', 1052,212],
+  bio:  ['Secretaría Administrativa FCB', 'Edificio BIO1, planta baja', 'Lun a vie · 8:00–18:00', 610,430],
+  cont: ['Secretaría Administrativa FCP', 'Edificio FCP1, planta baja', 'Lun a vie · 7:00–21:00', 432,660],
+  bib:  ['Módulo de Préstamo · Biblioteca Central', 'Edificio BC, planta baja', 'Lun a sáb · 8:00–21:00', 688,830],
+  vig:  ['Módulo de Vigilancia CU1', 'Av. Central. Recibe lo hallado en áreas comunes, canchas, estadio y parque', 'Todos los días · 7:00–22:00', 760,449]
+};
+const RESG = {};
+for (const [id, [name, lugar, horario, x, y]] of Object.entries(RESG_INFO))
+  RESG[id] = {id, code: id === 'vig' ? 'VIG' : id === 'bib' ? 'BC' : ZMAP[id].code, name, lugar, horario, x, y};
+const RESG_ORDER = ['fcc','fcq','fiq','fcfm','fce','ing','arq','der','adm','eco','len','fcf','bio','cont','bib','vig'];
+
+function inPoly(p, pts) {
+  let c = false;
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [xi, yi] = pts[i], [xj, yj] = pts[j];
+    if ((yi > p.y) !== (yj > p.y) && p.x < (xj - xi) * (p.y - yi) / (yj - yi) + xi) c = !c;
+  }
+  return c;
+}
+function zoneAt(p) {
+  for (const z of ZONES) if (z.polys.some(pl => inPoly(p, pl))) return z;
+  return ANDADOR;
+}
+
+/* =================================================================
+   Datos de ejemplo y almacenamiento
+   ================================================================= */
+const pad = n => String(n).padStart(2, '0');
+const dayStr = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const folio = n => 'CU1-' + String(n).padStart(4, '0');
+
+const SEED = [
+  ['botella','', 'Termo metálico azul marino con sticker de la NASA y asa en la tapa', 1,'13:40','fcc','Salón 204, edificio CCO3', 240,226,'resguardo'],
+  ['botella','', 'Botella de plástico transparente de 1 L con tapa rosa', 2,'10:15','ing','Edificio ING 4, planta alta', 460,410,'resguardo'],
+  ['botella','', 'Termo verde con abolladura en la base', 4,'17:05','cc','Gradas de la alberca', 630,480,'resguardo'],
+  ['botella','', 'Botella deportiva negra con el nombre «Dani» en marcador', 6,'09:20','fcfm','Aula 105, edificio FM 1', 572,308,'entregado', {d:2, n:'Daniela Ortiz Ramos', m:'202245318'}],
+  ['botella','', 'Cilindro blanco con logo BUAP', 3,'12:30','bib','Sala de lectura, segundo piso', 735,815,'pendiente'],
+  ['botella','', 'Termo rojo, tapa a presión, cinta adhesiva con iniciales J.R.', 8,'15:50','canchas','Banca de la cancha de futbol 2', 830,600,'resguardo'],
+  ['cargador','', 'Cargador USB-C 65 W marca Lenovo, cable gris', 1,'11:10','fcc','Laboratorio, edificio CCO 4', 270,215,'resguardo'],
+  ['cargador','', 'Cargador de iPhone blanco con cubo, cinta azul en el cable', 3,'16:45','fce','Salón, edificio FCE 6', 455,338,'resguardo'],
+  ['cargador','', 'Power bank Xiaomi 10 000 mAh negro', 5,'08:30','adm','Auditorio, edificio ADM 7', 675,302,'resguardo'],
+  ['cargador','', 'Cargador de laptop HP con punta azul', 8,'19:00','fcc','Pasillo planta baja, CCO 1', 212,258,'entregado', {d:5, n:'Luis Ángel Pérez Soto', m:'202158804'}],
+  ['llaves','', 'Llavero con 3 llaves y un peluche de gato', 2,'14:20','der','Jardinera frente a DER 3', 712,240,'resguardo'],
+  ['llaves','', 'Llave de auto Nissan con control', 7,'18:10','arq','Estacionamiento de Arquitectura', 330,445,'resguardo'],
+  ['sueter','', 'Sudadera gris talla M con logo de Lobos BUAP', 1,'09:55','fcq','Laboratorio FCQ 4, perchero', 318,276,'resguardo'],
+  ['sueter','', 'Chamarra de mezclilla con parche en el codo', 5,'13:00','cont','Salón, edificio FCP 3', 400,695,'resguardo'],
+  ['sueter','', 'Suéter azul marino tejido', 2,'13:30','parque','Bancas junto al lago', 850,410,'resguardo'],
+  ['libreta','', 'Cuaderno profesional de cálculo, forro verde, nombre en la primera hoja', 2,'12:00','fcfm','Mesas del patio, FM 4', 575,292,'resguardo'],
+  ['libreta','', 'Libreta pequeña negra con apuntes de química orgánica', 4,'10:40','fiq','Salón, edificio FIQ 1', 395,300,'pendiente'],
+  ['audifonos','', 'Audífonos inalámbricos blancos en estuche, raya en la tapa', 1,'15:30','bib','Cubículo de estudio 6', 760,860,'resguardo'],
+  ['audifonos','', 'Audífonos de diadema negros marca Sony', 6,'11:45','eco','Aula magna, ECO 3', 820,285,'resguardo'],
+  ['laptop','', 'Laptop Dell gris de 14", sticker de Linux en la tapa', 3,'20:10','fcc','Sala de cómputo, CCO 2', 230,242,'resguardo'],
+  ['celular','', 'Samsung con funda transparente y una foto adentro', 1,'10:05','bio','Laboratorio, edificio BIO 1', 620,395,'pendiente'],
+  ['credencial','', 'Credencial BUAP de estudiante (se verifica con nombre y foto)', 2,'08:15','ing','Entrada del edificio ING 1', 430,462,'resguardo'],
+  ['cartera','', 'Cartera café de piel con INE y dos tarjetas', 3,'14:55','len','Pasillo del edificio LEN 1', 915,236,'entregado', {d:1, n:'Mariana Juárez Téllez', m:'202331207'}],
+  ['calculadora','', 'Calculadora Casio fx-991 con iniciales grabadas', 4,'12:25','fcfm','Salón, edificio FM 7', 577,243,'resguardo'],
+  ['paraguas','', 'Paraguas negro plegable con mango de madera', 2,'18:30','fcf','Entrada del gimnasio FCF 2', 1084,240,'resguardo'],
+  ['lentes','', 'Lentes de armazón negro en estuche azul', 5,'09:10','der','Biblioteca de la facultad, DER 8', 774,268,'resguardo'],
+  ['mochila','', 'Mochila negra con dos llaveros', 10,'17:40','eco','Pasillo central', 810,240,'entregado', {d:9, n:'Carlos Méndez Rojas', m:'202067721'}],
+  ['otro','Bata de laboratorio', 'Bata blanca talla CH bordada «M. López»', 3,'13:15','fcq','Vestidor del laboratorio FCQ 1', 288,303,'resguardo'],
+  ['otro','Tupper', 'Tupper azul con tapa morada', 1,'15:00','arena','Explanada de la Arena BUAP', 490,600,'resguardo'],
+  ['usb','', 'Memoria USB Kingston 32 GB roja', 6,'11:00','fce','Laboratorio de microcontroladores', 500,345,'resguardo']
+];
+
+function seed() {
+  const now = new Date();
+  let n = 101;
+  return SEED.map(([tipo, otro, desc, days, hora, zona, lugar, x, y, estado, ent]) => {
+    const z = ZMAP[zona];
+    const fecha = dayStr(new Date(now - days * DAY));
+    const it = {id: folio(n++), tipo, otro, desc, fecha, hora, zona, lugar, x, y,
+      resg: z.resg, estado, quien: '', creado: new Date(`${fecha}T${hora}`).toISOString()};
+    if (estado !== 'pendiente') it.recibido = new Date(Date.parse(it.creado) + 2 * 3600e3).toISOString();
+    if (ent) it.entrega = {nombre: ent.n, matricula: ent.m, atendio: 'admin · ' + RESG[z.resg].code,
+      fecha: new Date(now - ent.d * DAY - 3 * 3600e3).toISOString(), desc: true, ident: true, obs: ''};
+    return it;
+  });
+}
+
+const KEY = 'op-cu1-v3';
+let DB = load();
+function load() {
+  try { const raw = localStorage.getItem(KEY); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d) && d.every(i => ZMAP[i.zona] && RESG[i.resg])) return d; } } catch (e) {}
+  return seed();
+}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(DB)); } catch (e) {} }
+function nextFolio() { return folio(Math.max(100, ...DB.map(i => +i.id.split('-')[1] || 0)) + 1); }
+
+/* =================================================================
+   Utilidades
+   ================================================================= */
+function fmtDate(f) {
+  const d = typeof f === 'string' && f.length === 10 ? new Date(f + 'T12:00') : new Date(f);
+  const W = ['dom','lun','mar','mié','jue','vie','sáb'], M = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return `${W[d.getDay()]} ${d.getDate()} ${M[d.getMonth()]}`;
+}
+function fmtDateTime(iso) {
+  const d = new Date(iso);
+  return fmtDate(iso) + ' · ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+function catName(it) { return it.tipo === 'otro' ? (it.otro || 'Otro objeto') : CATS[it.tipo].name; }
+function isPublic(it, now = Date.now()) {
+  if (it.estado === 'pendiente' || it.estado === 'resguardo') return true;
+  if (it.estado === 'entregado' && it.entrega) return now - Date.parse(it.entrega.fecha) < KEEP_DAYS * DAY;
+  return false;
+}
+function retiro(it) { return fmtDate(new Date(Date.parse(it.entrega.fecha) + KEEP_DAYS * DAY)); }
+function stChip(it) {
+  if (it.estado === 'pendiente') return '<span class="st st-pend">Por llegar al resguardo</span>';
+  if (it.estado === 'resguardo') return '<span class="st st-res">En resguardo</span>';
+  if (it.estado === 'entregado') return '<span class="st st-ok">Encontrado · entregado</span>';
+  return '<span class="st st-bad">Descartado</span>';
+}
+function daysSince(iso) { return Math.floor((Date.now() - Date.parse(iso)) / DAY); }
+function distSeg(p, a, b) {
+  const dx = b.x - a.x, dy = b.y - a.y, L = dx * dx + dy * dy;
+  let t = L ? ((p.x - a.x) * dx + (p.y - a.y) * dy) / L : 0;
+  t = Math.max(0, Math.min(1, t));
+  return Math.hypot(p.x - (a.x + t * dx), p.y - (a.y + t * dy));
+}
+function variants(t) {
+  const v = [t];
+  if (t.length > 4 && t.endsWith('es')) v.push(t.slice(0, -2));
+  if (t.length > 3 && t.endsWith('s')) v.push(t.slice(0, -1));
+  return v;
+}
+function matchesQuery(it, q) {
+  const qn = norm(q);
+  if (!qn) return true;
+  const kw = CATS[it.tipo].kw.slice();
+  if (it.tipo === 'otro' && it.otro) kw.push(...norm(it.otro).split(/\s+/), norm(it.otro));
+  if (kw.some(k => k.includes(' ') && (k.includes(qn) || qn.includes(k)))) return true;
+  const toks = qn.split(/\s+/).filter(t => t.length >= 2);
+  return toks.some(t => variants(t).some(v => kw.some(k => k === v || k.startsWith(v) || (k.length >= 4 && v.startsWith(k)))));
+}
+let toastT;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 3600);
+}
+
+/* =================================================================
+   Mapa
+   ================================================================= */
+const BOX_ICON = '<path d="M-6 -4h12v9h-12z M-6 -1h12 M-2 2h4"/>';
+const poly = pts => pts.map(p => p.join(',')).join(' ');
+const polyPath = polys => polys.map(pl => 'M' + pl.map(p => p.join(',')).join('L') + 'Z').join('');
+/* Capas trazadas del plano oficial de CU1 (Departamento de Planta Física, BUAP): calles, manzanas, áreas verdes, agua, canchas y edificios sin nombre */
+const MAP_LAYERS = {"hull": "M47,168L47,173L134.5,266.5L141.5,269.5L167.5,270L167.5,294L171,300L304,439.5L321.5,446.5L328,446.5L329,451.5L335.5,453.5L335.5,470.5L361,498L371,498.5L371,508.5L393,540.5L408.5,541.5L414,556.5L425.5,568.5L434.5,569L434.5,578.5L457.5,604L457.5,617L469.5,617L492.5,642L497.5,642L498,648L512,663.5L563,713.5L568.5,714L570.5,720L584.5,733L598.5,734L598.5,759L618.5,778.5L627,778.5L627.5,786.5L648.5,788L648.5,810L645.5,812L645.5,817L674,844L685.5,858L741.5,915L769.5,939.5L782,940L782.5,953.5L797,967L802,967L1186.5,602L1186.5,596.5L1176.5,568L1176.5,544.5L1183.5,534L1209,507.5L1221,491.5L1226.5,467.5L1225.5,449.5L1222,437L1202,391.5L1164.5,296L1126.5,220.5L1120.5,220.5L1120,217.5L1116,216.5L1114.5,211L1100,211L1097,206L1091.5,202L1070.5,200L774.5,197.5L765,208.5L720.5,209.5L720,206.5L672,206L671.5,193.5L652.5,193.5L652,206L624.5,206L624,209L579.5,209L578.5,206L512,206L511.5,209L479,209L478.5,192.5L427.5,192.5L427,204.5L275,205L274.5,192L269,192L268.5,194L242.5,194L225.5,200L203.5,200L203,176L201,174.5L90.5,175L73.5,174L53.5,168Z", "blocks": "M884.5,807.5L877.5,807.5L860,824L860,830L861.5,830.5L860,832L852.5,831.5L833.5,849.5L833.5,857.5L843.5,868.5L849,868.5L895.5,824.5L895.5,819ZM645.5,812L645.5,817L674,844L685.5,858L741.5,915L769.5,939.5L775.5,940L775.5,923.5L663.5,805L661,803.5L656,803.5ZM669,794.5L669,800L671.5,802.5L671.5,808L715,855L721,859L724.5,865L768.5,912L775.5,913L785,923L791.5,923.5L839,878.5L839,873.5L745.5,776.5L736.5,776ZM759.5,771.5L758.5,778L822,845.5L827,845.5L873,802.5L873,796L832,753.5L825.5,753.5ZM962,750L954.5,720L949.5,720L847,747.5L844.5,749L844.5,754L901,811L906.5,811L918.5,798L962,757.5ZM436.5,626.5L431.5,626.5L431.5,628L412,631L410,635.5L410,640L406.5,643.5L406.5,648.5L392.5,675L391.5,679.5L381.5,697L374.5,713.5L371.5,716.5L358.5,745L356,746.5L356,751.5L362.5,754L363,760L375,765L380.5,765L383,762.5L393,767.5L399.5,767.5L444,647.5L447,643L446.5,637ZM416.5,495L411,495L379,502.5L373.5,502L371,503.5L371,508.5L383.5,524.5L394,541.5L399,541.5L399.5,527.5L401.5,519.5L408,507.5L416.5,500ZM1085.5,457.5L1077,454.5L880.5,455L880,457.5L879.5,455L872.5,455L872.5,461.5L886.5,515.5L911.5,523.5L912.5,527.5L909.5,528L909.5,534.5L911.5,540.5L916.5,540.5L916.5,538L918.5,537L921.5,538.5L920.5,542.5L913.5,543L914,551.5L926,595.5L934,595L936.5,597.5L934.5,601L929,601L929,606.5L956.5,706.5L963.5,706.5L1003,695.5L1019.5,689.5L1034.5,682L1046,674.5L1063.5,659.5L1088.5,632.5L1096.5,620L1099.5,608L1100.5,595.5L1100,474.5L1095.5,465.5ZM861.5,455L735.5,455L724,454L599.5,455.5L544,471L442.5,496L442,494.5L437,494.5L436.5,498L423,504.5L415,513L409,525L409,543L414,556.5L425.5,568.5L433,568L434.5,569L435.5,571.5L434.5,578.5L492.5,642L498.5,642.5L498,648L540,692.5L563,713.5L568.5,714L570.5,716.5L570.5,720L584.5,733L590.5,732L592,733.5L597,733.5L597.5,731.5L600,730L602.5,731.5L602.5,735L600.5,736L600.5,741L605,745L605,751.5L603.5,754L598.5,754L598.5,759L618.5,778.5L623.5,778.5L623.5,770.5L621,770.5L618.5,768.5L619.5,765.5L622.5,764.5L626.5,770L633.5,770.5L646.5,782L657,785L673,785L944,712.5L943,701L896,530L886,526.5L879,519ZM1108.5,279L1107,280L1107,413.5L1115,413.5L1115.5,283.5L1114.5,279.5ZM1101,279L1059.5,279L1055,282L1047,282L1040,279L948,278.5L929.5,280.5L906,291L862,316.5L848,318L798,319L759.5,336.5L751.5,338.5L700.5,338.5L692.5,335.5L686,331L671,331L669.5,335L667.5,335.5L665,333L665,331L661,331L660,329L649,329.5L648.5,331L641,329L615,329.5L614.5,331L590,331L587.5,333L537,332.5L531.5,328L526.5,328L526,331.5L524,333L518,333L518,338.5L546,445L552,445L584,435.5L602.5,432L647,433.5L1027.5,434L1027,427.5L1028.5,425.5L1031.5,425L1033,428L1032.5,434L1080,433.5L1092.5,428L1098.5,420.5L1100.5,414.5ZM167.5,286L167.5,294L171,300L304,439.5L321.5,446.5L328,446.5L329,451.5L335.5,453L348.5,461.5L353,461.5L353.5,465.5L362.5,473.5L386,474L401.5,478.5L406,481.5L411,481.5L453,471L454.5,468.5L463,468.5L517,454L520,451.5L538.5,448.5L538,440L507,327L499,327L498.5,329.5L494,329.5L493,326.5L401,326L401,330L397.5,332L395,329.5L395,326L358.5,325.5L358.5,327.5L356.5,329L356,325.5L310,325L294,321L289.5,318L233.5,294.5L200,293L193,290L177,278.5L172,278.5ZM1126.5,220.5L1121.5,220.5L1121.5,254.5L1131.5,255L1121.5,255.5L1120.5,609.5L1098.5,632L1097,635.5L1052,680.5L1040.5,690L1019,700.5L966,715.5L960.5,715.5L961,723L970.5,760L911,819L908,824L872.5,855L864,865.5L783.5,941L782.5,953.5L797,967L802,967L1186.5,602L1186.5,596.5L1174,560L1174,551.5L1181.5,536.5L1209,507.5L1221,491.5L1226.5,467.5L1225.5,449.5L1222,437L1202,391.5L1164.5,296ZM436,209.5L436,318L468.5,318.5L467.5,312L471,309L472.5,310L473,318.5L561,320.5L561.5,317L564,316L564.5,318L567,318.5L567,320.5L594,320.5L593,209L579.5,209L578.5,206L512,206L511.5,209ZM433.5,208.5L421,208.5L420.5,205L400.5,204.5L354,205.5L353.5,208L339,208L338,209L339,248.5L337.5,262.5L337.5,307L344,307L345.5,308.5L343.5,312.5L343.5,317.5L433.5,318ZM597,209.5L597.5,320.5L683,321L700.5,330.5L750.5,330.5L797,311L850.5,310L859,308L865,304.5L865,278L861.5,278L859.5,274.5L861.5,272L865,272L865,206L866.5,203L871,203.5L871.5,297L877,297L885.5,292L893.5,289.5L914.5,277.5L931,272L944.5,270.5L1041.5,270.5L1045.5,268.5L1055.5,268.5L1059.5,271L1074,271L1080,268L1090,269L1092,271L1101,271L1102,217.5L1100.5,211.5L1097,206L1088,201L924.5,199.5L923.5,198.5L900,199.5L875.5,199L874.5,197.5L856.5,197.5L855.5,198.5L774.5,197.5L766,208L760,209.5L720.5,209.5L720,206.5L708,206L707.5,209.5L688,209L687,206L672,206L671.5,209L658,209L657.5,206.5L624.5,206L624,209ZM175.5,266.5L175.5,271.5L180.5,272L198,283.5L213,283.5L213,279.5L217,278L219,280L219,284L231.5,284L243,290.5L250.5,289.5L253.5,295.5L290,313L297.5,313.5L297.5,311L301,308.5L302.5,316.5L333,317.5L332,205L279,205L278.5,208L275,208L274.5,192L269,192L269,207L264.5,208L250.5,194L242.5,194L233,196.5L223,201L211.5,209.5ZM47,168L47,173L129,261L134.5,266.5L141.5,269.5L150,269L153.5,266.5L200.5,193.5L203,183L203,176L201,174.5L90.5,175L73.5,174L61.5,171.5L53.5,168Z", "parking": "M729,869.5L729,871.5L726.5,872L728,879.5L732.5,882L733,885L739.5,889.5L740,892L766,919L770,919L772,910L758.5,894.5L751.5,889.5L739,874L733.5,869.5ZM760,772L759,777.5L822.5,845L826.5,845L872.5,801.5L872.5,796.5L831,754ZM1020.5,701.5L970,715L961.5,715L961,720.5L969.5,752L975.5,751.5L1020.5,706ZM938.5,633.5L940.5,647L957,706L987.5,699L993,685.5L997,667.5L985.5,662.5L969.5,650.5L959.5,640L952.5,628.5L948,628.5ZM549.5,592L505,594.5L501.5,596L498.5,607.5L492,607.5L490.5,601L486,597.5L474.5,598L474.5,601L470,606.5L469.5,613.5L478.5,623.5L483.5,625.5L484,632.5L489.5,638L500,639L501.5,642L506,642L506.5,639.5L511.5,637L511.5,633.5L532,612.5L543.5,605.5L543.5,602L549.5,596ZM1099.5,521.5L1095,521.5L1077.5,529L1085,555.5L1089.5,581.5L1099,581.5ZM882.5,524.5L874,522.5L871.5,512.5L863,512L862,509.5L832.5,515.5L830.5,520.5L825.5,520.5L825,518.5L819,519L819,523L816,524L821,551.5L827,555.5L833,555.5L859,548.5L869.5,547.5L874,545.5L876.5,540L876.5,530L882.5,528.5ZM948,495.5L941.5,496L941,500.5L929,503.5L929,507.5L931.5,508L931,513.5L926.5,513.5L925.5,505.5L919,505.5L917.5,501.5L894.5,506L892,508.5L892,512.5L936.5,522.5L947.5,502.5ZM540.5,473L475.5,488.5L478,519.5L486.5,519.5L486.5,517.5L490,515.5L494.5,515.5L495,513.5L534.5,496.5L542,497.5L545,505L549,505L548.5,496.5L545.5,492ZM708.5,455.5L663,455.5L662,465L672,512L684.5,512L689,510L683.5,475L709,470ZM1011.5,455.5L1016.5,478.5L1043.5,489L1053,496L1057.5,496L1058,500L1072,520L1079.5,519.5L1100,510L1099.5,474.5L1094.5,466.5L1090.5,466.5L1066.5,490L1065,493.5L1060,493L1060,489L1082.5,461.5L1081,456ZM385.5,437.5L385.5,447L389.5,448L389,456L385,457L385,473.5L406.5,480.5L411.5,480.5L410.5,448.5L407,448L406.5,438.5L405,437ZM525,415L502.5,414.5L502,440.5L444.5,441.5L444.5,446.5L448,447L447,471L512,455L519.5,451L533,449.5L533,445.5L529,445L529.5,434.5ZM668.5,397L648.5,397L648,417L633,417.5L632.5,427L627.5,426.5L628,417.5L616,417.5L616.5,431.5L652,431L653,433L659,433L659.5,427L664.5,426.5L663.5,406.5L668.5,405.5ZM1201.5,391.5L1160.5,391.5L1160.5,479.5L1157,481.5L1157,488.5L1160.5,489L1160.5,499.5L1151,500L1150.5,496L1144,493.5L1141.5,488.5L1122,488.5L1122,516.5L1135,516.5L1137,519.5L1137,544.5L1136,547.5L1121.5,548L1121,609.5L1127.5,607.5L1146.5,588.5L1147,580.5L1155,580.5L1173.5,562L1174,549L1181.5,536L1181.5,532L1177,531.5L1177,517L1189,516.5L1191,520.5L1195.5,520.5L1212.5,502.5L1222,487.5L1226,468L1225,450L1220.5,435ZM306,388.5L306,409L317,423L317,431L312,438.5L312,442.5L317.5,443L323,446.5L331,446.5L331,439.5L335.5,438L335.5,431L329,430.5L329,408L315.5,407L316.5,401.5L325,401.5L325,388.5ZM438.5,299.5L438,316.5L484,318L484,307L456.5,306.5L454,298.5L451,298L451,294.5L442,294.5L442,298.5ZM738,209.5L739,271L723.5,271.5L723,281.5L747.5,281.5L748,297L758,297L759,269L748.5,269L746,266.5L745.5,237.5L742.5,235L742.5,230.5L745,229.5L745.5,213.5L744.5,209.5ZM439,209.5L439,212L436,212.5L436,277L438,277.5L438,281L453,281L453.5,277.5L455.5,277L455.5,262.5L458.5,262L459,259.5L474,259.5L474,249.5L456,249L456.5,209.5L448.5,209.5L448,217.5L444,217.5L443,209.5ZM895.5,205.5L879,205.5L878,210L874,210.5L873,250.5L885,250.5L885,219L896,215ZM794,201.5L793,240.5L797,240.5L797.5,236.5L807.5,236.5L808,240.5L832,240.5L832.5,236.5L856.5,236.5L857,240L864.5,240L864.5,229L862,228.5L862,221.5L864.5,221L864.5,217L862,216.5L862,209L864.5,208.5L864.5,204L857,203.5L856.5,201ZM143.5,176L143.5,181.5L147.5,182.5L147.5,186L167.5,191.5L181.5,202.5L186.5,202.5L189,199.5L191.5,199.5L192,194L194.5,191L200,191L201.5,180.5L181.5,180.5L181,175.5Z", "green": "M849,884L846,884L785,941.5L783.5,949L786.5,949L839,897L843.5,890.5L849,887ZM766.5,821L766.5,830.5L771,830.5L774.5,837L779,838.5L779,845.5L785.5,847L789.5,846L790,843L797,843L798,833L781,815L776.5,814L769,821ZM744.5,777.5L737.5,777L670,795.5L670,799L676.5,810L679.5,811L684.5,819L688,820L693,829L696.5,832.5L699,832.5L704.5,840.5L708,840.5L716,831.5L716,828L704,815.5L704,811.5L713,802.5L719.5,802.5L727.5,795.5L731.5,795.5L734,798L743.5,796.5L747.5,801L750.5,801L757.5,794L757.5,790.5ZM870,744L845.5,750L847.5,756L862,770L865,770L865,763.5L872.5,756L876.5,756L877,760.5L882,760.5L882,757L877.5,755L875.5,748L872.5,747.5ZM889,738L889,743L892.5,743L893.5,746.5L899.5,750.5L899.5,753L903,753L919.5,769.5L927.5,769.5L931,773L934,773L934,766.5L927.5,766L921.5,745L919.5,730ZM953.5,721L937.5,725L937.5,728L945.5,728.5L949.5,746L949.5,751.5L946,752L946.5,761.5L944,763L944,766L952,765.5L961,756.5ZM607,707L608,712.5L615,713L613,727.5L625,727.5L630.5,735L633.5,735L638,739.5L638,744.5L628,755.5L628,758.5L636,758.5L646,767L646.5,773L644,778.5L658,784L672,784L697,777L683,708.5L679.5,709L682.5,722.5L682.5,731L680,735L652,740L647.5,736.5L643,722L644,712.5L639.5,707.5L638.5,698L633.5,698L632.5,709L624,709.5L624,702.5L626.5,700.5L627,696L624,696L619,701L617,708L613,708L612.5,706ZM1037.5,694.5L1023.5,700L1023.5,703L1021,705L1017,705L1015.5,711L1009,713L1007.5,719L1001,721L1001,725L997,729L993,729L993,733L990.5,736L984.5,736.5L983.5,743L977,745L977,749L971.5,754L971.5,761L974.5,761L1037.5,698ZM433.5,648L408.5,652L410,663L414,669L414,674.5L427,675L434.5,655.5ZM997,510L982.5,517.5L968.5,536.5L967,559.5L969.5,578L976,599.5L992,627L1007.5,638L1016,640L1028,639.5L1044.5,631.5L1052.5,622.5L1056.5,614.5L1059,603L1059,589.5L1055.5,567.5L1046,539.5L1034.5,522L1015.5,510.5ZM1027.5,531.5L1044.5,592.5L1046,604.5L1006,616L998.5,616.5L979.5,551.5L979,544ZM466,492.5L438.5,497.5L424,505.5L412,521L409.5,529.5L411,546.5L415,555.5L421,561.5L424.5,562L424.5,565.5L431,567L442,561.5L444,550L450,536.5L456.5,529.5L464,525L463.5,514L469,509.5L468.5,496ZM599.5,493L608,528.5L641.5,520.5L642,518L651.5,517.5L653,506L642.5,508L641.5,511.5L633.5,510.5L621.5,513L618.5,511.5L618.5,502.5L615.5,491ZM510.5,506L514,517.5L523,518.5L537.5,545.5L539.5,581.5L533,582.5L533,589.5L549,589L549.5,593.5L546,595L545.5,600L538,604L537,608L533,609L532.5,616L522,618L522,623L519.5,627L517,627L516.5,632L512,632L511.5,634L507,635L507,638.5L502.5,641.5L501.5,649.5L546,696L554.5,695L556,685.5L564.5,674.5L564.5,671L545,656L545.5,651.5L549.5,651.5L566,661L569,661L575.5,648L584.5,642.5L596,641.5L609,648L612.5,648L624,629L628.5,629.5L628.5,634.5L621.5,656.5L631,656L634.5,663.5L627.5,691.5L645,688L645.5,681.5L652.5,679L659.5,679L661,683L671,682.5L672,689.5L677,689.5L669,655.5L663,644.5L634.5,620.5L630.5,620.5L629.5,616L597.5,588L583.5,581.5L564,580.5L563.5,578.5L560,578L561.5,564.5L560,564L560,558L556.5,557.5L555.5,547.5L561.5,547L561.5,558.5L565.5,559.5L568.5,573.5L583.5,574L591.5,577L605,585.5L636,613L642.5,613L668.5,628L672,628L677.5,616.5L686.5,610L698,608.5L715,615.5L721.5,605.5L726,606L713.5,650L708.5,657L700,660.5L689.5,659L689,667L683.5,667.5L682,661L687.5,659.5L687.5,656L677,646L673.5,646L690,706.5L698,745.5L703,745L693.5,702.5L700.5,700.5L703,707L709,708.5L722,755.5L723,765.5L737.5,766.5L736.5,756.5L726.5,757.5L726.5,752L757,744L762,744.5L762,750L767,749.5L764,732L754.5,700.5L754.5,696L757.5,695.5L757.5,690L760.5,686.5L764.5,686.5L781,750.5L784.5,753L943,711.5L943,706.5L939.5,706L896,717.5L879.5,658L878.5,649L923,637L922.5,630.5L918,630L876,641L858,577.5L858.5,572L902,560L894.5,530.5L885.5,527.5L872,526.5L872.5,531.5L876,533L876.5,539.5L873.5,541.5L872.5,545.5L869.5,545.5L870,554L861.5,557L863.5,565.5L856,570L843.5,571.5L841,567L840.5,559L850.5,556L851,552L823,553L819,542.5L816,525.5L814,523.5L815.5,517L823,517L826,514.5L835.5,516L835.5,513L839.5,512L839.5,508.5L837.5,507.5L814.5,509L802,512L809,547L795,551L785,550.5L783.5,554L762.5,560L757,559L747.5,519L775,512L778.5,525L781.5,525L782,518L799,514.5L798,507.5L783.5,509L781.5,503L759,507.5L748,505.5L747.5,507L711.5,515L710.5,517L685.5,520.5L670,526L664,526L663.5,522L652.5,519.5L653,524L656.5,525L656.5,529L654,529.5L654,534.5L660.5,561L626,571.5L620,571.5L616.5,561.5L616,551.5L613.5,550.5L611,541L594.5,545.5L589,545L587.5,538L563.5,544L559,544L556,541.5L556,536L553.5,535.5L553.5,528L551,527.5L546,503.5L547.5,501L559,498L559,494.5L556.5,494L556.5,486.5L551,485.5L549.5,479L544.5,479.5L544.5,496.5L536,495.5L529,498.5L520.5,497.5L519.5,503.5ZM816,667.5L832,724L833.5,735.5L788,747.5L771.5,689L770.5,679ZM869.5,652.5L887.5,720L849,731.5L842,732L825.5,675L824,664L861.5,653ZM795.5,591L811,645.5L813,659L774.5,670.5L767.5,671L764,659L761,659L761,662.5L753.5,664L752,662L752,655.5L761.5,653.5L761.5,649.5L750,608.5L750,602.5ZM849,576L867,643.5L826,656L821,656L803.5,587.5ZM710.5,524.5L718.5,524.5L730,519.5L737.5,519.5L747,552.5L747,559L738,563L730,563.5L726,557.5L718.5,557.5L710,529.5ZM736.5,456L739.5,474.5L772,468L778,468L779.5,473L813,466.5L817,466.5L820.5,474L834,472L836,477.5L861,474L864.5,472L860.5,456ZM1161.5,416L1156,416L1155.5,423.5L1138.5,424L1138.5,439.5L1129,442.5L1129,445.5L1136.5,444.5L1139,441L1144.5,441L1145.5,445.5L1147.5,446.5L1147.5,452.5L1157,452L1157.5,443L1153.5,442.5L1153,428.5L1160,427.5ZM464.5,408L446.5,408L445.5,410.5L437.5,410.5L437.5,413.5L446,414L446,422L438,423L436.5,425L436.5,431L444,432.5L443,439.5L436,440L436,443.5L440.5,444L442.5,448.5L442.5,462.5L445.5,462.5L446,447.5L450,447L451.5,442L452,412L464.5,411ZM508.5,386.5L467.5,388.5L466.5,395.5L472.5,395.5L474,392.5L480.5,392.5L481,411L486.5,411L487,407.5L500.5,405L501,398L508.5,398ZM405,372L401.5,372L401,378L384,378.5L383.5,387.5L392.5,389L392.5,399.5L375.5,400L376,408.5L405,409.5ZM436,348.5L436,365.5L439.5,366L440,368L453,367L453,379.5L437.5,380L437,388.5L451.5,388.5L452,395.5L456,395.5L457.5,384L467,384.5L470,380L478,380.5L478.5,376.5L509.5,376L511,384.5L520.5,384.5L517.5,370L512,372.5L507,371.5L508.5,363L502.5,356.5L503,349L482,349.5L481.5,358.5L484,359L484,363L489,365.5L489,369.5L479,370.5L478.5,362L470.5,360.5L469.5,348.5ZM1179,337L1176,337L1176.5,348L1144.5,348.5L1145,356.5L1158.5,356.5L1161,377L1151.5,379L1144,377L1144,383.5L1140.5,384L1140,387.5L1128.5,389L1128,384L1122.5,384L1122.5,395L1142.5,395L1143,391.5L1185,392L1177.5,367.5L1177.5,362L1187.5,361L1187.5,357.5ZM562.5,336L562.5,382L593.5,381.5L593.5,336.5L575,336L574.5,339L568,339L567.5,336.5ZM541,336L540,345.5L528,345.5L526.5,356L531,356.5L531,361.5L526.5,364L526.5,367L529,371.5L529,377L547,444L555,442.5L554,432L551.5,431.5L549.5,397.5L547.5,392.5L541,388L541,384L553.5,382.5L553.5,368L546,367.5L546,348.5L543.5,347.5L543.5,341L546,339.5L555.5,340L556,336.5ZM909.5,341L909,351.5L914,361L920.5,365.5L926.5,367L963,367L967.5,362.5L967.5,355L954,350.5L943,328L919,332L912.5,336ZM228,334.5L228,340L233,341.5L244.5,351.5L247.5,351.5L248,353.5L261.5,359.5L265,359.5L272.5,364.5L279.5,364.5L282,376.5L285,376.5L286,366.5L295.5,365.5L299,368L298,379L281.5,396L276.5,396L264,388L249.5,373L246,373L246,376.5L305,438.5L311.5,440.5L314,436.5L319,436.5L317.5,422.5L309.5,414.5L309.5,407.5L304.5,407L304,400.5L301,400L301,396L306,393.5L306.5,390L311.5,389.5L311.5,379.5L317.5,379L317,374L311.5,373.5L311.5,366L314.5,365L324,366.5L324,386.5L320.5,387.5L320.5,393L327.5,395L329.5,373.5L328.5,358L343,359L343,354.5L332,354.5L331.5,350L328.5,350L327,355L320.5,355L320,349.5L308,349L306.5,338L302.5,335.5L299.5,323.5L292.5,322.5L292.5,325.5L299,334L299,340L301.5,344.5L301.5,352.5L298,356L281.5,355.5L277.5,353.5L271.5,345.5L267.5,345.5L263,350L256.5,350L248,344.5L248,340.5L251.5,338.5L251.5,335.5L246,335.5L244.5,339L240.5,339L233,334.5ZM710,328.5L710,322L705,321.5L705,308L701.5,304.5L698.5,304.5L696,309.5L663,310L663,320L684,320L701.5,329.5ZM1100,280L1060.5,280L1056,283L1046,283L1039,280L936.5,280.5L916,287.5L915.5,290L907,292L863,317.5L799,320L752.5,339.5L697.5,339.5L697.5,343.5L701,344L700,349.5L688,350L687.5,339L690.5,338.5L690.5,335.5L683,333L683,352.5L682,354L672,354L671.5,362L678.5,362L679.5,358.5L683.5,358.5L685,360L685,369.5L678,370.5L677,377L671.5,377.5L671.5,380.5L675.5,381L675.5,387L670,388L670,400L668,400.5L667.5,404L663.5,405.5L663.5,417L661.5,417.5L661.5,423.5L664.5,423.5L665,417L669,417L669.5,422L666,422.5L666,425.5L670.5,426L670.5,432.5L977.5,434L988.5,433L989,428L999,428L999.5,433L1010,433L1011.5,430L1020.5,430L1021,424L1041.5,424L1042,433L1079,432.5L1091.5,427L1097.5,419.5L1099.5,413.5ZM975,297.5L979.5,302L992,326L998,342.5L1008,341.5L1012.5,348L1012.5,363.5L1011,365.5L1003,364.5L1003,380L996,392L986,400L975.5,405L893,406.5L882,401.5L873.5,395L869.5,379.5L854.5,357L854.5,352.5L873,340.5L888.5,320L903,308.5L912.5,298L924.5,291.5L943.5,288L957,293.5ZM173,279.5L168.5,287L168.5,293L172,299L201.5,330.5L208.5,335L209,338.5L230,358.5L238,369L244,371.5L244,368.5L229,354L228,349.5L221,342L221,334.5L209.5,334L207.5,328L191.5,312L191.5,308L197.5,306L220,308.5L236.5,306.5L238,308L257,309L257,306L230.5,295L214.5,294.5L214.5,299L210,299.5L209.5,294.5L199,294L176,279.5ZM822.5,271L822.5,280.5L819,282.5L819,287.5L822,288L821,307.5L823,309L848,309L858,307L858.5,303.5L847.5,302.5L845.5,300.5L846,276.5L858,275.5L858,271ZM296.5,252L296.5,258.5L303.5,259.5L302.5,269.5L330.5,271.5L330.5,255.5L312,257L311.5,252.5ZM811,249L811,254.5L815,255.5L815.5,270L818.5,270L820,261.5L846.5,263L846.5,249.5ZM649,269L682.5,269.5L682.5,267L685.5,266.5L686,261.5L711.5,262L711.5,249.5L707.5,250L707,255L693,255L692.5,249L665,249L662,251.5L661.5,258.5L649,258ZM742.5,269L761.5,269.5L762.5,254L783.5,254.5L785,250L764.5,250L745,247.5L745,263.5L742.5,264ZM569,247L568.5,252L560,252.5L561,278L564,278L565,265.5L575.5,265.5L576,267L587.5,266L587.5,281.5L585,283.5L577.5,283.5L577.5,288.5L587.5,289.5L587,307.5L584,308L583,317L590,317.5L591.5,316.5L591,286.5L593,285.5L592.5,248L579,248L578,252.5L574,252.5L573.5,247ZM183,257.5L183,260.5L189.5,261L194.5,270L194,278L221.5,277L230.5,278.5L232.5,269L255,268L255.5,271.5L267.5,272L268,282.5L258.5,283L257,287.5L253,287.5L254,293L257,293L258.5,290L274.5,290.5L275,296.5L287.5,296L290.5,296.5L291,299.5L302.5,299.5L303.5,309L307,308.5L308,299L330.5,299L330,283.5L277.5,282.5L276.5,278.5L273,277.5L273,270L287.5,268.5L287.5,262L236.5,261.5L231.5,262L230,264L202.5,264L201,262.5L201.5,248L194,248.5L193.5,245.5L189,247ZM247.5,228L247,241.5L250.5,243L286,242L286,238.5L270.5,238L269.5,225.5L250,226ZM1023,222L1023,255L1047,254.5L1049.5,256L1049.5,263.5L1044,264.5L1044,267.5L1073,270L1073,267L1065,266.5L1063,236.5L1054.5,237L1054.5,247L1051,249.5L1038,249.5L1037,240L1030.5,238.5L1030.5,233.5L1026,232.5L1026,222ZM280,209L280,213L296.5,213.5L296.5,223.5L288.5,224L289,228L306.5,229L306.5,220.5L309,218L313.5,218L314,214.5L319.5,214.5L319,209ZM488,211.5L488,223.5L491.5,222L522,222.5L522.5,213L534,213L534.5,227.5L558.5,227.5L561,218L591.5,218L591.5,214.5L588.5,211L536,211L535.5,208.5L532,208.5L531.5,210L520.5,210L520,211.5ZM437.5,213.5L433,213.5L432.5,209.5L387.5,207.5L386.5,222L389.5,222L394.5,218L399,218L400.5,222L414,222L418,224.5L418.5,227.5L423.5,228L423.5,232.5L419.5,233L416,236.5L416,239.5L418.5,240L418.5,244L414,244.5L413.5,241.5L408,241L399.5,228.5L395.5,228.5L392.5,232.5L387,232.5L387,247L395,248.5L404,247L407.5,251.5L407.5,255.5L402.5,258L392.5,256L386.5,262L365.5,261L365,257.5L356.5,257.5L356,264L338.5,264L339,284.5L343,284L344.5,270.5L365.5,270.5L366.5,286.5L384.5,286.5L385.5,273L390,272.5L390.5,270.5L432,270.5L432.5,239.5L425.5,239.5L424.5,234.5L429.5,233L428.5,220.5L432.5,217L437.5,217ZM1072,202L1071,205L1068,205.5L1068,212L1094.5,212.5L1094,253L1100,253L1100.5,218L1098,209.5L1089,202.5ZM977.5,246L983,245.5L983.5,208.5L1023.5,208.5L1024,201.5L971.5,201L971,206L975,206L977.5,210ZM94,203.5L94,211L88,211.5L88,214.5L135.5,265.5L142.5,268.5L150.5,267.5L166.5,241L169,239.5L171.5,232L168.5,232L168,235L164,238L154.5,236.5L148.5,247.5L143.5,248.5L124.5,236.5L123,228.5L117.5,228.5L110,224L108.5,218L112,211.5L117.5,211.5L125.5,217L135,216.5L144.5,223.5L147.5,223.5L149.5,227.5L157.5,229.5L161,221L166.5,216L167.5,210.5L157,207.5L155.5,204.5L146.5,200L145.5,197.5L141,199L137.5,204.5L137.5,208L133.5,211.5L123.5,210L120,206L105.5,209L97.5,203.5ZM81.5,175.5L81.5,178.5L85,181.5L85,186.5L90,187.5L87.5,199.5L91.5,199.5L91.5,196L95.5,191L98,191L98,186.5L100,184.5L104.5,184.5L119,193.5L123.5,193.5L126.5,188L129.5,186.5L129.5,176Z", "fields": "M815.5,669L809,669L772,679.5L776,705.5L778,706L780,721L782,722L788.5,746L832.5,735L831,724ZM869,654L862,654L825.5,664.5L826,672.5L842,730.5L861.5,727L885.5,719.5L885,711.5ZM555.5,659L555.5,663L565,669.5L566.5,673.5L569.5,673.5L581,683.5L584,689L591.5,692L599.5,692L607,689L610.5,681.5L610.5,676L620,644L616,644L612.5,650.5L608.5,650.5L604.5,646L594.5,642.5L584,644L574,652L569.5,662.5ZM924,639L917,639L880,650.5L896.5,715.5L903,715.5L940.5,704.5ZM647.5,619.5L647.5,623.5L650,624L652,628.5L657.5,628.5L658,631.5L663.5,633L688.5,656L695,659L700.5,659L708,656L711.5,651.5L722,613L718,613L715.5,617.5L712,617.5L702,610.5L688,610.5L678.5,617L672,629.5L660,626L652,619.5ZM795,592.5L789,592.5L751.5,603L751.5,609.5L768,669.5L774,669.5L803,660L811.5,659L808.5,640ZM848.5,578L840.5,578L805,588L805,593.5L821.5,655L865.5,643L864,632ZM903.5,562.5L896,563L859.5,573L876,639.5L882,639.5L921,628ZM1027,533L980,544L980,549L999,615L1005,615L1044.5,604L1044.5,597.5ZM773.5,514L749,519.5L749.5,527.5L758.5,558L784,552.5L783,544ZM863.5,487.5L860,487L861,478L859,476.5L850,476.5L849.5,488L843,488.5L842.5,490L835.5,489.5L835,482L833,480L824.5,481L823.5,485L815,484L808,485.5L805,477L797,478.5L800.5,495.5L812.5,494L815,503.5L823,501.5L823.5,493.5L827,494L827.5,499.5L839,498L841,499.5L840.5,512L852,511.5L850.5,496.5L863.5,493.5ZM965,486L958.5,458L945.5,460L942.5,468L926.5,470.5L926,472L921.5,472L920.5,467.5L916.5,467L915.5,459.5L904,460.5L902,471.5L899,471.5L898,467.5L892,467.5L878.5,472L882,491L904,487.5L905,491.5L923.5,488.5L927,489.5L928,492L933,492L951,487.5L952.5,493L960,493L965,491ZM984,209.5L984,265.5L1021.5,266L1022,210Z", "water": "M191.5,308.5L211,333.5L216,335L216.5,339L220.5,340L229,350.5L229.5,354L258.5,383.5L277,396.5L284,394.5L298.5,378.5L299,368L295.5,365.5L283.5,365L284,355.5L298.5,356L301.5,351L299.5,333.5L288.5,322L263.5,310L237.5,308L236.5,306L227.5,308L207,308L198.5,306ZM976.5,298.5L943.5,288L922.5,292.5L909,301L891,318L872,341L854.5,352.5L854.5,357L869.5,379.5L874,396L893.5,407L902,405.5L975,405L991,396L1001.5,383.5L1000.5,363.5L1002.5,363L1003,350.5L1001,344.5L998,343.5L995,332Z"};
+const BUILDINGS = 'M836,875L834,870L804,840L800,841L788,854L782,854L780,858L774,856L760,841L758,841L736,862L732,864L738,872L740,872L759,892L768,888L772,894L778,893L782,898L783,902L781,906L790,908L796,907L803,903L806,904L810,900L788,894L784,890L780,881L774,882L773,879L780,876L802,854L804,854L818,868L818,872L803,885L814,896Z M896,836L872,860L874,862L896,840Z M860,836L850,842L851,846L848,848L845,848L838,854L848,866L868,848L868,845Z M880,819L875,822L878,826L876,833L870,836L873,841L887,828L886,824Z M708,814L718,824L728,816L730,816L731,818L723,827L738,840L748,830L755,834L766,824L755,813L755,811L748,805L744,808L742,808L731,794L726,796Z M894,782L887,788L888,790L900,804L908,797Z M931,772L922,769L920,774L908,784L908,788L912,792L916,792L932,778Z M946,765L935,768L936,780L950,768Z M904,758L894,768L901,776L914,764L912,762L910,763Z M638,756L637,758L630,760L631,764L643,775L649,764L644,766L637,760L640,757Z M878,754L875,754L864,764L873,775L885,762L882,758L878,759Z M356,748L357,750L363,752L363,758L379,766L380,762L370,758L370,753L366,752L366,750L363,751Z M687,748L686,745L680,743L656,748L650,755L656,763L660,764L685,758L685,755L687,754Z M622,730L610,746L619,755L634,740L632,737Z M945,730L939,729L938,731L921,736L929,766L946,762L946,752L949,750L950,748L947,744Z M682,722L676,720L664,722L662,724L656,723L654,725L650,724L650,727L645,731L648,732L648,736L653,740L680,734L680,732L682,730Z M696,704L697,714L701,721L700,726L704,736L705,744L710,744L712,742L701,702Z M676,698L669,694L668,696L654,697L652,699L645,699L642,704L642,709L648,714L674,709L674,706L676,705Z M557,692L552,698L568,713L572,714L573,717L588,730L593,723L591,723L582,712L577,710L569,701Z M762,689L759,693L760,694L762,707L765,709L764,713L766,716L768,728L770,730L774,728L764,690Z M420,688L389,690L386,692L382,698L388,701L388,706L413,702L412,696L420,694Z M407,654L404,655L394,675L395,678L392,681L394,686L424,682L422,675L413,676L412,668L410,665Z M447,640L442,633L434,628L433,630L437,634L436,638L430,636L428,632L426,630L413,632L411,639L412,642L407,646L438,644L440,640L444,642Z M934,567L932,568L946,621L952,619L951,614L954,612L952,600L945,596L943,587L946,586L942,572L938,571L938,567Z M650,534L616,544L618,546L624,570L658,560Z M482,532L471,534L460,542L456,548L454,564L458,575L466,584L477,588L488,588L500,584L508,574L511,560L510,552L504,541L494,534Z M717,528L713,530L721,555L724,553Z M1123,519L1122,536L1123,545L1122,546L1136,546L1136,520Z M1179,518L1178,519L1178,530L1186,530L1186,524L1189,524L1188,518Z M800,514L780,519L788,550L808,546Z M690,510L686,512L674,514L674,518L684,518L685,515L692,516Z M950,499L949,500L956,506L956,508L947,524L942,524L940,534L943,536L942,558L950,558L951,536L956,536L956,540L960,539L962,532L960,528L955,531L954,526L964,510Z M646,504L654,503L654,509L651,517L666,522L670,508L658,504L656,499L656,502Z M864,475L862,476L868,502L870,503L873,502L866,476Z M1006,472L981,478L982,486L1008,479Z M600,460L596,460L595,462L576,466L580,490L598,486Z M735,456L722,455L713,457L711,456L709,458L709,465L734,466Z M1158,454L1154,458L1123,458L1122,456L1122,473L1158,474Z M414,448L414,468L433,468L435,473L442,473L444,464L441,464L441,449L442,448Z M332,440L332,446L366,446L366,440L364,438L350,438L349,440L345,438L336,440L334,438Z M366,434L366,436L406,436L406,430L366,430Z M410,416L411,442L417,442L417,434L420,432L420,416Z M366,412L366,418L406,418L406,412Z M432,408L427,408L427,443L433,443Z M336,406L336,415L333,416L334,420L336,421L336,430L346,430L347,432L360,430L360,422L355,420L355,416L360,414L360,406Z M498,406L498,412L522,412L521,405L512,405L512,406L501,406L499,405Z M410,402L410,414L420,414L420,402Z M437,399L437,406L465,406L464,411L452,412L452,422L454,423L494,423L494,412L478,412L477,399Z M1124,398L1126,398L1124,402L1126,410L1158,410L1158,396L1130,396L1127,395Z M575,390L564,396L558,394L559,415L560,416L560,425L562,426L564,424L564,418L567,416L571,418L574,424L586,419Z M367,394L373,394L376,397L392,397L392,394L394,394L392,394L390,388L384,388L382,392L376,392L373,385L368,384Z M333,383L333,390L340,390L342,394L358,393L358,386L350,384L348,388L342,388L340,387L340,383Z M650,378L651,392L666,392L665,378Z M482,376L482,385L510,385L509,376L504,376L504,378Z M594,378L596,399L611,399L613,404L610,406L610,410L615,410L616,415L646,415L645,396L618,398L618,396L612,392L612,376L608,374L606,378Z M1031,374L1028,374L1028,376L1022,378L1014,388L1020,396L1026,394L1034,386L1034,384L1037,378L1035,378Z M408,369L408,389L412,389L414,394L426,394L426,369Z M374,367L376,373L384,373L384,376L400,376L400,368L393,368L392,372L384,372L383,366Z M312,366L312,373L317,374L316,379L312,379L314,382L312,386L323,386L323,367Z M340,365L341,370L348,370L350,374L366,374L366,366L358,366L358,369L349,369L348,363L342,362Z M1178,361L1177,365L1181,372L1185,388L1192,389L1186,369L1187,366L1184,360L1182,362Z M684,360L680,360L679,363L676,362L676,360L672,360L673,376L676,376L678,370L684,370Z M652,360L651,374L666,374L666,360Z M624,360L624,374L645,374L644,378L624,378L624,392L646,392L646,360Z M1131,354L1132,374L1130,375L1144,376L1144,372L1146,372L1147,378L1160,376L1156,355L1148,358L1147,356L1144,356L1144,352L1135,352L1134,354Z M506,350L502,353L506,360L510,363L514,358Z M995,344L989,348L988,355L994,362L1000,364L998,351Z M1006,341L1000,344L1004,353L1003,362L1011,364L1012,350Z M688,340L688,349L700,349L700,340Z M442,336L442,343L472,343L472,334L456,336L444,334Z M352,332L354,334L353,353L356,353L357,355L358,353L374,353L374,332Z M483,332L484,346L504,346L504,332Z M1156,329L1156,340L1169,336L1169,330Z M1152,337L1146,334L1143,328L1142,332L1132,338L1138,339L1145,336L1148,339L1151,339Z M648,324L648,328L654,327L655,332L650,332L651,353L668,353L668,338L661,335L662,324L662,328L658,329L658,323L660,322L658,322L657,328L654,327L654,322L652,326Z M646,322L642,326L638,326L640,331L630,332L630,329L628,329L628,332L624,331L624,326L627,326L628,328L628,323L630,322L625,325L618,323L617,325L611,323L611,328L616,327L618,332L616,334L598,334L597,332L596,356L612,356L612,344L616,345L616,350L646,350Z M708,312L708,319L730,320L730,313Z M736,310L735,327L758,326L757,310Z M562,312L566,315L566,313L576,313L577,314L583,313L583,304L582,303L566,304L564,302Z M314,302L314,310L332,310L332,302Z M1148,298L1144,310L1150,320L1156,308Z M534,298L534,306L535,307L554,307L554,298Z M274,298L276,304L288,304L290,307L302,306L302,301L290,301L288,298Z M662,300L664,308L694,308L694,300L684,300L682,296L675,296L673,300Z M626,296L624,308L628,315L652,314L652,296Z M408,296L407,298L384,298L384,304L409,304Z M350,297L350,304L371,304L371,297Z M488,295L489,296L488,312L522,312L522,294Z M602,293L602,318L609,318L610,294Z M566,290L566,300L586,300L586,290L584,289Z M1124,288L1123,318L1126,318L1126,289Z M710,286L711,290L742,290L742,284L712,284L711,283Z M536,283L537,293L556,293L556,284L555,283Z M786,282L773,284L764,286L762,296L764,300L764,306L762,307L762,310L786,310L788,297L786,296Z M703,278L688,280L690,280L690,285L704,285Z M847,276L848,296L846,299L858,302L858,296L856,294L858,278Z M386,276L387,276L387,280L431,280L431,274L428,273L404,273L403,274L388,273Z M344,274L346,280L364,280L363,273Z M813,273L804,273L802,275L804,285L802,286L802,291L804,293L812,292L812,278L814,278Z M648,272L650,273L650,276L658,276L659,274L662,274L664,278L684,276L684,272L656,270Z M274,270L274,277L288,277L288,280L301,280L302,277L312,277L314,280L328,280L328,274L316,274L314,270L313,271L304,271L303,270L300,274L288,274L286,270Z M566,268L566,272L564,274L569,276L569,282L586,282L586,268Z M534,268L534,274L556,274L556,268Z M1136,264L1127,277L1127,281L1136,296L1145,280Z M238,270L238,282L251,282L252,280L265,280L266,281L268,280L264,274L252,274L248,264L248,268Z M690,264L690,269L720,269L720,264L693,264L692,262Z M606,264L607,270L637,270L637,264L608,264L608,262Z M460,262L458,263L458,282L458,286L465,287L465,294L461,294L461,305L480,305L480,294L465,294L466,290L476,290L476,263L474,262Z M1090,264L1090,258L1068,260L1068,264Z M762,258L762,262L764,263L762,273L764,274L769,274L771,276L783,274L783,258Z M1025,256L1026,262L1024,262L1048,263L1048,254L1027,254Z M201,254L200,261L202,262L230,262L230,255Z M519,254L516,252L513,258L510,256L508,258L509,261L513,262L512,265L494,266L493,264L487,264L486,272L494,275L522,274L523,270L522,266L516,266L514,264L514,261L519,261Z M252,248L252,258L258,258L259,261L264,261L260,260L261,257L270,258L270,248Z M610,247L603,247L603,257L610,257Z M556,246L555,248L534,248L534,254L556,254Z M298,240L298,250L313,250L314,254L328,254L328,248L326,246L312,246L311,243L302,243Z M624,240L624,245L648,245L650,252L660,252L660,240Z M215,238L215,246L246,246L246,238Z M565,240L565,246L572,246L573,247L574,246L590,246L590,240L574,240L574,238Z M380,238L375,239L374,238L368,240L369,256L376,256L378,252L382,252L382,240Z M665,234L666,246L686,246L686,234L685,232L666,232Z M734,230L732,228L722,230L724,231L723,240L695,240L695,252L705,252L706,246L734,246Z M534,230L535,235L554,235L554,236L554,235L560,235L560,229L558,228L536,229L535,228Z M492,224L492,230L503,230L504,232L503,238L490,239L492,245L521,245L521,240L519,238L510,238L512,230L521,230L520,223L493,222Z M564,222L564,228L589,228L589,222Z M458,219L456,221L458,222L458,248L474,248L474,222L472,224L464,224L462,218Z M888,234L888,238L892,240L896,248L912,252L914,255L919,254L920,252L935,248L939,244L940,240L944,239L944,232L940,230L936,223L932,220L922,220L920,216L912,216L912,220L904,219L904,220L896,222Z M665,216L666,228L686,228L686,216L670,216L670,214Z M626,222L626,226L630,233L657,233L657,228L660,228L660,221L656,214L630,214L629,216L630,218Z M340,213L340,222L344,222L346,224L346,232L364,232L364,213Z M1068,212L1068,252L1070,254L1093,254L1094,261L1096,262L1096,268L1094,268L1100,270L1098,252L1093,252L1094,214Z M322,212L323,238L329,238L330,212Z M173,211L160,231L166,236L168,232L174,230L174,226L180,219L180,216Z M764,210L762,212L764,248L765,250L768,248L771,250L772,248L785,248L786,212Z M114,210L108,219L108,222L122,229L122,234L146,249L149,243L141,238L136,231L138,230L150,238L154,232L130,218L126,218Z M972,208L960,212L960,245L962,248L968,248L969,246L976,246L976,240L978,240L976,235L976,220L978,218L976,212Z M959,210L958,210L958,206L960,206L958,201L938,202L941,208L944,210Z M284,224L282,224L282,216L278,212L272,211L274,202L272,194L270,194L271,216L267,216L266,214L260,216L259,208L254,204L244,204L242,211L236,211L232,208L224,208L221,210L214,210L214,220L216,220L215,230L240,230L240,221L244,220L244,222L270,223L272,237L278,237L280,235L279,230L284,230Z M103,188L95,202L108,209L112,201L115,200L116,196Z M152,188L150,194L168,205L171,204L174,200L174,197L167,193L162,194L157,189Z M128,186L118,204L132,212L142,195L137,190Z M72,174L71,178L78,185L77,188L74,185L70,186L77,192L76,194L74,195L74,199L84,206L86,202L84,198L86,196L90,188L86,186L84,181L80,176L77,179L74,179L74,175Z';
+function baseSVG() {
+  const M = MAP_LAYERS;
+  let s = `<rect x="${VB.x}" y="${VB.y}" width="${VB.w}" height="${VB.h}" class="m-bg"/>
+  <g pointer-events="none">
+    <path class="m-ext" d="M210,176 H1105"/>
+    <path class="m-ext" d="M40,182 L330,468 L772,978"/>
+    <path class="m-ext" d="M800,978 L1200,606"/>
+    <path class="m-ext" d="M1150,206 C1200,300 1244,380 1244,440 L1242,540 C1240,570 1218,592 1200,606"/>
+    <path class="m-street" d="${M.hull}"/>
+    <path class="m-block" d="${M.blocks}"/>
+    <path class="m-park" d="${M.parking}"/>
+    <path class="m-green" d="${M.green}" fill-rule="evenodd"/>
+    <path class="m-field" d="${M.fields}"/>
+    <path class="m-water" d="${M.water}"/>
+    <path class="m-bld" d="${BUILDINGS}"/>
+  </g>`;
+  let labels = '';
+  for (const z of ZONES) {
+    const [lx, ly] = z.l, lines = z.lines || [];
+    let t = z.code ? `<text class="z-code" x="${lx}" y="${ly}" text-anchor="middle">${z.code}</text>` : '';
+    lines.forEach((ln, i) => t += `<text class="${z.code ? 'z-name' : 'z-lbl'}" x="${lx}" y="${ly + (z.code ? 12 : 0) + i * 12}" text-anchor="middle">${esc(ln)}</text>`);
+    s += `<g class="zone ${z.type}" data-zone="${z.id}"><title>${esc(z.short)}</title><path class="zs" d="${polyPath(z.polys)}"/></g>`;
+    labels += t;
+  }
+  s += `<g class="road-labels" pointer-events="none">
+    <text class="road-label out" x="660" y="171" text-anchor="middle">AV. SAN CLAUDIO</text>
+    <text class="road-label" x="196" y="214" text-anchor="middle" transform="rotate(-63 196 214)">PROL. 14 SUR</text>
+    <text class="road-label" x="336" y="262" text-anchor="middle" transform="rotate(90 336 262)">C. DE LAS CIENCIAS</text>
+    <text class="road-label" x="596.5" y="262" text-anchor="middle" transform="rotate(90 596.5 262)">C. EDUCACIÓN</text>
+    <text class="road-label" x="867.5" y="250" text-anchor="middle" transform="rotate(90 867.5 250)">C. DE LA ACADEMIA</text>
+    <text class="road-label" x="420" y="325" text-anchor="middle">AV. UNIVERSIDAD</text>
+    <text class="road-label" x="800" y="453" text-anchor="middle">AV. CENTRAL</text>
+    <text class="road-label" x="1112" y="380" text-anchor="middle" transform="rotate(-90 1112 380)">AV. ESCOLAR</text>
+    <text class="road-label" x="906" y="580" text-anchor="middle" transform="rotate(71.8 906 580)">AV. DEL ESTADIO</text>
+    <text class="road-label" x="805" y="752" text-anchor="middle" transform="rotate(-15 805 752)">AV. DEL DEPORTE</text>
+    <text class="road-label" x="808" y="826" text-anchor="middle" transform="rotate(54 808 826)">C. BIBLIOTECA</text>
+    <text class="road-label out" x="150" y="318" text-anchor="middle" transform="rotate(44.6 150 318)">BLVD. VALSEQUILLO</text>
+    <text class="road-label out" x="540" y="772" text-anchor="middle" transform="rotate(49 540 772)">BLVD. VALSEQUILLO</text>
+    <text class="road-label out" x="1030" y="822" text-anchor="middle" transform="rotate(-42.6 1030 822)">BLVD. LAS TORRES</text>
+    <text class="road-label out" x="1252" y="320" text-anchor="middle" transform="rotate(68 1252 320)">CALLE 24 SUR</text>
+  </g>`;
+  s += `<g class="z-labels">${labels}</g>`;
+  for (const r of Object.values(RESG)) {
+    s += `<g class="resg" data-resg="${r.id}" transform="translate(${r.x},${r.y})"><title>${esc(r.name)}</title><rect x="-9" y="-9" width="18" height="18" rx="4"/><g transform="scale(.85)">${BOX_ICON}</g></g>`;
+  }
+  s += `<g class="scale"><line x1="40" y1="962" x2="102.5" y2="962"/><line x1="40" y1="957" x2="40" y2="967"/><line x1="102.5" y1="957" x2="102.5" y2="967"/></g>
+  <text x="110" y="966" class="map-label">≈ 100 m</text>
+  <text x="1240" y="165" class="map-label" text-anchor="middle">N ↑</text>`;
+  return s;
+}
+function makeMap(el, opts = {}) {
+  el.innerHTML = `<svg viewBox="${VB.x} ${VB.y} ${VB.w} ${VB.h}" role="img" aria-label="${esc(opts.label || 'Mapa esquemático de CU1')}">${baseSVG()}<g class="ov"></g></svg>`;
+  const svg = el.querySelector('svg'), ov = svg.querySelector('.ov');
+  if (opts.noClick) el.classList.add('no-click');
+  svg.addEventListener('click', e => {
+    const d = e.target.closest('[data-item]');
+    if (d && opts.onItem) { opts.onItem(d.dataset.item); return; }
+    const r = e.target.closest('[data-resg]');
+    if (r && opts.onResg) { opts.onResg(r.dataset.resg); return; }
+    const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+    const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+    const q = {x: Math.round(Math.max(VB.x + 5, Math.min(VB.x + VB.w - 5, p.x))), y: Math.round(Math.max(VB.y + 5, Math.min(VB.y + VB.h - 5, p.y)))};
+    opts.onClick && opts.onClick(q, zoneAt(q));
+  });
+  return {
+    svg,
+    draw(html) { ov.innerHTML = html; },
+    hlZones(ids, cls = 'hl') { $$('.zone', svg).forEach(g => g.classList.toggle(cls, ids.includes(g.dataset.zone))); },
+    hlResg(ids) { $$('.resg', svg).forEach(g => g.classList.toggle('hl', ids.includes(g.dataset.resg))); }
+  };
+}
+const pinSVG = (p, cls = '') => `<g class="pin ${cls}" transform="translate(${p.x},${p.y})" pointer-events="none">
+  <path d="M0 0 C-4 -9 -12 -14 -12 -23 A12 12 0 1 1 12 -23 C12 -14 4 -9 0 0Z"/><circle cx="0" cy="-23" r="4.5"/></g>`;
+const dotSVG = (it, cls, r = 6) => `<g class="dot ${cls}" data-item="${it.id}"><title>${esc(catName(it))} · ${esc(fmtDate(it.fecha))}</title>
+  <circle class="hit" cx="${it.x}" cy="${it.y}" r="9"/><circle class="d" cx="${it.x}" cy="${it.y}" r="${r}"/></g>`;
+
+/* =================================================================
+   Vista: BUSCAR
+   ================================================================= */
+const S = {q: '', lostDate: '', R: 110, mode: 'punto', pts: [], sel: null};
+let mapB;
+const HINTS = {
+  punto: 'Toca el mapa donde viste tu objeto por última vez. Si tocas otro lugar, el marcador se mueve.',
+  ruta: 'Toca el mapa en orden por los lugares donde estuviste: salón, comedor, biblioteca… Buscamos objetos a lo largo de tu recorrido.',
+  none: 'Te mostramos todos los objetos registrados de ese tipo, sin filtrar por lugar.'
+};
+
+function initBuscar() {
+  mapB = makeMap($('#mapBuscar'), {
+    label: 'Mapa de CU1 para marcar dónde perdiste tu objeto',
+    onClick(p) {
+      if (S.mode === 'punto') S.pts = [p];
+      else if (S.mode === 'ruta') { if (S.pts.length >= 15) { toast('La ruta admite hasta 15 puntos.'); return; } S.pts.push(p); }
+      else { toast('Elige «Marcar punto» o «Trazar ruta» para usar el mapa.'); return; }
+      renderBuscar();
+    },
+    onItem(id) { S.sel = S.sel === id ? null : id; renderBuscar(); const li = $(`#results [data-sel="${id}"]`); li && li.scrollIntoView({block: 'nearest', behavior: 'smooth'}); }
+  });
+  $('#dl-cats').innerHTML = Object.entries(CATS).filter(([k]) => k !== 'otro').map(([, c]) => `<option value="${esc(c.sing)}">`).join('');
+  $('#q').addEventListener('input', e => { S.q = e.target.value; S.sel = null; renderBuscar(); });
+  $('#lostDate').addEventListener('change', e => { S.lostDate = e.target.value; renderBuscar(); });
+  $('#lostDate').max = dayStr(new Date());
+  $('#radius').addEventListener('change', e => { S.R = +e.target.value; renderBuscar(); });
+  $$('.seg [data-mode]').forEach(b => b.addEventListener('click', () => {
+    S.mode = b.dataset.mode;
+    if (S.mode === 'punto') S.pts = S.pts.slice(-1);
+    if (S.mode === 'none') S.pts = [];
+    renderBuscar();
+  }));
+  $('#undoPt').addEventListener('click', () => { S.pts.pop(); renderBuscar(); });
+  $('#clearPts').addEventListener('click', () => { S.pts = []; renderBuscar(); });
+  $('#qchips').addEventListener('click', e => {
+    const b = e.target.closest('[data-cat]'); if (!b) return;
+    const c = CATS[b.dataset.cat];
+    S.q = norm(S.q) === norm(c.sing) ? '' : c.sing; $('#q').value = S.q; S.sel = null; renderBuscar();
+  });
+  $('#results').addEventListener('click', e => {
+    const b = e.target.closest('[data-sel]'); if (b) { S.sel = S.sel === b.dataset.sel ? null : b.dataset.sel; renderBuscar(); return; }
+    const c = e.target.closest('[data-cat]'); if (c) { S.q = CATS[c.dataset.cat].sing; $('#q').value = S.q; renderBuscar(); window.scrollTo({top: 0, behavior: 'smooth'}); }
+  });
+}
+
+function routeZones(pts) {
+  const set = new Set();
+  pts.forEach((p, i) => {
+    set.add(zoneAt(p).id);
+    const n = pts[i + 1]; if (!n) return;
+    const steps = Math.ceil(Math.hypot(n.x - p.x, n.y - p.y) / 10);
+    for (let k = 1; k < steps; k++) set.add(zoneAt({x: p.x + (n.x - p.x) * k / steps, y: p.y + (n.y - p.y) * k / steps}).id);
+  });
+  set.delete('and');
+  return set;
+}
+
+function locReason(it) {
+  if (S.mode === 'none' || !S.pts.length) return null;
+  const R = S.R / MPU;
+  if (S.pts.length === 1) {
+    const d = Math.hypot(it.x - S.pts[0].x, it.y - S.pts[0].y);
+    if (d <= R) return {score: d, txt: `A unos ${Math.max(10, Math.round(d * MPU / 10) * 10)} m de tu marcador`};
+    const z = zoneAt(S.pts[0]);
+    if (z.id !== 'and' && z.id === it.zona) return {score: R + d, txt: `En la misma zona que marcaste (${zTag(z)})`};
+    return null;
+  }
+  let d = Infinity;
+  for (let i = 0; i < S.pts.length - 1; i++) d = Math.min(d, distSeg(it, S.pts[i], S.pts[i + 1]));
+  if (d * MPU <= S.R) return {score: d, txt: d * MPU < 25 ? 'Justo sobre tu ruta' : `A unos ${Math.round(d * MPU / 10) * 10} m de tu ruta`};
+  if (routeZones(S.pts).has(it.zona)) return {score: R + d, txt: `En una zona por la que pasaste (${zTag(ZMAP[it.zona])})`};
+  return null;
+}
+
+function itemRow(it, why) {
+  const z = ZMAP[it.zona], r = RESG[it.resg], sel = S.sel === it.id;
+  let det = '';
+  if (sel) {
+    if (it.estado === 'entregado') {
+      det = `<div class="it-detail"><p>Este objeto ya se entregó a su dueño el <b>${fmtDate(it.entrega.fecha)}</b>. Seguirá en la lista hasta el <b>${retiro(it)}</b> como constancia.</p>
+        <p>Si crees que era tuyo, acude a <b>${esc(r.name)}</b> con el folio <span class="folio">${it.id}</span>: la entrega quedó registrada.</p></div>`;
+    } else {
+      det = `<div class="it-detail">
+        ${it.estado === 'pendiente' ? '<p><b>Aún no llega al resguardo.</b> Quien lo encontró dijo que lo llevará ahí. Pregunta con el folio o revisa más tarde.</p>' : ''}
+        <ol>
+          <li>Ve a <b>${esc(r.name)}</b>: ${esc(r.lugar)}. Horario: ${esc(r.horario)}.</li>
+          <li>Lleva tu credencial BUAP o una identificación oficial.</li>
+          <li>Menciona el folio <span class="folio">${it.id}</span> y describe tu objeto: color, marca, señas o lo que tenía dentro. Si coincide con lo registrado, te lo entregan.</li>
+        </ol></div>`;
+    }
+  }
+  return `<li class="it ${sel ? 'sel' : ''} ${why ? 'match' : ''}">
+    <button type="button" class="it-head" data-sel="${it.id}" aria-expanded="${sel}">
+      <span class="it-when"><b>${fmtDate(it.fecha)}</b><span>${esc(it.hora)} h</span></span>
+      <span class="it-body">
+        <span class="it-title">${esc(catName(it))} <span class="folio">${it.id}</span></span>
+        <span class="it-line">Se encontró en <b>${esc(z.short)}</b> · ${esc(it.lugar)}</span>
+        <span class="it-line">Resguardo: <b>${esc(r.name)}</b></span>
+        ${why ? `<span class="why">${esc(why)}</span>` : ''}
+      </span>
+      ${stChip(it)}
+    </button>${det}</li>`;
+}
+
+function renderBuscar() {
+  const now = Date.now();
+  const visible = DB.filter(it => isPublic(it, now)).sort((a, b) => (b.fecha + b.hora).localeCompare(a.fecha + a.hora));
+  const q = S.q.trim();
+
+  // controles
+  $$('.seg [data-mode]').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === S.mode));
+  $('#modeHint').textContent = HINTS[S.mode];
+  $('#undoPt').disabled = !S.pts.length; $('#clearPts').disabled = !S.pts.length;
+  $('#radius').disabled = S.mode === 'none';
+
+  // chips con conteo
+  const counts = {};
+  visible.forEach(it => counts[it.tipo] = (counts[it.tipo] || 0) + 1);
+  $('#qchips').innerHTML = Object.keys(CATS).filter(k => counts[k]).sort((a, b) => counts[b] - counts[a])
+    .map(k => `<button type="button" class="chip-btn" data-cat="${k}" aria-pressed="${norm(q) === norm(CATS[k].sing)}">${esc(CATS[k].name)} <b>${counts[k]}</b></button>`).join('');
+
+  // filtrado
+  const found = q ? visible.filter(it => matchesQuery(it, q)) : visible;
+  const useLoc = S.mode !== 'none' && S.pts.length > 0;
+  const useDate = !!S.lostDate;
+  let matches = [], others = found;
+  const reasons = {};
+  if (q && (useLoc || useDate)) {
+    matches = []; others = [];
+    for (const it of found) {
+      const dateOk = !useDate || it.fecha >= S.lostDate;
+      const lr = useLoc ? locReason(it) : {score: 0, txt: 'Se encontró después del día que lo perdiste'};
+      if (dateOk && lr) { reasons[it.id] = lr; matches.push(it); } else others.push(it);
+    }
+    matches.sort((a, b) => reasons[a.id].score - reasons[b.id].score);
+  }
+
+  // mapa
+  let h = '';
+  if (useLoc) {
+    if (S.pts.length === 1) h += `<circle class="ov-area" cx="${S.pts[0].x}" cy="${S.pts[0].y}" r="${S.R / MPU}"/>`;
+    else {
+      const pl = S.pts.map(p => `${p.x},${p.y}`).join(' ');
+      h += `<polyline class="ov-buf" points="${pl}" stroke-width="${S.R * 2 / MPU}"/><polyline class="ov-route" points="${pl}"/>`;
+    }
+  }
+  const mIds = new Set(matches.map(i => i.id));
+  const shown = q ? found : visible;
+  const selIt = shown.find(i => i.id === S.sel);
+  if (selIt) { const r = RESG[selIt.resg]; h += `<line class="ov-link" x1="${selIt.x}" y1="${selIt.y}" x2="${r.x}" y2="${r.y}"/>`; }
+  for (const it of shown) {
+    if (it.id === S.sel) continue;
+    const cls = [mIds.has(it.id) ? 'm' : q ? 'q' : '', it.estado === 'entregado' ? 'ok' : ''].join(' ');
+    h += dotSVG(it, cls, mIds.has(it.id) ? 7 : 5);
+  }
+  if (selIt) h += dotSVG(selIt, 'sel ' + (mIds.has(selIt.id) ? 'm' : 'q') + (selIt.estado === 'entregado' ? ' ok' : ''), 9);
+  if (useLoc) {
+    if (S.pts.length === 1) h += pinSVG(S.pts[0]);
+    else S.pts.forEach((p, i) => h += `<g class="ov-vtx" pointer-events="none"><circle cx="${p.x}" cy="${p.y}" r="10"/><text x="${p.x}" y="${p.y + 4}">${i + 1}</text></g>`);
+  }
+  mapB.draw(h);
+  mapB.hlZones(useLoc ? (S.pts.length === 1 ? [zoneAt(S.pts[0]).id] : [...routeZones(S.pts)]) : []);
+  mapB.hlResg(selIt ? [selIt.resg] : []);
+
+  // resultados
+  const out = [];
+  if (!q) {
+    const enRes = visible.filter(i => i.estado !== 'entregado').length;
+    out.push(`<div class="summary"><div class="big">${enRes}</div><div><b>objetos registrados como encontrados en CU1</b><span>Escribe qué perdiste o toca un tipo de objeto para ver cuándo y dónde se encontró cada uno.</span></div></div>`);
+    out.push(`<div class="sec-h"><h3>Reportados recientemente</h3></div><ul class="items">${visible.slice(0, 8).map(it => itemRow(it)).join('')}</ul>`);
+  } else if (!found.length) {
+    out.push(`<div class="summary"><div class="big">0</div><div><b>No hay «${esc(q)}» registrados como encontrados</b><span>Revisa más tarde: cualquier persona puede reportar lo que encuentra. También puedes preguntar en el punto de resguardo de la facultad donde lo perdiste.</span></div></div>`);
+  } else {
+    const kinds = new Set(found.map(i => i.tipo));
+    const c = kinds.size === 1 ? CATS[[...kinds][0]] : CATS.otro;
+    const n = found.length, a = c.g === 'f' ? 'a' : 'o';
+    const noun = n === 1 ? (kinds.size === 1 && found[0].tipo === 'otro' ? found[0].otro.toLowerCase() : c.sing) : c.plural;
+    const label = n === 1 ? `${noun} registrad${a} como encontrad${a}` : `${noun} registrad${a}s como encontrad${a}s`;
+    const nRes = found.filter(i => i.estado !== 'entregado').length, nOk = n - nRes;
+    let sub = `${nRes} en resguardo o por llegar${nOk ? ` · ${nOk} ya entregado${nOk > 1 ? 's' : ''} esta semana` : ''}.`;
+    if (useLoc || useDate) sub = `<b style="display:inline;color:var(--accent)">${matches.length} coincide${matches.length === 1 ? '' : 'n'}</b> con ${useLoc && useDate ? 'el lugar y la fecha que indicaste' : useLoc ? (S.pts.length > 1 ? 'tu ruta' : 'el lugar que marcaste') : 'la fecha que indicaste'}. ` + sub;
+    else sub += ' Marca en el mapa dónde lo perdiste para ver cuáles coinciden.';
+    out.push(`<div class="summary"><div class="big">${n}</div><div><b>${esc(label)}</b><span>${sub}</span></div></div>`);
+    if (useLoc || useDate) {
+      out.push(`<div class="sec-h"><h3>Coinciden con tu búsqueda</h3></div>`);
+      out.push(matches.length ? `<ul class="items">${matches.map(it => itemRow(it, reasons[it.id].txt)).join('')}</ul>`
+        : `<div class="empty">Ninguno se encontró cerca de ${S.pts.length > 1 ? 'tu ruta' : 'tu marcador'}${useDate ? ' después de esa fecha' : ''}. Prueba un radio más amplio o revisa los demás registros.</div>`);
+      if (others.length) out.push(`<div class="sec-h"><h3>Otros registrados en CU1</h3></div><ul class="items">${others.map(it => itemRow(it)).join('')}</ul>`);
+    } else {
+      out.push(`<ul class="items">${found.map(it => itemRow(it)).join('')}</ul>`);
+    }
+  }
+  $('#results').innerHTML = out.join('');
+}
+
+/* =================================================================
+   Vista: REPORTAR
+   ================================================================= */
+let RP, mapR;
+function resetReport() {
+  const d = new Date();
+  RP = {tipo: null, otro: '', pt: null, zona: null, lugar: '', fecha: dayStr(d), hora: pad(d.getHours()) + ':' + pad(d.getMinutes()),
+    desc: '', resg: ADM.user ? ADM.point : '', resgManual: !!ADM.user, quien: '', done: null};
+}
+const SHIELD = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg>';
+function renderReport() {
+  const w = $('#reportWrap');
+  if (RP.done) {
+    const it = RP.done, r = RESG[it.resg];
+    w.innerHTML = `<div class="panel confirm">
+      <span class="sub">Objeto registrado · folio</span>
+      <div class="fol">${it.id}</div>
+      <h2>${it.estado === 'resguardo' ? 'Quedó en resguardo' : 'Gracias. Ahora llévalo al punto de resguardo'}</h2>
+      <div class="resg-card"><span class="ico"><svg viewBox="-12 -12 24 24">${BOX_ICON}</svg></span><div><b>${esc(r.name)}</b><span>${esc(r.lugar)}</span><span>${esc(r.horario)}</span></div></div>
+      <p>${it.estado === 'resguardo' ? 'Ya aparece en el buscador como «En resguardo».' : 'Menciona el folio al entregarlo. Mientras tanto aparece en el buscador como «Por llegar al resguardo», y cuando la administración lo reciba pasará a «En resguardo».'}</p>
+      <div class="maptools"><button class="btn primary" type="button" id="rpAgain">Registrar otro objeto</button><a class="btn" href="#buscar">Ir al buscador</a></div></div>`;
+    $('#rpAgain').onclick = () => { resetReport(); renderReport(); window.scrollTo({top: 0}); };
+    return;
+  }
+  const resgOpts = RESG_ORDER.map(id => `<option value="${id}" ${RP.resg === id ? 'selected' : ''}>${esc(RESG[id].name)}</option>`).join('');
+  w.innerHTML = `
+  ${ADM.user ? `<div class="admin-banner">Registrando como administración de ${esc(RESG[ADM.point].name)}: el objeto entra directo a «En resguardo».</div>` : ''}
+  <form id="rpForm" novalidate class="r-wrap">
+    <div class="panel step"><span class="step-n">1</span><div class="step-b">
+      <h2 id="lbl-tipo">¿Qué encontraste?</h2>
+      <div class="catgrid" role="radiogroup" aria-labelledby="lbl-tipo">
+        ${Object.entries(CATS).map(([k, c]) => `<button type="button" class="cat" role="radio" data-tipo="${k}" aria-checked="${RP.tipo === k}">${k === 'otro' && RP.otro ? 'Otro: ' + esc(RP.otro) : esc(c.name)}</button>`).join('')}
+      </div>
+      <p class="err" id="e-tipo">Elige el tipo de objeto.</p>
+    </div></div>
+
+    <div class="panel step"><span class="step-n">2</span><div class="step-b">
+      <h2>¿Dónde lo encontraste?</h2>
+      <p class="sub">Toca el mapa en el lugar exacto. La zona se detecta sola.</p>
+      <p class="map-scroll-hint">Desliza el mapa a los lados para ver todo el campus.</p>
+      <div class="map" id="mapReport"></div>
+      <div class="zone-info" id="zoneInfo"></div>
+      <p class="err" id="e-pt">Marca en el mapa dónde lo encontraste.</p>
+      <div class="field">
+        <label for="rpLugar">Lugar exacto <span class="sub">(salón, laboratorio, mesa…)</span></label>
+        <input type="text" id="rpLugar" maxlength="80" placeholder="Ej. Salón 204, edificio CCO3" value="${esc(RP.lugar)}">
+        <p class="err" id="e-lugar">Escribe en qué parte lo encontraste.</p>
+      </div>
+    </div></div>
+
+    <div class="panel step"><span class="step-n">3</span><div class="step-b">
+      <h2>¿Cuándo?</h2>
+      <div class="row2">
+        <div class="field"><label for="rpFecha">Día</label><input type="date" id="rpFecha" value="${RP.fecha}" max="${dayStr(new Date())}"></div>
+        <div class="field"><label for="rpHora">Hora aproximada</label><input type="time" id="rpHora" value="${RP.hora}"></div>
+      </div>
+      <p class="err" id="e-fecha">Indica el día y la hora.</p>
+    </div></div>
+
+    <div class="panel step"><span class="step-n">4</span><div class="step-b">
+      <h2>Descríbelo para verificar al dueño</h2>
+      <div class="field">
+        <label for="rpDesc">Color, marca, señas o qué tenía dentro</label>
+        <textarea id="rpDesc" maxlength="240" placeholder="Ej. Termo azul marino con sticker de la NASA">${esc(RP.desc)}</textarea>
+      </div>
+      <p class="privacy">${SHIELD}<span>Solo la ve la administración. No se publica, para que quien lo reclame tenga que describirlo y así evitar robos.</span></p>
+    </div></div>
+
+    <div class="panel step"><span class="step-n">5</span><div class="step-b">
+      <h2>¿Dónde lo vas a entregar?</h2>
+      <div class="field">
+        <label for="rpResg">Punto de resguardo</label>
+        <select id="rpResg" ${ADM.user ? 'disabled' : ''}><option value="">Marca el lugar en el mapa o elige uno</option>${resgOpts}</select>
+      </div>
+      <div id="resgCard"></div>
+      <p class="err" id="e-resg">Elige el punto de resguardo.</p>
+      ${ADM.user ? '' : `<div class="field">
+        <label for="rpQuien">Tu nombre o matrícula <span class="sub">(opcional)</span></label>
+        <input type="text" id="rpQuien" maxlength="60" value="${esc(RP.quien)}">
+        <p class="privacy" style="margin-top:6px">${SHIELD}<span>Solo para la administración, por si necesitan contactarte.</span></p>
+      </div>`}
+    </div></div>
+
+    <div><button class="btn primary" type="submit" style="min-width:260px;min-height:50px;font-size:16px">Registrar objeto encontrado</button></div>
+  </form>`;
+
+  mapR = makeMap($('#mapReport'), {
+    label: 'Mapa de CU1 para marcar dónde encontraste el objeto',
+    onClick(p, z) {
+      RP.pt = p; RP.zona = z.id;
+      if (!RP.resgManual) { RP.resg = z.resg; $('#rpResg').value = RP.resg; }
+      $('#e-pt').classList.remove('on'); $('#e-resg').classList.remove('on');
+      paintReport();
+    },
+    onResg(id) { if (ADM.user) return; RP.resg = id; RP.resgManual = true; $('#rpResg').value = id; paintReport(); }
+  });
+
+  const f = $('#rpForm');
+  const paintCats = () => $$('.cat', f).forEach(x => {
+    x.setAttribute('aria-checked', x.dataset.tipo === RP.tipo);
+    if (x.dataset.tipo === 'otro') x.textContent = RP.tipo === 'otro' && RP.otro ? 'Otro: ' + RP.otro : 'Otro';
+  });
+  $$('.cat', f).forEach(b => b.addEventListener('click', () => {
+    $('#e-tipo').classList.remove('on');
+    if (b.dataset.tipo === 'otro') { openOtro(b, paintCats); return; }
+    RP.tipo = b.dataset.tipo; paintCats();
+  }));
+  $('#rpLugar').oninput = e => RP.lugar = e.target.value;
+  $('#rpFecha').onchange = e => RP.fecha = e.target.value;
+  $('#rpHora').onchange = e => RP.hora = e.target.value;
+  $('#rpDesc').oninput = e => RP.desc = e.target.value;
+  $('#rpResg').onchange = e => { RP.resg = e.target.value; RP.resgManual = !!RP.resg; paintReport(); };
+  if ($('#rpQuien')) $('#rpQuien').oninput = e => RP.quien = e.target.value;
+  f.addEventListener('submit', submitReport);
+  paintReport();
+}
+function paintReport() {
+  let h = '';
+  const r = RESG[RP.resg];
+  if (RP.pt && r) h += `<line class="ov-link" x1="${RP.pt.x}" y1="${RP.pt.y}" x2="${r.x}" y2="${r.y}"/>`;
+  if (RP.pt) h += pinSVG(RP.pt, 'found');
+  mapR.draw(h);
+  mapR.hlZones(RP.zona ? [RP.zona] : []);
+  mapR.hlResg(r ? [r.id] : []);
+  const z = RP.zona && ZMAP[RP.zona];
+  $('#zoneInfo').innerHTML = z ? `<span class="tag">${esc(z.code || 'CU1')}</span><span>Zona detectada: <b>${esc(z.short)}</b></span>` : '<span class="sub">Todavía no marcas el lugar en el mapa.</span>';
+  $('#resgCard').innerHTML = r ? `<div class="resg-card"><span class="ico"><svg viewBox="-12 -12 24 24">${BOX_ICON}</svg></span><div><b>${esc(r.name)}</b><span>${esc(r.lugar)}</span><span>${esc(r.horario)}</span></div></div>` : '';
+}
+function submitReport(e) {
+  e.preventDefault();
+  const errs = {
+    tipo: !RP.tipo || (RP.tipo === 'otro' && !RP.otro.trim()),
+    pt: !RP.pt,
+    lugar: !RP.lugar.trim(),
+    fecha: !RP.fecha || !RP.hora,
+    resg: !RP.resg
+  };
+  for (const [k, bad] of Object.entries(errs)) $('#e-' + k).classList.toggle('on', bad);
+  const first = Object.keys(errs).find(k => errs[k]);
+  if (first) { $('#e-' + first).closest('.panel').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
+  const now = new Date().toISOString();
+  const it = {id: nextFolio(), tipo: RP.tipo, otro: RP.tipo === 'otro' ? RP.otro.trim() : '', desc: RP.desc.trim(),
+    fecha: RP.fecha, hora: RP.hora, zona: RP.zona, lugar: RP.lugar.trim(), x: RP.pt.x, y: RP.pt.y, resg: RP.resg,
+    estado: ADM.user ? 'resguardo' : 'pendiente', quien: ADM.user ? 'Administración ' + RESG[ADM.point].code : RP.quien.trim(), creado: now};
+  if (ADM.user) it.recibido = now;
+  DB.push(it); save();
+  RP.done = it; renderReport(); window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+/* =================================================================
+   Vista: PUNTOS DE RESGUARDO
+   ================================================================= */
+let mapG, gSel = null;
+function initResg() {
+  mapG = makeMap($('#mapResg'), {
+    label: 'Mapa de puntos de resguardo de CU1',
+    onClick(p, z) { selectResg(z.resg); },
+    onResg(id) { selectResg(id); }
+  });
+  $('#resgList').addEventListener('click', e => { const b = e.target.closest('[data-g]'); if (b) selectResg(b.dataset.g, false); });
+}
+function selectResg(id, scroll = true) {
+  gSel = id; renderResg();
+  if (scroll) { const c = $(`#resgList [data-g="${id}"]`); c && c.scrollIntoView({block: 'nearest', behavior: 'smooth'}); }
+}
+function renderResg() {
+  const cnt = {};
+  DB.forEach(it => { if (it.estado === 'resguardo' || it.estado === 'pendiente') cnt[it.resg] = (cnt[it.resg] || 0) + 1; });
+  $('#resgList').innerHTML = RESG_ORDER.map(id => {
+    const r = RESG[id];
+    return `<button type="button" class="g-card ${gSel === id ? 'sel' : ''}" data-g="${id}" aria-pressed="${gSel === id}">
+      <span class="g-code">${r.code}</span>
+      <span><b>${esc(r.name)}</b><span>${esc(r.lugar)}</span><span>${esc(r.horario)}</span></span>
+      <span class="g-n"><b>${cnt[id] || 0}</b><span>objetos</span></span></button>`;
+  }).join('');
+  const zones = gSel ? ZONES.filter(z => z.resg === gSel).map(z => z.id) : [];
+  mapG.hlZones(zones, 'hl2');
+  mapG.hlResg(gSel ? [gSel] : []);
+}
+
+/* =================================================================
+   Vista: ADMINISTRACIÓN
+   ================================================================= */
+const ADM = {user: null, point: 'fcc', tab: 'inv', filter: 'activos', q: '', all: false};
+try { const s = JSON.parse(sessionStorage.getItem('op-cu1-adm') || 'null'); if (s) Object.assign(ADM, s); } catch (e) {}
+function saveAdm() { try { sessionStorage.setItem('op-cu1-adm', JSON.stringify({user: ADM.user, point: ADM.point})); } catch (e) {} }
+
+function renderAdmin() {
+  const w = $('#adminWrap');
+  updateNav();
+  if (!ADM.user) {
+    w.innerHTML = `<form class="panel login" id="loginForm" novalidate>
+      <div><h1>Administración</h1><p class="sub" style="font-size:14.5px;margin-top:6px">Para el personal de cada facultad que recibe y entrega objetos perdidos.</p></div>
+      <div class="field"><label for="lgPoint">Punto de resguardo</label><select id="lgPoint">${RESG_ORDER.map(id => `<option value="${id}" ${ADM.point === id ? 'selected' : ''}>${esc(RESG[id].name)}</option>`).join('')}</select></div>
+      <div class="field"><label for="lgUser">Usuario</label><input type="text" id="lgUser" autocomplete="username" value="admin"></div>
+      <div class="field"><label for="lgPass">Contraseña</label><input type="password" id="lgPass" autocomplete="current-password"></div>
+      <p class="err" id="lgErr">Usuario o contraseña incorrectos.</p>
+      <button class="btn primary" type="submit">Entrar</button>
+      <p class="demo-note">Demostración: usuario <b>admin</b>, contraseña <b>buap2026</b>. En la versión final cada facultad tendrá su propia cuenta.</p>
+    </form>`;
+    $('#loginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      if ($('#lgUser').value.trim() === 'admin' && $('#lgPass').value === 'buap2026') {
+        ADM.user = 'admin'; ADM.point = $('#lgPoint').value; saveAdm(); resetReport(); renderAdmin();
+      } else $('#lgErr').classList.add('on');
+    });
+    return;
+  }
+  const P = RESG[ADM.point];
+  const mine = DB.filter(i => i.resg === ADM.point);
+  const now = Date.now();
+  const nRes = mine.filter(i => i.estado === 'resguardo').length;
+  const nPend = mine.filter(i => i.estado === 'pendiente').length;
+  const nOk7 = mine.filter(i => i.estado === 'entregado' && now - Date.parse(i.entrega.fecha) < 7 * DAY).length;
+  const nOkAll = mine.filter(i => i.estado === 'entregado').length;
+  w.innerHTML = `
+  <div class="a-head">
+    <div><small>Sesión de administración</small><h1>${esc(P.name)}</h1><p class="sub" style="font-size:14px">${esc(P.lugar)} · ${esc(P.horario)}</p></div>
+    <div class="a-tools">
+      <label for="adPoint" class="sub" style="margin:0">Punto</label>
+      <select id="adPoint">${RESG_ORDER.map(id => `<option value="${id}" ${ADM.point === id ? 'selected' : ''}>${esc(RESG[id].name)}</option>`).join('')}</select>
+      <a class="btn primary" href="#reportar">Registrar objeto</a>
+      <button class="btn ghost" type="button" id="adOut">Cerrar sesión</button>
+    </div>
+  </div>
+  <div class="tiles">
+    <div class="tile t-res"><b>${nRes}</b><span>En resguardo</span></div>
+    <div class="tile t-pend"><b>${nPend}</b><span>Por recibir (reportados)</span></div>
+    <div class="tile t-ok"><b>${nOk7}</b><span>Entregados · últimos 7 días</span></div>
+    <div class="tile t-all"><b>${nOkAll}</b><span>Entregas registradas</span></div>
+  </div>
+  <div class="subtabs" role="tablist">
+    <button role="tab" type="button" data-tab="inv" aria-selected="${ADM.tab === 'inv'}">Inventario</button>
+    <button role="tab" type="button" data-tab="log" aria-selected="${ADM.tab === 'log'}">Bitácora de entregas</button>
+  </div>
+  <div id="adBody"></div>
+  <p class="sub" style="margin-top:12px">${SHIELD.replace('<svg', '<svg style="width:13px;height:13px;vertical-align:-2px;stroke:currentColor;fill:none;stroke-width:2"')} Nombre y matrícula de quien recoge un objeto solo los ve la administración. En el buscador público el objeto aparece como «Encontrado · entregado» durante ${KEEP_DAYS} días.</p>`;
+  $('#adPoint').onchange = e => { ADM.point = e.target.value; saveAdm(); resetReport(); renderAdmin(); };
+  $('#adOut').onclick = () => { ADM.user = null; saveAdm(); resetReport(); renderAdmin(); };
+  $$('[data-tab]', w).forEach(b => b.onclick = () => { ADM.tab = b.dataset.tab; renderAdmin(); });
+  ADM.tab === 'inv' ? renderInv() : renderLog();
+}
+
+function renderInv() {
+  const b = $('#adBody');
+  b.innerHTML = `<div class="toolbar">
+      <input type="search" id="adQ" placeholder="Buscar por objeto, folio o descripción" value="${esc(ADM.q)}" aria-label="Buscar en inventario">
+      <select id="adF" aria-label="Filtrar por estado">
+        ${[['activos','Pendientes y en resguardo'],['pendiente','Por recibir'],['resguardo','En resguardo'],['entregado','Entregados'],['todos','Todos']].map(([v, t]) => `<option value="${v}" ${ADM.filter === v ? 'selected' : ''}>${t}</option>`).join('')}
+      </select>
+      <label class="check"><input type="checkbox" id="adAll" ${ADM.all ? 'checked' : ''}> Ver todo CU1</label>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr><th>Folio</th><th>Objeto</th><th>Descripción <span class="priv-tag">privada</span></th><th>Hallazgo</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="adRows"></tbody></table></div>`;
+  $('#adQ').oninput = e => { ADM.q = e.target.value; rows(); };
+  $('#adF').onchange = e => { ADM.filter = e.target.value; rows(); };
+  $('#adAll').onchange = e => { ADM.all = e.target.checked; rows(); };
+  $('#adRows').addEventListener('click', e => {
+    const a = e.target.closest('[data-act]'); if (!a) return;
+    const it = DB.find(i => i.id === a.dataset.id);
+    if (a.dataset.act === 'recibir') { it.estado = 'resguardo'; it.recibido = new Date().toISOString(); save(); toast(`${it.id} recibido. Ya aparece como «En resguardo».`); renderAdmin(); }
+    if (a.dataset.act === 'entregar') openDeliver(it);
+    if (a.dataset.act === 'descartar') openDiscard(it);
+    if (a.dataset.act === 'ver') openReceipt(it);
+  });
+  rows();
+  function rows() {
+    const qn = norm(ADM.q);
+    const list = DB.filter(i => (ADM.all || i.resg === ADM.point))
+      .filter(i => ADM.filter === 'todos' ? i.estado !== 'descartado' : ADM.filter === 'activos' ? (i.estado === 'pendiente' || i.estado === 'resguardo') : i.estado === ADM.filter)
+      .filter(i => !qn || matchesQuery(i, ADM.q) || norm(i.id).includes(qn) || norm(i.desc).includes(qn) || norm(i.lugar).includes(qn))
+      .sort((a, b) => (b.fecha + b.hora).localeCompare(a.fecha + a.hora));
+    $('#adRows').innerHTML = list.length ? list.map(it => {
+      const own = it.resg === ADM.point, z = ZMAP[it.zona];
+      const age = daysSince(it.creado);
+      let act = '';
+      if (!own) act = `<span class="s">En ${esc(RESG[it.resg].name)}</span>`;
+      else if (it.estado === 'pendiente') act = `<div class="acts"><button class="btn sm primary" type="button" data-act="recibir" data-id="${it.id}">Confirmar recepción</button><button class="btn sm ghost danger" type="button" data-act="descartar" data-id="${it.id}">No llegó</button></div>`;
+      else if (it.estado === 'resguardo') act = `<button class="btn sm ok" type="button" data-act="entregar" data-id="${it.id}">Entregar a su dueño</button>`;
+      else if (it.estado === 'entregado') act = `<button class="btn sm" type="button" data-act="ver" data-id="${it.id}">Ver entrega</button><span class="s">${esc(it.entrega.nombre)} · ${esc(it.entrega.matricula)}</span>`;
+      return `<tr>
+        <td><span class="folio">${it.id}</span></td>
+        <td><b>${esc(catName(it))}</b>${it.quien ? `<span class="s">Reportó: ${esc(it.quien)}</span>` : ''}</td>
+        <td><div class="pv">${esc(it.desc) || '<i>Sin descripción</i>'}</div></td>
+        <td><span class="tab-num">${fmtDate(it.fecha)} · ${esc(it.hora)}</span><span class="s">${esc(zTag(z))} · ${esc(it.lugar)}</span></td>
+        <td>${stChip(it)}${it.estado === 'resguardo' && age >= 30 ? '<span class="s" style="color:var(--bad)">Más de 30 días</span>' : it.estado !== 'entregado' ? `<span class="s">Hace ${age} día${age === 1 ? '' : 's'}</span>` : ''}</td>
+        <td>${act}</td></tr>`;
+    }).join('') : `<tr><td colspan="6" style="color:var(--muted);padding:20px">No hay objetos con esos filtros.</td></tr>`;
+  }
+}
+
+function renderLog() {
+  const list = DB.filter(i => i.estado === 'entregado' && i.resg === ADM.point).sort((a, b) => b.entrega.fecha.localeCompare(a.entrega.fecha));
+  $('#adBody').innerHTML = `<div class="tbl-wrap"><table><thead><tr><th>Entrega</th><th>Folio</th><th>Objeto</th><th>Recogió <span class="priv-tag">privado</span></th><th>Matrícula <span class="priv-tag">privado</span></th><th>Verificación</th><th>Atendió</th></tr></thead><tbody>
+    ${list.length ? list.map(it => `<tr>
+      <td class="tab-num">${fmtDateTime(it.entrega.fecha)}</td>
+      <td><span class="folio">${it.id}</span></td>
+      <td>${esc(catName(it))}<span class="s">${esc(it.desc)}</span></td>
+      <td><b>${esc(it.entrega.nombre)}</b>${it.entrega.obs ? `<span class="s">${esc(it.entrega.obs)}</span>` : ''}</td>
+      <td class="tab-num">${esc(it.entrega.matricula)}</td>
+      <td><span class="s">${it.entrega.desc ? '✓ Describió el objeto' : '✗ Sin descripción'}</span><span class="s">${it.entrega.ident ? '✓ Presentó identificación' : '✗ Sin identificación'}</span></td>
+      <td>${esc(it.entrega.atendio)}</td></tr>`).join('') : '<tr><td colspan="7" style="color:var(--muted);padding:20px">Aún no hay entregas registradas en este punto.</td></tr>'}
+  </tbody></table></div>`;
+}
+
+/* ---------- modales ---------- */
+let lastFocus = null;
+function openModal(html) {
+  lastFocus = document.activeElement;
+  $('#modalCard').innerHTML = html; $('#modal').classList.add('on');
+  const f = $('#modalCard input, #modalCard textarea, #modalCard button.btn'); f && f.focus();
+  $$('[data-close]', $('#modalCard')).forEach(b => b.onclick = closeModal);
+}
+function closeModal() { $('#modal').classList.remove('on'); lastFocus && lastFocus.focus && lastFocus.focus(); }
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#modal').classList.contains('on')) closeModal(); });
+
+function openOtro(btn, done) {
+  openModal(`<div class="modal-h"><h2 id="modalTitle">¿Qué objeto encontraste?</h2><button class="x" type="button" data-close aria-label="Cerrar">×</button></div>
+    <form id="otroForm" novalidate style="display:flex;flex-direction:column;gap:12px">
+      <div class="field">
+        <label for="otroIn">Nombre del objeto</label>
+        <input type="text" id="otroIn" maxlength="40" placeholder="Ej. bata de laboratorio, tupper, balón" value="${esc(RP.otro)}">
+        <p class="sub" style="margin-top:6px">Escribe solo qué es. Color, marca y señas van en la descripción privada.</p>
+        <p class="err" id="e-otroIn">Escribe qué objeto es.</p>
+      </div>
+      <div class="m-actions"><button class="btn ghost" type="button" data-close>Cancelar</button><button class="btn primary" type="submit">Guardar</button></div>
+    </form>`);
+  $('#otroIn').focus();
+  $('#otroForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const v = $('#otroIn').value.trim();
+    if (!v) { $('#e-otroIn').classList.add('on'); return; }
+    RP.tipo = 'otro'; RP.otro = v.charAt(0).toUpperCase() + v.slice(1);
+    closeModal(); done();
+  });
+}
+
+function openDeliver(it) {
+  const z = ZMAP[it.zona];
+  openModal(`<div class="modal-h"><div><span class="folio">${it.id}</span><h2 id="modalTitle">Entregar ${esc(catName(it).toLowerCase())}</h2></div><button class="x" type="button" data-close aria-label="Cerrar">×</button></div>
+    <p class="sub" style="font-size:14px">Se encontró el ${fmtDate(it.fecha)} a las ${esc(it.hora)} en ${esc(z.short)} · ${esc(it.lugar)}.</p>
+    <div class="verify"><small>Descripción registrada · no la leas en voz alta</small>${esc(it.desc) || '<i>Sin descripción. Pide señas detalladas.</i>'}</div>
+    <p style="font-size:14px">Pide a la persona que describa su objeto y compáralo con la descripción registrada antes de entregarlo.</p>
+    <form id="dlForm" novalidate style="display:flex;flex-direction:column;gap:12px">
+      <div class="field"><label for="dlNombre">Nombre completo de quien lo recoge</label><input type="text" id="dlNombre" autocomplete="off" maxlength="80"><p class="err" id="e-dlNombre">Escribe nombre y apellidos.</p></div>
+      <div class="field"><label for="dlMat">Matrícula BUAP</label><input type="text" id="dlMat" inputmode="numeric" maxlength="9" placeholder="9 dígitos, ej. 202312345"><p class="err" id="e-dlMat">La matrícula BUAP tiene 9 dígitos.</p></div>
+      <label class="check"><input type="checkbox" id="dlDesc"> Describió el objeto y coincide con lo registrado</label>
+      <label class="check"><input type="checkbox" id="dlId"> Presentó credencial BUAP o identificación oficial</label>
+      <p class="err" id="e-dlChk">Confirma ambas verificaciones antes de entregar.</p>
+      <div class="field"><label for="dlObs">Observaciones <span class="sub">(opcional)</span></label><input type="text" id="dlObs" maxlength="120"></div>
+      <div class="m-actions"><button class="btn ghost" type="button" data-close>Cancelar</button><button class="btn ok" type="submit">Registrar entrega</button></div>
+    </form>`);
+  $('#dlForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const nombre = $('#dlNombre').value.trim(), mat = $('#dlMat').value.trim();
+    const bad = {dlNombre: nombre.split(/\s+/).length < 2, dlMat: !/^\d{9}$/.test(mat), dlChk: !$('#dlDesc').checked || !$('#dlId').checked};
+    for (const [k, v] of Object.entries(bad)) $('#e-' + k).classList.toggle('on', v);
+    if (Object.values(bad).some(Boolean)) return;
+    it.estado = 'entregado';
+    it.entrega = {nombre, matricula: mat, desc: true, ident: true, obs: $('#dlObs').value.trim(), fecha: new Date().toISOString(), atendio: 'admin · ' + RESG[ADM.point].code};
+    save(); closeModal();
+    toast(`Entregado. En el buscador aparece como «Encontrado» hasta el ${retiro(it)}.`);
+    renderAdmin();
+  });
+}
+function openReceipt(it) {
+  const e = it.entrega;
+  openModal(`<div class="modal-h"><div><span class="folio">${it.id}</span><h2 id="modalTitle">Registro de entrega</h2></div><button class="x" type="button" data-close aria-label="Cerrar">×</button></div>
+    <div class="tbl-wrap"><table style="min-width:0"><tbody>
+      <tr><th>Objeto</th><td>${esc(catName(it))}<span class="s">${esc(it.desc)}</span></td></tr>
+      <tr><th>Recogió</th><td><b>${esc(e.nombre)}</b></td></tr>
+      <tr><th>Matrícula</th><td class="tab-num">${esc(e.matricula)}</td></tr>
+      <tr><th>Fecha</th><td>${fmtDateTime(e.fecha)}</td></tr>
+      <tr><th>Atendió</th><td>${esc(e.atendio)}</td></tr>
+      <tr><th>Verificación</th><td>${e.desc ? '✓ Describió el objeto' : '✗'} · ${e.ident ? '✓ Identificación' : '✗'}</td></tr>
+      ${e.obs ? `<tr><th>Notas</th><td>${esc(e.obs)}</td></tr>` : ''}
+      <tr><th>Visible al público</th><td>Hasta el ${retiro(it)}, como «Encontrado · entregado», sin datos personales.</td></tr>
+    </tbody></table></div>
+    <div class="m-actions"><button class="btn" type="button" data-close>Cerrar</button></div>`);
+}
+function openDiscard(it) {
+  openModal(`<div class="modal-h"><div><span class="folio">${it.id}</span><h2 id="modalTitle">¿El objeto nunca llegó?</h2></div><button class="x" type="button" data-close aria-label="Cerrar">×</button></div>
+    <p>Se quitará del buscador público. Úsalo solo si pasaron varios días y nadie entregó el objeto en este punto.</p>
+    <div class="m-actions"><button class="btn ghost" type="button" data-close>Cancelar</button><button class="btn danger" type="button" id="dsOk">Quitar reporte</button></div>`);
+  $('#dsOk').onclick = () => { it.estado = 'descartado'; save(); closeModal(); toast(`${it.id} se quitó del buscador.`); renderAdmin(); };
+}
+
+/* =================================================================
+   Navegación
+   ================================================================= */
+const VIEWS = ['buscar', 'reportar', 'resguardo', 'admin'];
+function updateNav() {
+  const a = $('#nav [data-v="admin"]');
+  a.innerHTML = 'Administración' + (ADM.user ? '<span class="dot-live" title="Sesión iniciada"></span>' : '');
+}
+function route() {
+  const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'buscar';
+  $$('.view').forEach(s => s.classList.toggle('on', s.id === 'view-' + v));
+  $$('#nav a').forEach(a => a.dataset.v === v ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+  if (v === 'buscar') renderBuscar();
+  if (v === 'reportar') { if (!RP || RP.done) resetReport(); renderReport(); }
+  if (v === 'resguardo') renderResg();
+  if (v === 'admin') renderAdmin();
+  updateNav();
+}
+window.addEventListener('hashchange', () => { route(); window.scrollTo({top: 0}); });
+
+initBuscar();
+initResg();
+resetReport();
+route();
+</script>
+</body>
+</html>

@@ -29,17 +29,22 @@ El programa está **listo** cuando todas las casillas de la sección final, [«E
 
 - [ ] **1.1 `docker-compose.yml`** con el servicio `db` (PostgreSQL 16) y un volumen para que los datos no se borren.
   *Terminado cuando:* `docker compose up db` levanta la base y se puede conectar con `psql`.
-- [ ] **1.2 Esquema SQL** en `db/init/01_schema.sql` con las tablas:
-  - `puntos_resguardo` (id, nombre, ubicación, horario, coordenadas en el mapa)
+- [ ] **1.2 Esquema SQL** en `db/init/01_esquema.sql` con las tablas:
+  - `puntos_resguardo` (nombre, ubicación, horario, responsable, coordenadas en el mapa, si ya lo confirmó la facultad)
+  - `zonas` (zonas del mapa y a qué punto de resguardo mandan sus objetos)
+  - `categorias` (tipos de objeto: botella, cargador, casco, otro…)
   - `objetos` (folio, tipo, tipo_otro, descripción privada, fecha y hora del hallazgo, zona, lugar, coordenadas, punto de resguardo, estado, quién reportó, fechas de registro y recepción)
   - `entregas` (objeto, nombre, matrícula, verificó descripción, verificó identificación, observaciones, fecha, administrador)
   - `administradores` (usuario, contraseña cifrada, punto de resguardo)
+  - Vista `objetos_publicos`: lo único que podrá consultar el buscador; no incluye datos privados.
 
-  *Terminado cuando:* al levantar la base vacía, las cuatro tablas se crean solas.
-- [ ] **1.3 Reglas en la base.** `estado` solo acepta `pendiente`, `resguardo`, `entregado` o `descartado`; la matrícula tiene 9 dígitos; el folio es único.
+  *Terminado cuando:* al levantar la base vacía, todo se crea solo.
+- [ ] **1.3 Reglas en la base.** `estado` solo acepta `pendiente`, `resguardo`, `entregado` o `descartado`; la matrícula tiene 9 dígitos; el folio es único; «Otro» exige nombre; solo se entrega un objeto en resguardo y solo lo puede entregar un administrador de ese mismo punto.
   *Terminado cuando:* insertar un estado inválido o una matrícula de 8 dígitos da error.
-- [ ] **1.4 Datos iniciales** en `db/init/02_seed.sql`: los 16 puntos de resguardo y unos 20 objetos de ejemplo.
+- [ ] **1.4 Datos iniciales:** catálogos en `db/init/02_catalogos.sql` (16 puntos de resguardo, 27 zonas, 19 tipos de objeto) y datos de demostración en `db/init/03_datos_demo.sql` (30 objetos y una cuenta de prueba por punto).
   *Terminado cuando:* `SELECT count(*) FROM puntos_resguardo` devuelve 16.
+- [ ] **1.5 Verificación automática** con `db/pruebas/fase1.sql`.
+  *Terminado cuando:* en la computadora de cada integrante el resumen dice «TODO BIEN: Fase 1 verificada».
 
 ## Fase 2 · API pública (Node.js + Express)
 

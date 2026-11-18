@@ -11,7 +11,7 @@ Página web para recuperar objetos perdidos en Ciudad Universitaria (CU1) de la 
 | Parte | Estado |
 |---|---|
 | Interfaz (`frontend/index.html`) | Prototipo funcional, con datos de ejemplo guardados en el navegador |
-| Base de datos (PostgreSQL) | Pendiente |
+| Base de datos (PostgreSQL) | Lista para probar: esquema, catálogos, datos de demostración y pruebas |
 | API (Node.js + Express) | Pendiente |
 | Publicación | Pendiente |
 
@@ -20,6 +20,42 @@ El plan completo y el avance están en **[docs/MANUAL_DE_TAREAS.md](docs/MANUAL_
 ## Ver el prototipo
 
 Abre `frontend/index.html` en el navegador. Para entrar a «Administración» en la demostración: usuario `admin`, contraseña `buap2026`.
+
+## Levantar la base de datos (Fase 1)
+
+Necesitas Docker Desktop abierto.
+
+```bash
+cp .env.example .env          # en Windows: copy .env.example .env
+# edita .env y cambia POSTGRES_PASSWORD
+docker compose up -d
+docker compose ps             # el servicio db debe decir "healthy"
+```
+
+Verificar que todo quedó bien:
+
+```bash
+docker compose exec db psql -U opcu1 -d objetos_perdidos -f /pruebas/fase1.sql
+```
+
+Debe terminar con **«TODO BIEN: Fase 1 verificada»**.
+
+Entrar a la base para explorar:
+
+```bash
+docker compose exec db psql -U opcu1 -d objetos_perdidos
+```
+
+Algunas consultas útiles: `SELECT * FROM objetos_publicos;`, `\dt` (tablas), `\q` (salir).
+
+**Empezar de cero:** los scripts de `db/init/` solo corren la primera vez. Para volver a crear la base con datos limpios:
+
+```bash
+docker compose down -v        # ⚠ borra todos los datos de la base
+docker compose up -d
+```
+
+**Cuentas de demostración:** `admin.fcc`, `admin.ing`, `admin.vig`… (una por punto de resguardo), contraseña `buap2026`. Se crean desde `db/init/03_datos_demo.sql`, que debe borrarse antes de publicar.
 
 ## Tecnologías
 
@@ -35,8 +71,11 @@ objetos-perdidos-cu1/
 ├── frontend/          Interfaz web
 ├── docs/              Manual de tareas y documentación
 ├── api/               API en Node.js (fase 2)
-├── db/init/           Esquema y datos iniciales de PostgreSQL (fase 1)
-└── docker-compose.yml (fase 1)
+├── db/
+│   ├── init/          Esquema, catálogos y datos de demostración
+│   └── pruebas/       Verificación de la base
+├── .env.example       Variables de entorno (copiar a .env)
+└── docker-compose.yml
 ```
 
 ## Equipo

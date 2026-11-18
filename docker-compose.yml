@@ -1,0 +1,30 @@
+# Objetos Perdidos CU1 · servicios de desarrollo
+# Uso: copia .env.example a .env, cambia la contraseña y ejecuta `docker compose up -d`.
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: opcu1-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-objetos_perdidos}
+      POSTGRES_USER: ${POSTGRES_USER:-opcu1}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en el archivo .env}
+      TZ: America/Mexico_City
+      PGTZ: America/Mexico_City
+    ports:
+      # Solo accesible desde tu computadora. Cambia DB_PORT en .env si el 5432 ya está ocupado.
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      # Los .sql de esta carpeta se ejecutan en orden SOLO la primera vez (con la base vacía).
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+      - ./db/pruebas:/pruebas:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  db-data:

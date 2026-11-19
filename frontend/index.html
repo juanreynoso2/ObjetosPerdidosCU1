@@ -302,6 +302,14 @@ td .s{color:var(--muted);font-size:12.5px;display:block}
 .verify{background:var(--resg-soft);border:1px solid var(--resg);border-radius:10px;padding:10px 12px;font-size:14px}
 .verify small{display:block;font-weight:700;text-transform:uppercase;font-size:11.5px;letter-spacing:.05em;color:var(--resg-ink)}
 .m-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.aviso{border-radius:10px;padding:10px 14px;font-size:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px solid}
+.aviso.error{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.aviso.info{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.aviso .btn{min-height:32px;padding:4px 10px;font-size:13px}
+.cargando{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:14px;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.cargando::before{content:"";width:16px;height:16px;border-radius:50%;border:2.5px solid var(--line);border-top-color:var(--accent);animation:gira .8s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+pre.code{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:500 12.5px/1.5 var(--font-m);white-space:pre-wrap;word-break:break-all;margin:0}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:10px;font-weight:500;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:60;max-width:calc(100% - 32px)}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -445,7 +453,7 @@ footer{max-width:1400px;margin:0 auto;padding:0 20px 30px;color:var(--muted);fon
 </main>
 
 <footer>
-  <span>Prototipo de interfaz · En esta demostración los datos se guardan solo en este navegador.</span>
+  <span id="modoTexto">Conectando…</span>
   <span>Proyecto «Recuperación de Objetos Perdidos en CU1»: Juan David Reynoso Carranza, Guillermo Martínez Hernández, Josué Benedicto Ramírez Centeno y Gabriel Flores Calderón.</span>
 </footer>
 
@@ -612,12 +620,140 @@ function seed() {
 }
 
 const KEY = 'op-cu1-v3';
-let DB = load();
+let DB = [];
 function load() {
   try { const raw = localStorage.getItem(KEY); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d) && d.every(i => ZMAP[i.zona] && RESG[i.resg])) return d; } } catch (e) {}
   return seed();
 }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(DB)); } catch (e) {} }
+/* =================================================================
+   Conexión con la API
+   - Si la página la sirve la API (docker compose), los datos vienen de la base.
+   - Si se abre como archivo o en un sitio sin API, funciona en modo demostración
+     con datos guardados en este navegador.
+   ================================================================= */
+const MODO = {api: false, cargando: true, error: null, ultimaCarga: 0};
+const API = 'api';
+
+class ErrorAPI extends Error {
+  constructor(mensaje, status = 0, detalles = []) { super(mensaje); this.status = status; this.detalles = detalles; }
+}
+
+async function pedir(ruta, opciones = {}) {
+  const ctrl = new AbortController();
+  const limite = setTimeout(() => ctrl.abort(), 10000);
+  let r;
+  try {
+    r = await fetch(`${API}/${ruta}`, {
+      ...opciones,
+      signal: ctrl.signal,
+      headers: {Accept: 'application/json', ...(opciones.body ? {'Content-Type': 'application/json'} : {})}
+    });
+  } catch (e) {
+    throw new ErrorAPI('No hay conexión con el servidor. Revisa tu internet e intenta de nuevo.');
+  } finally {
+    clearTimeout(limite);
+  }
+  let datos = null;
+  try { datos = await r.json(); } catch (e) {}
+  if (!r.ok) throw new ErrorAPI(datos?.error || `El servidor respondió con un error (${r.status}).`, r.status, datos?.detalles || []);
+  return datos;
+}
+
+// Convierte un objeto de la API al formato que usa la página.
+function desdeAPI(o) {
+  const conocido = !!CATS[o.tipo];
+  return {
+    id: o.folio,
+    tipo: conocido ? o.tipo : 'otro',
+    otro: o.tipo === 'otro' || !conocido ? o.nombre : '',
+    desc: '',
+    fecha: o.fecha,
+    hora: o.hora,
+    zona: ZMAP[o.zona.id] ? o.zona.id : 'and',
+    lugar: o.lugar,
+    x: o.mapa.x,
+    y: o.mapa.y,
+    resg: o.resguardo_id,
+    estado: o.estado,
+    entrega: o.entregado_en ? {fecha: o.entregado_en} : null
+  };
+}
+
+async function cargarObjetos() {
+  const d = await pedir('objetos?limite=500');
+  DB = d.objetos.map(desdeAPI);
+  MODO.ultimaCarga = Date.now();
+}
+
+async function cargarResguardos() {
+  const lista = await pedir('resguardos');
+  for (const p of lista) {
+    RESG[p.id] = {...(RESG[p.id] || {}), id: p.id, code: p.sigla, name: p.nombre, lugar: p.ubicacion,
+      horario: p.horario, x: p.mapa.x, y: p.mapa.y, objetos: p.objetos};
+    if (!RESG_ORDER.includes(p.id)) RESG_ORDER.splice(RESG_ORDER.length - 1, 0, p.id);
+  }
+}
+
+async function recargar({silencioso = false} = {}) {
+  if (!silencioso) { MODO.cargando = true; MODO.error = null; refrescarVista(); }
+  try {
+    await Promise.all([cargarObjetos(), cargarResguardos()]);
+    MODO.error = null;
+  } catch (e) {
+    MODO.error = e.message;
+  }
+  MODO.cargando = false;
+  refrescarVista();
+}
+
+function usarDemo() {
+  MODO.api = false; MODO.cargando = false; MODO.error = null;
+  DB = load();
+  pintarModo();
+  refrescarVista(true);
+}
+
+async function iniciarDatos() {
+  if (location.protocol === 'file:') return usarDemo();
+  try {
+    const r = await fetch(`${API}/salud`, {headers: {Accept: 'application/json'}});
+    const d = await r.json().catch(() => null);
+    if (!d || typeof d.ok !== 'boolean') return usarDemo();   // este sitio no tiene API
+  } catch (e) {
+    // La página viene de un servidor que no responde: se avisa, no se usan datos falsos.
+  }
+  MODO.api = true;
+  pintarModo();
+  await recargar();
+  refrescarVista(true);
+  setInterval(() => { if (!document.hidden) recargar({silencioso: true}); }, 60000);
+}
+
+function pintarModo() {
+  $('#modoTexto').textContent = MODO.api
+    ? 'Conectado a la base de datos de Objetos Perdidos CU1.'
+    : 'Modo demostración · Los datos se guardan solo en este navegador.';
+}
+
+function avisoConexion() {
+  if (!MODO.api || !MODO.error) return '';
+  const hora = MODO.ultimaCarga ? new Date(MODO.ultimaCarga).toLocaleTimeString('es-MX', {hour: '2-digit', minute: '2-digit'}) : '';
+  return `<div class="aviso error" role="alert"><span>${esc(MODO.error)}${hora ? ` Mostrando lo último que se cargó (${hora}).` : ''}</span>
+    <button class="btn" type="button" data-reintentar>Reintentar</button></div>`;
+}
+const primeraCargaPendiente = () => MODO.cargando && !MODO.ultimaCarga;
+const adminDemo = () => !MODO.api && !!ADM.user;
+
+function vistaActual() { return VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'buscar'; }
+function refrescarVista(incluirFormulario = false) {
+  const v = vistaActual();
+  if (v === 'buscar') renderBuscar();
+  else if (v === 'resguardo') renderResg();
+  else if (v === 'admin') renderAdmin();
+  else if (v === 'reportar' && incluirFormulario && RP && !RP.done) renderReport();
+}
+
 function nextFolio() { return folio(Math.max(100, ...DB.map(i => +i.id.split('-')[1] || 0)) + 1); }
 
 /* =================================================================
@@ -799,6 +935,7 @@ function initBuscar() {
     S.q = norm(S.q) === norm(c.sing) ? '' : c.sing; $('#q').value = S.q; S.sel = null; renderBuscar();
   });
   $('#results').addEventListener('click', e => {
+    if (e.target.closest('[data-reintentar]')) { recargar(); return; }
     const b = e.target.closest('[data-sel]'); if (b) { S.sel = S.sel === b.dataset.sel ? null : b.dataset.sel; renderBuscar(); return; }
     const c = e.target.closest('[data-cat]'); if (c) { S.q = CATS[c.dataset.cat].sing; $('#q').value = S.q; renderBuscar(); window.scrollTo({top: 0, behavior: 'smooth'}); }
   });
@@ -951,7 +1088,7 @@ function renderBuscar() {
       out.push(`<ul class="items">${found.map(it => itemRow(it)).join('')}</ul>`);
     }
   }
-  $('#results').innerHTML = out.join('');
+  $('#results').innerHTML = avisoConexion() + (primeraCargaPendiente() ? '<div class="cargando">Cargando objetos…</div>' : out.join(''));
 }
 
 /* =================================================================
@@ -961,7 +1098,7 @@ let RP, mapR;
 function resetReport() {
   const d = new Date();
   RP = {tipo: null, otro: '', pt: null, zona: null, lugar: '', fecha: dayStr(d), hora: pad(d.getHours()) + ':' + pad(d.getMinutes()),
-    desc: '', resg: ADM.user ? ADM.point : '', resgManual: !!ADM.user, quien: '', done: null};
+    desc: '', resg: adminDemo() ? ADM.point : '', resgManual: adminDemo(), quien: '', done: null};
 }
 const SHIELD = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg>';
 function renderReport() {
@@ -980,7 +1117,7 @@ function renderReport() {
   }
   const resgOpts = RESG_ORDER.map(id => `<option value="${id}" ${RP.resg === id ? 'selected' : ''}>${esc(RESG[id].name)}</option>`).join('');
   w.innerHTML = `
-  ${ADM.user ? `<div class="admin-banner">Registrando como administración de ${esc(RESG[ADM.point].name)}: el objeto entra directo a «En resguardo».</div>` : ''}
+  ${adminDemo() ? `<div class="admin-banner">Registrando como administración de ${esc(RESG[ADM.point].name)}: el objeto entra directo a «En resguardo».</div>` : ''}
   <form id="rpForm" novalidate class="r-wrap">
     <div class="panel step"><span class="step-n">1</span><div class="step-b">
       <h2 id="lbl-tipo">¿Qué encontraste?</h2>
@@ -1026,11 +1163,11 @@ function renderReport() {
       <h2>¿Dónde lo vas a entregar?</h2>
       <div class="field">
         <label for="rpResg">Punto de resguardo</label>
-        <select id="rpResg" ${ADM.user ? 'disabled' : ''}><option value="">Marca el lugar en el mapa o elige uno</option>${resgOpts}</select>
+        <select id="rpResg" ${adminDemo() ? 'disabled' : ''}><option value="">Marca el lugar en el mapa o elige uno</option>${resgOpts}</select>
       </div>
       <div id="resgCard"></div>
       <p class="err" id="e-resg">Elige el punto de resguardo.</p>
-      ${ADM.user ? '' : `<div class="field">
+      ${adminDemo() ? '' : `<div class="field">
         <label for="rpQuien">Tu nombre o matrícula <span class="sub">(opcional)</span></label>
         <input type="text" id="rpQuien" maxlength="60" value="${esc(RP.quien)}">
         <p class="privacy" style="margin-top:6px">${SHIELD}<span>Solo para la administración, por si necesitan contactarte.</span></p>
@@ -1048,7 +1185,7 @@ function renderReport() {
       $('#e-pt').classList.remove('on'); $('#e-resg').classList.remove('on');
       paintReport();
     },
-    onResg(id) { if (ADM.user) return; RP.resg = id; RP.resgManual = true; $('#rpResg').value = id; paintReport(); }
+    onResg(id) { if (adminDemo()) return; RP.resg = id; RP.resgManual = true; $('#rpResg').value = id; paintReport(); }
   });
 
   const f = $('#rpForm');
@@ -1068,6 +1205,7 @@ function renderReport() {
   $('#rpResg').onchange = e => { RP.resg = e.target.value; RP.resgManual = !!RP.resg; paintReport(); };
   if ($('#rpQuien')) $('#rpQuien').oninput = e => RP.quien = e.target.value;
   f.addEventListener('submit', submitReport);
+  $$('.err', f).forEach(el => { el.dataset.def = el.textContent; });
   paintReport();
 }
 function paintReport() {
@@ -1091,16 +1229,58 @@ function submitReport(e) {
     fecha: !RP.fecha || !RP.hora,
     resg: !RP.resg
   };
+  $$('#rpForm .err').forEach(el => { if (el.dataset.def) el.textContent = el.dataset.def; });
   for (const [k, bad] of Object.entries(errs)) $('#e-' + k).classList.toggle('on', bad);
   const first = Object.keys(errs).find(k => errs[k]);
   if (first) { $('#e-' + first).closest('.panel').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
+  if (MODO.api) { enviarReporte(); return; }
   const now = new Date().toISOString();
   const it = {id: nextFolio(), tipo: RP.tipo, otro: RP.tipo === 'otro' ? RP.otro.trim() : '', desc: RP.desc.trim(),
     fecha: RP.fecha, hora: RP.hora, zona: RP.zona, lugar: RP.lugar.trim(), x: RP.pt.x, y: RP.pt.y, resg: RP.resg,
-    estado: ADM.user ? 'resguardo' : 'pendiente', quien: ADM.user ? 'Administración ' + RESG[ADM.point].code : RP.quien.trim(), creado: now};
-  if (ADM.user) it.recibido = now;
+    estado: adminDemo() ? 'resguardo' : 'pendiente', quien: adminDemo() ? 'Administración ' + RESG[ADM.point].code : RP.quien.trim(), creado: now};
+  if (adminDemo()) it.recibido = now;
   DB.push(it); save();
   RP.done = it; renderReport(); window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// Envía el reporte a la API. Si falla, el formulario conserva lo escrito.
+async function enviarReporte() {
+  const btn = $('#rpForm button[type=submit]');
+  const anterior = $('#e-general'); if (anterior) anterior.remove();
+  btn.disabled = true; btn.textContent = 'Enviando…';
+  try {
+    const r = await pedir('objetos', {method: 'POST', body: JSON.stringify({
+      tipo: RP.tipo,
+      tipo_otro: RP.tipo === 'otro' ? RP.otro.trim() : null,
+      descripcion: RP.desc.trim() || null,
+      fecha: RP.fecha,
+      hora: RP.hora,
+      zona_id: RP.zona,
+      lugar: RP.lugar.trim(),
+      x: RP.pt.x,
+      y: RP.pt.y,
+      resguardo_id: RP.resg || null,
+      reportado_por: RP.quien.trim() || null
+    })});
+    const g = r.resguardo;
+    if (RESG[g.id]) Object.assign(RESG[g.id], {name: g.nombre, lugar: g.ubicacion, horario: g.horario});
+    RP.done = {id: r.folio, resg: g.id, estado: r.estado};
+    renderReport();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+    recargar({silencioso: true});
+  } catch (err) {
+    btn.disabled = false; btn.textContent = 'Registrar objeto encontrado';
+    const campos = {tipo: 'tipo', tipo_otro: 'tipo', zona_id: 'pt', x: 'pt', y: 'pt', lugar: 'lugar', fecha: 'fecha', hora: 'fecha', resguardo_id: 'resg'};
+    let primero = null;
+    for (const d of err.detalles || []) {
+      const el = $('#e-' + campos[d.campo]);
+      if (el) { el.textContent = d.mensaje; el.classList.add('on'); primero = primero || el; }
+    }
+    const mensaje = primero ? 'Revisa los campos marcados en rojo.' : err.message;
+    btn.parentElement.insertAdjacentHTML('beforebegin',
+      `<div class="aviso error" id="e-general" role="alert">${esc(mensaje)} Lo que escribiste sigue en el formulario.</div>`);
+    (primero ? primero.closest('.panel') : $('#e-general')).scrollIntoView({behavior: 'smooth', block: 'center'});
+  }
 }
 
 /* =================================================================
@@ -1113,7 +1293,7 @@ function initResg() {
     onClick(p, z) { selectResg(z.resg); },
     onResg(id) { selectResg(id); }
   });
-  $('#resgList').addEventListener('click', e => { const b = e.target.closest('[data-g]'); if (b) selectResg(b.dataset.g, false); });
+  $('#resgList').addEventListener('click', e => { if (e.target.closest('[data-reintentar]')) { recargar(); return; } const b = e.target.closest('[data-g]'); if (b) selectResg(b.dataset.g, false); });
 }
 function selectResg(id, scroll = true) {
   gSel = id; renderResg();
@@ -1121,8 +1301,9 @@ function selectResg(id, scroll = true) {
 }
 function renderResg() {
   const cnt = {};
-  DB.forEach(it => { if (it.estado === 'resguardo' || it.estado === 'pendiente') cnt[it.resg] = (cnt[it.resg] || 0) + 1; });
-  $('#resgList').innerHTML = RESG_ORDER.map(id => {
+  if (MODO.api) RESG_ORDER.forEach(id => { cnt[id] = RESG[id].objetos || 0; });
+  else DB.forEach(it => { if (it.estado === 'resguardo' || it.estado === 'pendiente') cnt[it.resg] = (cnt[it.resg] || 0) + 1; });
+  $('#resgList').innerHTML = avisoConexion() + RESG_ORDER.map(id => {
     const r = RESG[id];
     return `<button type="button" class="g-card ${gSel === id ? 'sel' : ''}" data-g="${id}" aria-pressed="${gSel === id}">
       <span class="g-code">${r.code}</span>
@@ -1144,6 +1325,15 @@ function saveAdm() { try { sessionStorage.setItem('op-cu1-adm', JSON.stringify({
 function renderAdmin() {
   const w = $('#adminWrap');
   updateNav();
+  if (MODO.api) {
+    w.innerHTML = `<div class="panel login" style="max-width:680px">
+      <div><h1>Administración</h1><p class="sub" style="font-size:14.5px;margin-top:6px">El inicio de sesión de cada punto de resguardo, confirmar recepción, entregar y la bitácora se conectan a la base en la Fase 4.</p></div>
+      <p style="font-size:14px">Mientras tanto, para probar el recorrido completo, marca un objeto como recibido directamente en la base (cambia el folio):</p>
+      <pre class="code">docker compose exec db psql -U opcu1 -d objetos_perdidos -c "UPDATE objetos SET estado = 'resguardo', recibido_en = now() WHERE folio = 'CU1-0131'"</pre>
+      <p class="sub">La demostración completa de la administración sigue disponible abriendo <b>frontend/index.html</b> directamente como archivo.</p>
+    </div>`;
+    return;
+  }
   if (!ADM.user) {
     w.innerHTML = `<form class="panel login" id="loginForm" novalidate>
       <div><h1>Administración</h1><p class="sub" style="font-size:14.5px;margin-top:6px">Para el personal de cada facultad que recibe y entrega objetos perdidos.</p></div>
@@ -1347,7 +1537,7 @@ function openDiscard(it) {
 const VIEWS = ['buscar', 'reportar', 'resguardo', 'admin'];
 function updateNav() {
   const a = $('#nav [data-v="admin"]');
-  a.innerHTML = 'Administración' + (ADM.user ? '<span class="dot-live" title="Sesión iniciada"></span>' : '');
+  a.innerHTML = 'Administración' + (adminDemo() ? '<span class="dot-live" title="Sesión iniciada"></span>' : '');
 }
 function route() {
   const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'buscar';
@@ -1365,6 +1555,7 @@ initBuscar();
 initResg();
 resetReport();
 route();
+iniciarDatos();
 </script>
 </body>
 </html>

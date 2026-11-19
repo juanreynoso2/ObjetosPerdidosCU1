@@ -27,7 +27,9 @@ services:
       retries: 10
 
   api:
-    build: ./api
+    build:
+      context: .
+      dockerfile: api/Dockerfile
     container_name: opcu1-api
     restart: unless-stopped
     # En desarrollo se reinicia sola al guardar cambios en api/src.
@@ -45,6 +47,7 @@ services:
     volumes:
       - ./api/src:/app/src:ro
       - ./api/test:/app/test:ro
+      - ./frontend:/app/public:ro
     depends_on:
       db:
         condition: service_healthy

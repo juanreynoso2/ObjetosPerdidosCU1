@@ -1,14 +1,17 @@
+# Se construye desde la raíz del repositorio (ver docker-compose.yml)
 FROM node:22-alpine
 
 ENV TZ=America/Mexico_City
+ENV FRONTEND_DIR=/app/public
 RUN apk add --no-cache tzdata
 
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY api/package.json api/package-lock.json ./
 RUN npm ci && npm cache clean --force
 
-COPY src ./src
-COPY test ./test
+COPY api/src ./src
+COPY api/test ./test
+COPY frontend ./public
 
 USER node
 EXPOSE 3000

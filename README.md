@@ -10,16 +10,17 @@ Página web para recuperar objetos perdidos en Ciudad Universitaria (CU1) de la 
 
 | Parte | Estado |
 |---|---|
-| Interfaz (`frontend/index.html`) | Prototipo funcional, con datos de ejemplo guardados en el navegador |
+| Interfaz (`frontend/index.html`) | Conectada a la API: buscar, reportar y puntos de resguardo usan la base de datos. La administración llega en la Fase 4 |
 | Base de datos (PostgreSQL) | Lista para probar: esquema, catálogos, datos de demostración y pruebas |
 | API (Node.js + Express) | Rutas públicas listas para probar: buscar, reportar, resguardos ([docs/API.md](docs/API.md)) |
 | Publicación | Pendiente |
 
 El plan completo y el avance están en **[docs/MANUAL_DE_TAREAS.md](docs/MANUAL_DE_TAREAS.md)**.
 
-## Ver el prototipo
+## Ver la página
 
-Abre `frontend/index.html` en el navegador. Para entrar a «Administración» en la demostración: usuario `admin`, contraseña `buap2026`.
+- **Con la base de datos (lo normal):** levanta el proyecto (abajo) y abre **http://localhost:8080**. Lo que reporte una persona lo ven todas.
+- **Modo demostración, sin Docker:** abre `frontend/index.html` directo en el navegador. Usa datos de ejemplo guardados solo en ese navegador e incluye la demostración de «Administración» (usuario `admin`, contraseña `buap2026`). El pie de página dice en qué modo estás.
 
 ## Levantar el proyecto
 
@@ -32,9 +33,9 @@ docker compose up -d --build
 docker compose ps             # db y api deben decir "healthy"
 ```
 
-Abre **http://localhost:8080/api/salud** en el navegador: debe decir `{"ok":true,"base":"conectada"}`. Prueba también http://localhost:8080/api/objetos?q=termo.
+Abre **http://localhost:8080**: es la página conectada a la base (el pie de página dice «Conectado a la base de datos»). La API responde en http://localhost:8080/api/salud.
 
-Usa `--build` la primera vez y cada vez que cambie `api/package.json`. Para lo demás basta `docker compose up -d`; la API se reinicia sola al guardar cambios en `api/src` (si no lo hace, `docker compose restart api`).
+Usa `--build` la primera vez y cada vez que cambie `api/package.json`. Para lo demás basta `docker compose up -d`; la API se reinicia sola al guardar cambios en `api/src` (si no lo hace, `docker compose restart api`). Los cambios en `frontend/` se ven con solo recargar el navegador.
 
 Verificar la base de datos:
 

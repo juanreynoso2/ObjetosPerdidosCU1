@@ -68,7 +68,7 @@ El programa está **listo** cuando todas las casillas de la sección final, [«E
 
 ## Fase 3 · Conectar la página
 
-- [ ] **3.1 Servir `frontend/`** desde la API (o con nginx) en `http://localhost:8080`.
+- [ ] **3.1 Servir `frontend/`** desde la API en `http://localhost:8080`.
   *Terminado cuando:* la página abre desde Docker, no como archivo suelto.
 - [ ] **3.2 Buscador conectado.** Reemplazar los datos guardados en el navegador por llamadas a `GET /api/objetos`.
   *Terminado cuando:* un objeto reportado en una computadora aparece en el buscador de otra.

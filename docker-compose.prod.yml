@@ -1,0 +1,94 @@
+# Objetos Perdidos CU1 · PRODUCCIÓN
+# Uso en el servidor (ver docs/DESPLIEGUE.md):
+#   cp .env.produccion.example .env   # y llena los valores
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# Diferencias con el de desarrollo:
+# - La base se crea SIN datos de demostración (solo esquema y catálogos).
+# - La base y la API no se exponen; solo Caddy escucha en 80/443 y obtiene el certificado HTTPS.
+# - Respaldo diario automático de la base en ./respaldos.
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-objetos_perdidos}
+      POSTGRES_USER: ${POSTGRES_USER:-opcu1}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en .env}
+      TZ: America/Mexico_City
+      PGTZ: America/Mexico_City
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db/init/01_esquema.sql:/docker-entrypoint-initdb.d/01_esquema.sql:ro
+      - ./db/init/02_catalogos.sql:/docker-entrypoint-initdb.d/02_catalogos.sql:ro
+      - ./db/reportes:/reportes:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PGHOST: db
+      PGPORT: 5432
+      PGDATABASE: ${POSTGRES_DB:-objetos_perdidos}
+      PGUSER: ${POSTGRES_USER:-opcu1}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en .env}
+      PORT: 3000
+      TZ: America/Mexico_City
+      JWT_SECRET: ${JWT_SECRET:?Define JWT_SECRET en .env (mínimo 32 caracteres)}
+      COOKIE_SECURE: "true"
+      TRUST_PROXY: "1"
+      LIMITE_REPORTES_POR_MINUTO: ${LIMITE_REPORTES_POR_MINUTO:-10}
+    volumes:
+      - ./db/datos_reales:/app/datos:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      DOMINIO: ${DOMINIO:?Define DOMINIO en .env (por ejemplo objetosperdidos.buap.mx)}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      api:
+        condition: service_healthy
+
+  respaldos:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      PGHOST: db
+      PGUSER: ${POSTGRES_USER:-opcu1}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD en .env}
+      PGDATABASE: ${POSTGRES_DB:-objetos_perdidos}
+      TZ: America/Mexico_City
+      HORA_RESPALDO: ${HORA_RESPALDO:-03}
+      DIAS_A_CONSERVAR: ${DIAS_A_CONSERVAR:-30}
+    volumes:
+      - ./respaldos:/respaldos
+      - ./deploy/respaldar.sh:/respaldar.sh:ro
+    entrypoint: ["/bin/sh", "/respaldar.sh"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db-data:
+  caddy-data:
+  caddy-config:

@@ -1,0 +1,17 @@
+id;nombre;ubicacion;horario;responsable;confirmado
+fcc;Secretaría Administrativa FCC;Edificio CCO1, planta baja;Lun a vie · 8:00–20:00;;no
+fcq;Secretaría Administrativa FCQ;Edificio FCQ1, planta baja;Lun a vie · 8:00–19:00;;no
+fiq;Secretaría Administrativa FIQ;Edificio FIQ1, planta baja;Lun a vie · 8:00–19:00;;no
+fcfm;Secretaría Administrativa FCFM;Edificio FM1, planta baja;Lun a vie · 8:00–19:00;;no
+fce;Secretaría Administrativa FCE;Edificio FCE1, planta baja;Lun a vie · 8:00–19:00;;no
+ing;Control Escolar de Ingeniería;Edificio ING1, planta baja;Lun a vie · 8:00–20:00;;no
+arq;Secretaría Administrativa ARQ;Edificio ARQ1, planta baja;Lun a vie · 8:00–20:00;;no
+der;Secretaría Administrativa DER;Edificio DER1, planta baja;Lun a vie · 8:00–20:00;;no
+adm;Secretaría Administrativa ADM;Edificio ADM1, planta baja;Lun a vie · 7:00–21:00;;no
+eco;Secretaría Administrativa ECO;Edificio ECO1, planta baja;Lun a vie · 8:00–19:00;;no
+len;Secretaría Administrativa LEN;Edificio LEN1, planta baja;Lun a vie · 8:00–19:00;;no
+fcf;Coordinación Administrativa FCF;Edificio FCF1, planta baja;Lun a vie · 7:00–20:00;;no
+bio;Secretaría Administrativa FCB;Edificio BIO1, planta baja;Lun a vie · 8:00–18:00;;no
+cont;Secretaría Administrativa FCP;Edificio FCP1, planta baja;Lun a vie · 7:00–21:00;;no
+bib;Módulo de Préstamo · Biblioteca Central;Edificio BC, planta baja;Lun a sáb · 8:00–21:00;;no
+vig;Módulo de Vigilancia CU1;Av. Central. Recibe lo hallado en áreas comunes, canchas, estadio y parque;Todos los días · 7:00–22:00;;no

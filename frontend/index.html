@@ -241,6 +241,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;
 .resg-card b{display:block}
 .resg-card span{color:var(--muted);display:block;font-size:13.5px}
 .privacy{font-size:12.5px;color:var(--muted);display:flex;gap:6px;align-items:flex-start}
+.privacy a{color:inherit}
 .privacy svg{flex:none;width:14px;height:14px;margin-top:3px;stroke:currentColor;fill:none;stroke-width:2}
 .admin-banner{background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok);border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600}
 .confirm{text-align:left;display:flex;flex-direction:column;gap:14px;border-top:5px solid var(--ok)}
@@ -261,6 +262,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;
 .g-n span{font-size:11.5px}
 
 /* ---------- admin ---------- */
+.doc{max-width:760px;display:flex;flex-direction:column;gap:18px}
+.doc section{display:flex;flex-direction:column;gap:8px}
+.doc h2{font-size:18px}
+.doc ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.doc p,.doc li{font-size:15px;max-width:68ch}
+.pend{background:var(--resg-soft);border-radius:4px;padding:0 4px;color:var(--resg-ink)}
+footer a{color:inherit}
 .login{max-width:420px;margin:10px auto;display:flex;flex-direction:column;gap:14px}
 .demo-note{font-size:13px;background:var(--resg-soft);color:var(--resg-ink);border-radius:8px;padding:9px 12px}
 .a-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:16px}
@@ -302,6 +310,14 @@ td .s{color:var(--muted);font-size:12.5px;display:block}
 .verify{background:var(--resg-soft);border:1px solid var(--resg);border-radius:10px;padding:10px 12px;font-size:14px}
 .verify small{display:block;font-weight:700;text-transform:uppercase;font-size:11.5px;letter-spacing:.05em;color:var(--resg-ink)}
 .m-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.aviso{border-radius:10px;padding:10px 14px;font-size:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px solid}
+.aviso.error{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.aviso.info{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.aviso .btn{min-height:32px;padding:4px 10px;font-size:13px}
+.cargando{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:14px;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.cargando::before{content:"";width:16px;height:16px;border-radius:50%;border:2.5px solid var(--line);border-top-color:var(--accent);animation:gira .8s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+pre.code{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:500 12.5px/1.5 var(--font-m);white-space:pre-wrap;word-break:break-all;margin:0}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:10px;font-weight:500;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:60;max-width:calc(100% - 32px)}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -439,13 +455,72 @@ footer{max-width:1400px;margin:0 auto;padding:0 20px 30px;color:var(--muted);fon
   </section>
 
   <!-- ================= ADMIN ================= -->
+  <!-- ================= AVISO DE PRIVACIDAD ================= -->
+  <section class="view" id="view-privacidad" aria-labelledby="h-privacidad">
+    <article class="doc">
+      <div class="intro" style="margin:0">
+        <h1 id="h-privacidad">Aviso de privacidad</h1>
+        <p>Qué datos personales usa Objetos Perdidos CU1, para qué y quién los ve.</p>
+      </div>
+      <div class="aviso info" role="note">Borrador para revisión: antes de publicar la página, este aviso debe aprobarlo el área de la BUAP responsable de la protección de datos personales. Lo marcado en amarillo está por definir.</div>
+
+      <section>
+        <h2>Quién es responsable</h2>
+        <p>La Benemérita Universidad Autónoma de Puebla, a través de <span class="pend">[área responsable del sistema]</span>, con domicilio en <span class="pend">[domicilio]</span>.</p>
+      </section>
+
+      <section>
+        <h2>Qué datos pedimos y cuándo</h2>
+        <ul>
+          <li><b>Para buscar:</b> ninguno.</li>
+          <li><b>Para reportar un objeto encontrado:</b> la descripción del objeto y, si quieres, tu nombre o matrícula. Ninguno de los dos se publica.</li>
+          <li><b>Para recoger un objeto:</b> tu nombre completo y tu matrícula. El personal revisa tu credencial o identificación, pero no guarda copia.</li>
+          <li><b>Personal de administración:</b> nombre y usuario de cada cuenta.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Para qué los usamos</h2>
+        <ul>
+          <li>Comprobar que quien reclama un objeto es su dueño.</li>
+          <li>Dejar constancia de quién se llevó cada objeto, para evitar robos y aclarar reclamaciones.</li>
+          <li>Contactar a quien reportó un objeto, si hace falta.</li>
+        </ul>
+        <p>No se usan para ningún otro fin, no se publican y no se usan para publicidad.</p>
+      </section>
+
+      <section>
+        <h2>Quién los ve</h2>
+        <p>Solo el personal del punto de resguardo que tiene el objeto. El buscador público muestra el tipo de objeto, la fecha, el lugar donde se encontró, el punto de resguardo y su estado, pero nunca la descripción, quién lo reportó ni quién lo recogió.</p>
+        <p>No compartimos estos datos con nadie fuera de la universidad, salvo que una autoridad competente los requiera conforme a la ley.</p>
+      </section>
+
+      <section>
+        <h2>Cuánto tiempo los guardamos</h2>
+        <p>Los datos de quien recogió un objeto y de quien lo reportó se conservan <span class="pend">[12 meses]</span> después de la entrega y luego se borran.</p>
+      </section>
+
+      <section>
+        <h2>Tus derechos</h2>
+        <p>Puedes pedir acceso a tus datos, corregirlos, cancelarlos u oponerte a su uso (derechos ARCO) ante la Unidad de Transparencia de la BUAP: <span class="pend">[correo, teléfono y domicilio]</span>.</p>
+      </section>
+
+      <section>
+        <h2>Cookies y almacenamiento</h2>
+        <p>La página no usa cookies de rastreo ni de publicidad. Solo el personal de administración recibe una cookie de sesión al iniciar sesión, que se borra al cerrarla o a las 8 horas.</p>
+      </section>
+
+      <p class="sub">Última actualización: <span class="pend">[fecha de aprobación]</span>.</p>
+    </article>
+  </section>
+
   <section class="view" id="view-admin" aria-labelledby="h-admin">
     <div id="adminWrap"></div>
   </section>
 </main>
 
 <footer>
-  <span>Prototipo de interfaz · En esta demostración los datos se guardan solo en este navegador.</span>
+  <span><span id="modoTexto">Conectando…</span> · <a href="#privacidad">Aviso de privacidad</a></span>
   <span>Proyecto «Recuperación de Objetos Perdidos en CU1»: Juan David Reynoso Carranza, Guillermo Martínez Hernández, Josué Benedicto Ramírez Centeno y Gabriel Flores Calderón.</span>
 </footer>
 
@@ -612,12 +687,148 @@ function seed() {
 }
 
 const KEY = 'op-cu1-v3';
-let DB = load();
+let DB = [];
 function load() {
   try { const raw = localStorage.getItem(KEY); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d) && d.every(i => ZMAP[i.zona] && RESG[i.resg])) return d; } } catch (e) {}
   return seed();
 }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(DB)); } catch (e) {} }
+/* =================================================================
+   Conexión con la API
+   - Si la página la sirve la API (docker compose), los datos vienen de la base.
+   - Si se abre como archivo o en un sitio sin API, funciona en modo demostración
+     con datos guardados en este navegador.
+   ================================================================= */
+const MODO = {api: false, cargando: true, error: null, ultimaCarga: 0};
+const API = 'api';
+
+class ErrorAPI extends Error {
+  constructor(mensaje, status = 0, detalles = []) { super(mensaje); this.status = status; this.detalles = detalles; }
+}
+
+async function pedir(ruta, opciones = {}) {
+  const ctrl = new AbortController();
+  const limite = setTimeout(() => ctrl.abort(), 10000);
+  let r;
+  try {
+    r = await fetch(`${API}/${ruta}`, {
+      ...opciones,
+      signal: ctrl.signal,
+      headers: {Accept: 'application/json', ...(opciones.body ? {'Content-Type': 'application/json'} : {})}
+    });
+  } catch (e) {
+    throw new ErrorAPI('No hay conexión con el servidor. Revisa tu internet e intenta de nuevo.');
+  } finally {
+    clearTimeout(limite);
+  }
+  let datos = null;
+  try { datos = await r.json(); } catch (e) {}
+  if (!r.ok) throw new ErrorAPI(datos?.error || `El servidor respondió con un error (${r.status}).`, r.status, datos?.detalles || []);
+  return datos;
+}
+
+// Convierte un objeto de la API al formato que usa la página.
+function desdeAPI(o) {
+  const conocido = !!CATS[o.tipo];
+  return {
+    id: o.folio,
+    tipo: conocido ? o.tipo : 'otro',
+    otro: o.tipo === 'otro' || !conocido ? o.nombre : '',
+    desc: '',
+    fecha: o.fecha,
+    hora: o.hora,
+    zona: ZMAP[o.zona.id] ? o.zona.id : 'and',
+    lugar: o.lugar,
+    x: o.mapa.x,
+    y: o.mapa.y,
+    resg: o.resguardo_id,
+    estado: o.estado,
+    entrega: o.entregado_en ? {fecha: o.entregado_en} : null
+  };
+}
+
+async function cargarObjetos() {
+  const d = await pedir('objetos?limite=500');
+  DB = d.objetos.map(desdeAPI);
+  MODO.ultimaCarga = Date.now();
+}
+
+async function cargarResguardos() {
+  const lista = await pedir('resguardos');
+  for (const p of lista) {
+    RESG[p.id] = {...(RESG[p.id] || {}), id: p.id, code: p.sigla, name: p.nombre, lugar: p.ubicacion,
+      horario: p.horario, x: p.mapa.x, y: p.mapa.y, objetos: p.objetos};
+    if (!RESG_ORDER.includes(p.id)) RESG_ORDER.splice(RESG_ORDER.length - 1, 0, p.id);
+  }
+}
+
+async function recargar({silencioso = false} = {}) {
+  if (!silencioso) { MODO.cargando = true; MODO.error = null; refrescarVista(); }
+  try {
+    await Promise.all([cargarObjetos(), cargarResguardos()]);
+    MODO.error = null;
+  } catch (e) {
+    MODO.error = e.message;
+  }
+  MODO.cargando = false;
+  refrescarVista();
+}
+
+function usarDemo() {
+  MODO.api = false; MODO.cargando = false; MODO.error = null;
+  DB = load();
+  pintarModo();
+  refrescarVista(true);
+}
+
+async function iniciarDatos() {
+  if (location.protocol === 'file:') return usarDemo();
+  try {
+    const r = await fetch(`${API}/salud`, {headers: {Accept: 'application/json'}});
+    const d = await r.json().catch(() => null);
+    if (!d || typeof d.ok !== 'boolean') return usarDemo();   // este sitio no tiene API
+  } catch (e) {
+    // La página viene de un servidor que no responde: se avisa, no se usan datos falsos.
+  }
+  MODO.api = true;
+  pintarModo();
+  // Los nombres de las zonas se toman de la base, por si se corrigen ahí (tarea 6.2).
+  pedir('catalogos').then(c => { for (const z of c.zonas) if (ZMAP[z.id]) ZMAP[z.id].short = z.nombre; }).catch(() => {});
+  await recargar();
+  refrescarVista(true);
+  verificarSesion();
+  setInterval(() => {
+    if (document.hidden) return;
+    recargar({silencioso: true});
+    const escribiendo = document.activeElement?.closest?.('#adminWrap input, #adminWrap select');
+    if (SES.admin && !$('#modal').classList.contains('on') && !escribiendo) cargarInventario();
+  }, 60000);
+}
+
+function pintarModo() {
+  $('#modoTexto').textContent = MODO.api
+    ? 'Conectado a la base de datos de Objetos Perdidos CU1.'
+    : 'Modo demostración · Los datos se guardan solo en este navegador.';
+}
+
+function avisoConexion() {
+  if (!MODO.api || !MODO.error) return '';
+  const hora = MODO.ultimaCarga ? new Date(MODO.ultimaCarga).toLocaleTimeString('es-MX', {hour: '2-digit', minute: '2-digit'}) : '';
+  return `<div class="aviso error" role="alert"><span>${esc(MODO.error)}${hora ? ` Mostrando lo último que se cargó (${hora}).` : ''}</span>
+    <button class="btn" type="button" data-reintentar>Reintentar</button></div>`;
+}
+const primeraCargaPendiente = () => MODO.cargando && !MODO.ultimaCarga;
+const adminDemo = () => !MODO.api && !!ADM.user;
+
+function vistaActual() { return VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'buscar'; }
+function refrescarVista(incluirFormulario = false) {
+  const v = vistaActual();
+  if (v === 'buscar') renderBuscar();
+  else if (v === 'resguardo') renderResg();
+  else if (v === 'admin') renderAdmin();
+  else if (v === 'reportar' && incluirFormulario && RP && !RP.done) renderReport();
+}
+
 function nextFolio() { return folio(Math.max(100, ...DB.map(i => +i.id.split('-')[1] || 0)) + 1); }
 
 /* =================================================================
@@ -799,6 +1010,7 @@ function initBuscar() {
     S.q = norm(S.q) === norm(c.sing) ? '' : c.sing; $('#q').value = S.q; S.sel = null; renderBuscar();
   });
   $('#results').addEventListener('click', e => {
+    if (e.target.closest('[data-reintentar]')) { recargar(); return; }
     const b = e.target.closest('[data-sel]'); if (b) { S.sel = S.sel === b.dataset.sel ? null : b.dataset.sel; renderBuscar(); return; }
     const c = e.target.closest('[data-cat]'); if (c) { S.q = CATS[c.dataset.cat].sing; $('#q').value = S.q; renderBuscar(); window.scrollTo({top: 0, behavior: 'smooth'}); }
   });
@@ -951,7 +1163,7 @@ function renderBuscar() {
       out.push(`<ul class="items">${found.map(it => itemRow(it)).join('')}</ul>`);
     }
   }
-  $('#results').innerHTML = out.join('');
+  $('#results').innerHTML = avisoConexion() + (primeraCargaPendiente() ? '<div class="cargando">Cargando objetos…</div>' : out.join(''));
 }
 
 /* =================================================================
@@ -961,7 +1173,7 @@ let RP, mapR;
 function resetReport() {
   const d = new Date();
   RP = {tipo: null, otro: '', pt: null, zona: null, lugar: '', fecha: dayStr(d), hora: pad(d.getHours()) + ':' + pad(d.getMinutes()),
-    desc: '', resg: ADM.user ? ADM.point : '', resgManual: !!ADM.user, quien: '', done: null};
+    desc: '', resg: adminActivo() ? puntoAdmin() : '', resgManual: adminActivo(), quien: '', done: null};
 }
 const SHIELD = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg>';
 function renderReport() {
@@ -980,7 +1192,7 @@ function renderReport() {
   }
   const resgOpts = RESG_ORDER.map(id => `<option value="${id}" ${RP.resg === id ? 'selected' : ''}>${esc(RESG[id].name)}</option>`).join('');
   w.innerHTML = `
-  ${ADM.user ? `<div class="admin-banner">Registrando como administración de ${esc(RESG[ADM.point].name)}: el objeto entra directo a «En resguardo».</div>` : ''}
+  ${adminActivo() ? `<div class="admin-banner">Registrando como administración de ${esc(RESG[puntoAdmin()].name)}: el objeto entra directo a «En resguardo».</div>` : ''}
   <form id="rpForm" novalidate class="r-wrap">
     <div class="panel step"><span class="step-n">1</span><div class="step-b">
       <h2 id="lbl-tipo">¿Qué encontraste?</h2>
@@ -1026,14 +1238,14 @@ function renderReport() {
       <h2>¿Dónde lo vas a entregar?</h2>
       <div class="field">
         <label for="rpResg">Punto de resguardo</label>
-        <select id="rpResg" ${ADM.user ? 'disabled' : ''}><option value="">Marca el lugar en el mapa o elige uno</option>${resgOpts}</select>
+        <select id="rpResg" ${adminActivo() ? 'disabled' : ''}><option value="">Marca el lugar en el mapa o elige uno</option>${resgOpts}</select>
       </div>
       <div id="resgCard"></div>
       <p class="err" id="e-resg">Elige el punto de resguardo.</p>
-      ${ADM.user ? '' : `<div class="field">
+      ${adminActivo() ? '' : `<div class="field">
         <label for="rpQuien">Tu nombre o matrícula <span class="sub">(opcional)</span></label>
         <input type="text" id="rpQuien" maxlength="60" value="${esc(RP.quien)}">
-        <p class="privacy" style="margin-top:6px">${SHIELD}<span>Solo para la administración, por si necesitan contactarte.</span></p>
+        <p class="privacy" style="margin-top:6px">${SHIELD}<span>Solo para la administración, por si necesitan contactarte. <a href="#privacidad">Aviso de privacidad</a>.</span></p>
       </div>`}
     </div></div>
 
@@ -1048,7 +1260,7 @@ function renderReport() {
       $('#e-pt').classList.remove('on'); $('#e-resg').classList.remove('on');
       paintReport();
     },
-    onResg(id) { if (ADM.user) return; RP.resg = id; RP.resgManual = true; $('#rpResg').value = id; paintReport(); }
+    onResg(id) { if (adminActivo()) return; RP.resg = id; RP.resgManual = true; $('#rpResg').value = id; paintReport(); }
   });
 
   const f = $('#rpForm');
@@ -1068,6 +1280,7 @@ function renderReport() {
   $('#rpResg').onchange = e => { RP.resg = e.target.value; RP.resgManual = !!RP.resg; paintReport(); };
   if ($('#rpQuien')) $('#rpQuien').oninput = e => RP.quien = e.target.value;
   f.addEventListener('submit', submitReport);
+  $$('.err', f).forEach(el => { el.dataset.def = el.textContent; });
   paintReport();
 }
 function paintReport() {
@@ -1091,16 +1304,61 @@ function submitReport(e) {
     fecha: !RP.fecha || !RP.hora,
     resg: !RP.resg
   };
+  $$('#rpForm .err').forEach(el => { if (el.dataset.def) el.textContent = el.dataset.def; });
   for (const [k, bad] of Object.entries(errs)) $('#e-' + k).classList.toggle('on', bad);
   const first = Object.keys(errs).find(k => errs[k]);
   if (first) { $('#e-' + first).closest('.panel').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
+  if (MODO.api) { enviarReporte(); return; }
   const now = new Date().toISOString();
   const it = {id: nextFolio(), tipo: RP.tipo, otro: RP.tipo === 'otro' ? RP.otro.trim() : '', desc: RP.desc.trim(),
     fecha: RP.fecha, hora: RP.hora, zona: RP.zona, lugar: RP.lugar.trim(), x: RP.pt.x, y: RP.pt.y, resg: RP.resg,
-    estado: ADM.user ? 'resguardo' : 'pendiente', quien: ADM.user ? 'Administración ' + RESG[ADM.point].code : RP.quien.trim(), creado: now};
-  if (ADM.user) it.recibido = now;
+    estado: adminDemo() ? 'resguardo' : 'pendiente', quien: adminDemo() ? 'Administración ' + RESG[ADM.point].code : RP.quien.trim(), creado: now};
+  if (adminDemo()) it.recibido = now;
   DB.push(it); save();
   RP.done = it; renderReport(); window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// Envía el reporte a la API. Si falla, el formulario conserva lo escrito.
+async function enviarReporte() {
+  const btn = $('#rpForm button[type=submit]');
+  const anterior = $('#e-general'); if (anterior) anterior.remove();
+  btn.disabled = true; btn.textContent = 'Enviando…';
+  try {
+    const comoAdmin = !!SES.admin;
+    const r = await pedir(comoAdmin ? 'admin/objetos' : 'objetos', {method: 'POST', body: JSON.stringify({
+      tipo: RP.tipo,
+      tipo_otro: RP.tipo === 'otro' ? RP.otro.trim() : null,
+      descripcion: RP.desc.trim() || null,
+      fecha: RP.fecha,
+      hora: RP.hora,
+      zona_id: RP.zona,
+      lugar: RP.lugar.trim(),
+      x: RP.pt.x,
+      y: RP.pt.y,
+      resguardo_id: RP.resg || null,
+      reportado_por: RP.quien.trim() || null
+    })});
+    const g = r.resguardo;
+    if (RESG[g.id]) Object.assign(RESG[g.id], {name: g.nombre, lugar: g.ubicacion, horario: g.horario});
+    RP.done = {id: r.folio, resg: g.id, estado: r.estado};
+    renderReport();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+    recargar({silencioso: true});
+    if (comoAdmin) cargarInventario();
+  } catch (err) {
+    btn.disabled = false; btn.textContent = 'Registrar objeto encontrado';
+    if (err.status === 401 && SES.admin) { sesionExpirada(); err.message = 'Tu sesión de administración expiró. Inicia sesión de nuevo para registrar.'; }
+    const campos = {tipo: 'tipo', tipo_otro: 'tipo', zona_id: 'pt', x: 'pt', y: 'pt', lugar: 'lugar', fecha: 'fecha', hora: 'fecha', resguardo_id: 'resg'};
+    let primero = null;
+    for (const d of err.detalles || []) {
+      const el = $('#e-' + campos[d.campo]);
+      if (el) { el.textContent = d.mensaje; el.classList.add('on'); primero = primero || el; }
+    }
+    const mensaje = primero ? 'Revisa los campos marcados en rojo.' : err.message;
+    btn.parentElement.insertAdjacentHTML('beforebegin',
+      `<div class="aviso error" id="e-general" role="alert">${esc(mensaje)} Lo que escribiste sigue en el formulario.</div>`);
+    (primero ? primero.closest('.panel') : $('#e-general')).scrollIntoView({behavior: 'smooth', block: 'center'});
+  }
 }
 
 /* =================================================================
@@ -1113,7 +1371,7 @@ function initResg() {
     onClick(p, z) { selectResg(z.resg); },
     onResg(id) { selectResg(id); }
   });
-  $('#resgList').addEventListener('click', e => { const b = e.target.closest('[data-g]'); if (b) selectResg(b.dataset.g, false); });
+  $('#resgList').addEventListener('click', e => { if (e.target.closest('[data-reintentar]')) { recargar(); return; } const b = e.target.closest('[data-g]'); if (b) selectResg(b.dataset.g, false); });
 }
 function selectResg(id, scroll = true) {
   gSel = id; renderResg();
@@ -1121,8 +1379,9 @@ function selectResg(id, scroll = true) {
 }
 function renderResg() {
   const cnt = {};
-  DB.forEach(it => { if (it.estado === 'resguardo' || it.estado === 'pendiente') cnt[it.resg] = (cnt[it.resg] || 0) + 1; });
-  $('#resgList').innerHTML = RESG_ORDER.map(id => {
+  if (MODO.api) RESG_ORDER.forEach(id => { cnt[id] = RESG[id].objetos || 0; });
+  else DB.forEach(it => { if (it.estado === 'resguardo' || it.estado === 'pendiente') cnt[it.resg] = (cnt[it.resg] || 0) + 1; });
+  $('#resgList').innerHTML = avisoConexion() + RESG_ORDER.map(id => {
     const r = RESG[id];
     return `<button type="button" class="g-card ${gSel === id ? 'sel' : ''}" data-g="${id}" aria-pressed="${gSel === id}">
       <span class="g-code">${r.code}</span>
@@ -1141,9 +1400,118 @@ const ADM = {user: null, point: 'fcc', tab: 'inv', filter: 'activos', q: '', all
 try { const s = JSON.parse(sessionStorage.getItem('op-cu1-adm') || 'null'); if (s) Object.assign(ADM, s); } catch (e) {}
 function saveAdm() { try { sessionStorage.setItem('op-cu1-adm', JSON.stringify({user: ADM.user, point: ADM.point})); } catch (e) {} }
 
+// Con la API: la sesión vive en una cookie que la página no puede leer; aquí solo se guarda quién entró.
+const SES = {verificada: false, admin: null, cargando: false, aviso: null};
+let ADMDB = [];
+const adminActivo = () => MODO.api ? !!SES.admin : !!ADM.user;
+const puntoAdmin = () => MODO.api ? SES.admin?.resguardo.id : ADM.point;
+const fuenteAdmin = () => MODO.api ? ADMDB : DB;
+
+function desdeAPIAdmin(o) {
+  const e = o.entrega;
+  return {
+    ...desdeAPI({...o, entregado_en: e?.entregado_en || null}),
+    desc: o.descripcion || '',
+    quien: o.reportado_por || '',
+    creado: o.creado_en,
+    recibido: o.recibido_en,
+    propio: o.propio,
+    entrega: e ? {fecha: e.entregado_en, nombre: e.nombre || '', matricula: e.matricula || '', desc: !!e.verifico_descripcion,
+      ident: !!e.verifico_identificacion, obs: e.observaciones || '', atendio: e.atendio || ''} : null
+  };
+}
+
+let verificando = null;
+function verificarSesion() {
+  verificando ??= verificarSesionAhora().finally(() => { verificando = null; });
+  return verificando;
+}
+async function verificarSesionAhora() {
+  try {
+    SES.admin = await pedir('admin/sesion');
+  } catch (e) {
+    SES.admin = null;
+    if (e.status !== 401) SES.aviso = e.message;
+  }
+  SES.verificada = true;
+  updateNav();
+  if (SES.admin) { resetReport(); await cargarInventario(); }
+  if (vistaActual() === 'admin') renderAdmin();
+}
+
+async function cargarInventario() {
+  SES.cargando = true;
+  try {
+    ADMDB = (await pedir('admin/objetos?estado=todos&todo=1')).map(desdeAPIAdmin);
+  } catch (e) {
+    if (e.status === 401) return sesionExpirada();
+    toast(e.message);
+  } finally {
+    SES.cargando = false;
+  }
+  if (vistaActual() === 'admin') renderAdmin();
+}
+
+function sesionExpirada() {
+  SES.admin = null; ADMDB = [];
+  SES.aviso = 'Tu sesión expiró. Inicia sesión de nuevo.';
+  resetReport(); updateNav();
+  if (vistaActual() === 'admin') renderAdmin();
+}
+
+/** Ejecuta una acción de administración en la API y recarga los datos. */
+async function accionAdmin(ruta, cuerpo, mensajeOk) {
+  try {
+    const r = await pedir(ruta, {method: 'POST', ...(cuerpo ? {body: JSON.stringify(cuerpo)} : {})});
+    if (mensajeOk) toast(typeof mensajeOk === 'function' ? mensajeOk(r) : mensajeOk);
+    await cargarInventario();
+    recargar({silencioso: true});
+    return r;
+  } catch (e) {
+    if (e.status === 401) { sesionExpirada(); return null; }
+    throw e;
+  }
+}
+
+function renderLoginAPI(w) {
+  w.innerHTML = `<form class="panel login" id="loginForm" novalidate>
+    <div><h1>Administración</h1><p class="sub" style="font-size:14.5px;margin-top:6px">Para el personal de cada facultad que recibe y entrega objetos perdidos.</p></div>
+    ${SES.aviso ? `<div class="aviso info" role="status">${esc(SES.aviso)}</div>` : ''}
+    <div class="field"><label for="lgUser">Usuario</label><input type="text" id="lgUser" autocomplete="username" autocapitalize="none" spellcheck="false"></div>
+    <div class="field"><label for="lgPass">Contraseña</label><input type="password" id="lgPass" autocomplete="current-password"></div>
+    <p class="err" id="lgErr">Usuario o contraseña incorrectos.</p>
+    <button class="btn primary" type="submit">Entrar</button>
+    <p class="sub">Cada punto de resguardo tiene su propia cuenta. Si no la tienes, pídela a la coordinación del proyecto.</p>
+  </form>`;
+  $('#lgUser').focus();
+  $('#loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = $('#loginForm button[type=submit]');
+    const err = $('#lgErr');
+    err.classList.remove('on');
+    btn.disabled = true; btn.textContent = 'Entrando…';
+    try {
+      SES.admin = await pedir('admin/login', {method: 'POST', body: JSON.stringify({usuario: $('#lgUser').value, contrasena: $('#lgPass').value})});
+      SES.aviso = null;
+      resetReport(); updateNav();
+      w.innerHTML = '<div class="cargando">Cargando inventario…</div>';
+      await cargarInventario();
+    } catch (ex) {
+      btn.disabled = false; btn.textContent = 'Entrar';
+      err.textContent = ex.status === 400 ? 'Escribe tu usuario y contraseña.' : ex.message;
+      err.classList.add('on');
+      $('#lgPass').select();
+    }
+  });
+}
+
 function renderAdmin() {
   const w = $('#adminWrap');
   updateNav();
+  if (MODO.api) {
+    if (!SES.verificada) { w.innerHTML = '<div class="cargando">Revisando tu sesión…</div>'; verificarSesion(); return; }
+    if (!SES.admin) { renderLoginAPI(w); return; }
+  } else
   if (!ADM.user) {
     w.innerHTML = `<form class="panel login" id="loginForm" novalidate>
       <div><h1>Administración</h1><p class="sub" style="font-size:14.5px;margin-top:6px">Para el personal de cada facultad que recibe y entrega objetos perdidos.</p></div>
@@ -1162,8 +1530,8 @@ function renderAdmin() {
     });
     return;
   }
-  const P = RESG[ADM.point];
-  const mine = DB.filter(i => i.resg === ADM.point);
+  const P = RESG[puntoAdmin()];
+  const mine = fuenteAdmin().filter(i => i.resg === puntoAdmin());
   const now = Date.now();
   const nRes = mine.filter(i => i.estado === 'resguardo').length;
   const nPend = mine.filter(i => i.estado === 'pendiente').length;
@@ -1173,9 +1541,10 @@ function renderAdmin() {
   <div class="a-head">
     <div><small>Sesión de administración</small><h1>${esc(P.name)}</h1><p class="sub" style="font-size:14px">${esc(P.lugar)} · ${esc(P.horario)}</p></div>
     <div class="a-tools">
-      <label for="adPoint" class="sub" style="margin:0">Punto</label>
-      <select id="adPoint">${RESG_ORDER.map(id => `<option value="${id}" ${ADM.point === id ? 'selected' : ''}>${esc(RESG[id].name)}</option>`).join('')}</select>
+      ${MODO.api ? `<span class="sub" style="margin:0">Sesión: <b>${esc(SES.admin.usuario)}</b></span>` : `<label for="adPoint" class="sub" style="margin:0">Punto</label>
+      <select id="adPoint">${RESG_ORDER.map(id => `<option value="${id}" ${ADM.point === id ? 'selected' : ''}>${esc(RESG[id].name)}</option>`).join('')}</select>`}
       <a class="btn primary" href="#reportar">Registrar objeto</a>
+      ${MODO.api ? '<button class="btn" type="button" id="adRefresh">Actualizar</button>' : ''}
       <button class="btn ghost" type="button" id="adOut">Cerrar sesión</button>
     </div>
   </div>
@@ -1191,8 +1560,15 @@ function renderAdmin() {
   </div>
   <div id="adBody"></div>
   <p class="sub" style="margin-top:12px">${SHIELD.replace('<svg', '<svg style="width:13px;height:13px;vertical-align:-2px;stroke:currentColor;fill:none;stroke-width:2"')} Nombre y matrícula de quien recoge un objeto solo los ve la administración. En el buscador público el objeto aparece como «Encontrado · entregado» durante ${KEEP_DAYS} días.</p>`;
-  $('#adPoint').onchange = e => { ADM.point = e.target.value; saveAdm(); resetReport(); renderAdmin(); };
-  $('#adOut').onclick = () => { ADM.user = null; saveAdm(); resetReport(); renderAdmin(); };
+  if ($('#adRefresh')) $('#adRefresh').onclick = () => { $('#adRefresh').disabled = true; cargarInventario(); };
+  if ($('#adPoint')) $('#adPoint').onchange = e => { ADM.point = e.target.value; saveAdm(); resetReport(); renderAdmin(); };
+  $('#adOut').onclick = async () => {
+    if (MODO.api) {
+      try { await pedir('admin/logout', {method: 'POST'}); } catch (e) {}
+      SES.admin = null; ADMDB = []; SES.aviso = null;
+    } else { ADM.user = null; saveAdm(); }
+    resetReport(); renderAdmin();
+  };
   $$('[data-tab]', w).forEach(b => b.onclick = () => { ADM.tab = b.dataset.tab; renderAdmin(); });
   ADM.tab === 'inv' ? renderInv() : renderLog();
 }
@@ -1212,8 +1588,14 @@ function renderInv() {
   $('#adAll').onchange = e => { ADM.all = e.target.checked; rows(); };
   $('#adRows').addEventListener('click', e => {
     const a = e.target.closest('[data-act]'); if (!a) return;
-    const it = DB.find(i => i.id === a.dataset.id);
-    if (a.dataset.act === 'recibir') { it.estado = 'resguardo'; it.recibido = new Date().toISOString(); save(); toast(`${it.id} recibido. Ya aparece como «En resguardo».`); renderAdmin(); }
+    const it = fuenteAdmin().find(i => i.id === a.dataset.id);
+    if (a.dataset.act === 'recibir') {
+      if (MODO.api) {
+        a.disabled = true;
+        accionAdmin(`admin/objetos/${it.id}/recibir`, null, `${it.id} recibido. Ya aparece como «En resguardo».`)
+          .catch(e => { a.disabled = false; toast(e.message); });
+      } else { it.estado = 'resguardo'; it.recibido = new Date().toISOString(); save(); toast(`${it.id} recibido. Ya aparece como «En resguardo».`); renderAdmin(); }
+    }
     if (a.dataset.act === 'entregar') openDeliver(it);
     if (a.dataset.act === 'descartar') openDiscard(it);
     if (a.dataset.act === 'ver') openReceipt(it);
@@ -1221,12 +1603,12 @@ function renderInv() {
   rows();
   function rows() {
     const qn = norm(ADM.q);
-    const list = DB.filter(i => (ADM.all || i.resg === ADM.point))
+    const list = fuenteAdmin().filter(i => (ADM.all || i.resg === puntoAdmin()))
       .filter(i => ADM.filter === 'todos' ? i.estado !== 'descartado' : ADM.filter === 'activos' ? (i.estado === 'pendiente' || i.estado === 'resguardo') : i.estado === ADM.filter)
       .filter(i => !qn || matchesQuery(i, ADM.q) || norm(i.id).includes(qn) || norm(i.desc).includes(qn) || norm(i.lugar).includes(qn))
       .sort((a, b) => (b.fecha + b.hora).localeCompare(a.fecha + a.hora));
     $('#adRows').innerHTML = list.length ? list.map(it => {
-      const own = it.resg === ADM.point, z = ZMAP[it.zona];
+      const own = it.resg === puntoAdmin(), z = ZMAP[it.zona];
       const age = daysSince(it.creado);
       let act = '';
       if (!own) act = `<span class="s">En ${esc(RESG[it.resg].name)}</span>`;
@@ -1245,7 +1627,7 @@ function renderInv() {
 }
 
 function renderLog() {
-  const list = DB.filter(i => i.estado === 'entregado' && i.resg === ADM.point).sort((a, b) => b.entrega.fecha.localeCompare(a.entrega.fecha));
+  const list = fuenteAdmin().filter(i => i.estado === 'entregado' && i.resg === puntoAdmin()).sort((a, b) => b.entrega.fecha.localeCompare(a.entrega.fecha));
   $('#adBody').innerHTML = `<div class="tbl-wrap"><table><thead><tr><th>Entrega</th><th>Folio</th><th>Objeto</th><th>Recogió <span class="priv-tag">privado</span></th><th>Matrícula <span class="priv-tag">privado</span></th><th>Verificación</th><th>Atendió</th></tr></thead><tbody>
     ${list.length ? list.map(it => `<tr>
       <td class="tab-num">${fmtDateTime(it.entrega.fecha)}</td>
@@ -1312,6 +1694,22 @@ function openDeliver(it) {
     const bad = {dlNombre: nombre.split(/\s+/).length < 2, dlMat: !/^\d{9}$/.test(mat), dlChk: !$('#dlDesc').checked || !$('#dlId').checked};
     for (const [k, v] of Object.entries(bad)) $('#e-' + k).classList.toggle('on', v);
     if (Object.values(bad).some(Boolean)) return;
+    if (MODO.api) {
+      const btn = $('#dlForm button[type=submit]');
+      btn.disabled = true; btn.textContent = 'Registrando…';
+      accionAdmin(`admin/objetos/${it.id}/entregar`, {
+        nombre, matricula: mat, verifico_descripcion: true, verifico_identificacion: true, observaciones: $('#dlObs').value.trim() || null
+      }, r => `Entregado. En el buscador aparece como «Encontrado» hasta el ${fmtDate(r.visible_hasta)}.`)
+        .then(() => closeModal())
+        .catch(e => {
+          btn.disabled = false; btn.textContent = 'Registrar entrega';
+          const campos = {nombre: 'dlNombre', matricula: 'dlMat', verifico_descripcion: 'dlChk', verifico_identificacion: 'dlChk'};
+          let marcado = false;
+          for (const d of e.detalles || []) { const el = $('#e-' + campos[d.campo]); if (el) { el.textContent = d.mensaje; el.classList.add('on'); marcado = true; } }
+          if (!marcado) toast(e.message);
+        });
+      return;
+    }
     it.estado = 'entregado';
     it.entrega = {nombre, matricula: mat, desc: true, ident: true, obs: $('#dlObs').value.trim(), fecha: new Date().toISOString(), atendio: 'admin · ' + RESG[ADM.point].code};
     save(); closeModal();
@@ -1338,21 +1736,31 @@ function openDiscard(it) {
   openModal(`<div class="modal-h"><div><span class="folio">${it.id}</span><h2 id="modalTitle">¿El objeto nunca llegó?</h2></div><button class="x" type="button" data-close aria-label="Cerrar">×</button></div>
     <p>Se quitará del buscador público. Úsalo solo si pasaron varios días y nadie entregó el objeto en este punto.</p>
     <div class="m-actions"><button class="btn ghost" type="button" data-close>Cancelar</button><button class="btn danger" type="button" id="dsOk">Quitar reporte</button></div>`);
-  $('#dsOk').onclick = () => { it.estado = 'descartado'; save(); closeModal(); toast(`${it.id} se quitó del buscador.`); renderAdmin(); };
+  $('#dsOk').onclick = () => {
+    if (MODO.api) {
+      $('#dsOk').disabled = true;
+      accionAdmin(`admin/objetos/${it.id}/descartar`, null, `${it.id} se quitó del buscador.`)
+        .then(() => closeModal())
+        .catch(e => { closeModal(); toast(e.message); });
+      return;
+    }
+    it.estado = 'descartado'; save(); closeModal(); toast(`${it.id} se quitó del buscador.`); renderAdmin();
+  };
 }
 
 /* =================================================================
    Navegación
    ================================================================= */
-const VIEWS = ['buscar', 'reportar', 'resguardo', 'admin'];
+const VIEWS = ['buscar', 'reportar', 'resguardo', 'admin', 'privacidad'];
 function updateNav() {
   const a = $('#nav [data-v="admin"]');
-  a.innerHTML = 'Administración' + (ADM.user ? '<span class="dot-live" title="Sesión iniciada"></span>' : '');
+  a.innerHTML = 'Administración' + (adminActivo() ? '<span class="dot-live" title="Sesión iniciada"></span>' : '');
 }
 function route() {
   const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'buscar';
   $$('.view').forEach(s => s.classList.toggle('on', s.id === 'view-' + v));
   $$('#nav a').forEach(a => a.dataset.v === v ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+  if (MODO.api && (v === 'buscar' || v === 'resguardo') && Date.now() - MODO.ultimaCarga > 15000) recargar({silencioso: true});
   if (v === 'buscar') renderBuscar();
   if (v === 'reportar') { if (!RP || RP.done) resetReport(); renderReport(); }
   if (v === 'resguardo') renderResg();
@@ -1365,6 +1773,7 @@ initBuscar();
 initResg();
 resetReport();
 route();
+iniciarDatos();
 </script>
 </body>
 </html>

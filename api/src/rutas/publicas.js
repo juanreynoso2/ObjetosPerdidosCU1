@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { pool } from '../db.js';
 import { interpretarBusqueda } from '../busqueda.js';
-import { esquemaBusqueda, esquemaReporte, detallesDeValidacion } from '../validacion.js';
+import { esquemaBusqueda, detallesDeValidacion } from '../validacion.js';
+import { crearObjeto } from '../reportes.js';
 import { ErrorDeDatos } from '../errores.js';
 
 const router = Router();
@@ -135,55 +136,8 @@ router.get('/objetos/:folio', async (req, res) => {
 // POST /api/objetos · Reportar un objeto encontrado
 // ---------------------------------------------------------------------
 router.post('/objetos', async (req, res) => {
-  const lectura = esquemaReporte.safeParse(req.body ?? {});
-  if (!lectura.success) {
-    throw new ErrorDeDatos('Revisa los datos del reporte', detallesDeValidacion(lectura.error));
-  }
-  const d = lectura.data;
-
-  const [categoria, zona] = await Promise.all([
-    pool.query('SELECT 1 FROM categorias WHERE id = $1', [d.tipo]),
-    pool.query('SELECT resguardo_id FROM zonas WHERE id = $1', [d.zona_id])
-  ]);
-  if (!categoria.rowCount) throw new ErrorDeDatos('Revisa los datos del reporte', [{ campo: 'tipo', mensaje: 'Ese tipo de objeto no existe' }]);
-  if (!zona.rowCount) throw new ErrorDeDatos('Revisa los datos del reporte', [{ campo: 'zona_id', mensaje: 'Esa zona del mapa no existe' }]);
-
-  const resguardoId = d.resguardo_id || zona.rows[0].resguardo_id;
-  const resguardo = await pool.query(
-    'SELECT id, nombre, ubicacion, horario FROM puntos_resguardo WHERE id = $1 AND activo',
-    [resguardoId]
-  );
-  if (!resguardo.rowCount) {
-    throw new ErrorDeDatos('Revisa los datos del reporte', [{ campo: 'resguardo_id', mensaje: 'Ese punto de resguardo no existe' }]);
-  }
-
-  const { rows } = await pool.query(
-    `INSERT INTO objetos (tipo, tipo_otro, descripcion_privada, encontrado_en, zona_id, lugar,
-                          mapa_x, mapa_y, resguardo_id, reportado_por)
-     VALUES ($1, $2, $3, (($4 || ' ' || $5)::timestamp AT TIME ZONE 'America/Mexico_City'),
-             $6, $7, $8, $9, $10, $11)
-     RETURNING folio, estado, encontrado_en`,
-    [
-      d.tipo,
-      d.tipo === 'otro' ? d.tipo_otro : null,
-      d.descripcion || null,
-      d.fecha,
-      d.hora,
-      d.zona_id,
-      d.lugar,
-      d.x,
-      d.y,
-      resguardoId,
-      d.reportado_por || null
-    ]
-  );
-
-  res.status(201).location(`/api/objetos/${rows[0].folio}`).json({
-    folio: rows[0].folio,
-    estado: rows[0].estado,
-    encontrado_en: rows[0].encontrado_en,
-    resguardo: resguardo.rows[0]
-  });
+  const creado = await crearObjeto(req.body);
+  res.status(201).location(`/api/objetos/${creado.folio}`).json(creado);
 });
 
 export default router;

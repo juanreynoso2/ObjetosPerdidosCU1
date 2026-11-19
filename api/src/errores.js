@@ -15,7 +15,8 @@ const ERRORES_PG = {
   '23502': [400, 'Falta un dato obligatorio'],
   '23503': [400, 'Algún dato hace referencia a algo que no existe'],
   '23514': [400, 'Algún dato no cumple las reglas'],
-  '23505': [409, 'Ese registro ya existe']
+  '23505': [409, 'Ese registro ya existe'],
+  '42501': [403, 'No tienes permiso para esa acción']
 };
 
 /** Último middleware de Express: convierte cualquier error en una respuesta JSON en español. */

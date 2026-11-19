@@ -43,12 +43,19 @@ services:
       PORT: 3000
       TZ: America/Mexico_City
       FRONTEND_DIR: /app/public
+      # Clave para firmar las sesiones de administración (ver .env.example)
+      JWT_SECRET: ${JWT_SECRET:-}
+      # En producción con HTTPS: COOKIE_SECURE=true y, detrás de un proxy, TRUST_PROXY=1
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      TRUST_PROXY: ${TRUST_PROXY:-}
+      LIMITE_REPORTES_POR_MINUTO: ${LIMITE_REPORTES_POR_MINUTO:-10}
     ports:
       - "127.0.0.1:${API_PORT:-8080}:3000"
     volumes:
       - ./api/src:/app/src:ro
       - ./api/test:/app/test:ro
       - ./frontend:/app/public:ro
+      - ./api/scripts:/app/scripts:ro
     depends_on:
       db:
         condition: service_healthy

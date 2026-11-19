@@ -81,7 +81,7 @@ El programa está **listo** cuando todas las casillas de la sección final, [«E
 
 ## Fase 4 · Administración y seguridad
 
-- [ ] **4.1 Inicio de sesión real.** `POST /api/admin/login` con contraseñas cifradas (`bcrypt`) y sesión con token (JWT en cookie `httpOnly`).
+- [ ] **4.1 Inicio de sesión real.** `POST /api/admin/login` con contraseñas cifradas (`bcrypt`) y sesión con token (JWT en cookie `httpOnly`, `SameSite=Strict`). Cuentas con `api/scripts/crear-admin.js`.
   *Terminado cuando:* se quita la contraseña de demostración de la página y cada punto de resguardo tiene su propia cuenta.
 - [ ] **4.2 Inventario:** `GET /api/admin/objetos`, solo con sesión iniciada; incluye la descripción privada.
   *Terminado cuando:* sin sesión responde 401.
@@ -91,8 +91,12 @@ El programa está **listo** cuando todas las casillas de la sección final, [«E
   *Terminado cuando:* cada entrega hecha desde la página aparece con fecha y hora del servidor.
 - [ ] **4.5 Límite de reportes:** como máximo 10 reportes por minuto desde la misma conexión (`express-rate-limit`).
   *Terminado cuando:* el reporte número 11 en un minuto responde 429.
-- [ ] **4.6 Cabeceras de seguridad** (`helmet`) y CORS limitado al dominio de la página.
+- [ ] **4.6 Cabeceras de seguridad** (`helmet`) y peticiones solo desde el dominio de la página.
   *Terminado cuando:* una página de otro dominio no puede llamar a la API.
+- [ ] **4.7 Administración en la página** conectada a la API: inicio de sesión, inventario, confirmar recepción, entregar, descartar, registrar objetos y bitácora.
+  *Terminado cuando:* el recorrido reportar → recibir → entregar → «Encontrado» en el buscador funciona desde la página, con dos navegadores (uno público y uno de administración).
+- [ ] **4.8 Pruebas de administración y seguridad** en `api/test/admin.test.js` y `api/test/seguridad.test.js`.
+  *Terminado cuando:* `docker compose exec api npm test` termina con `# fail 0` (55 pruebas).
 
 ## Fase 5 · Pruebas
 
@@ -109,7 +113,7 @@ El programa está **listo** cuando todas las casillas de la sección final, [«E
   *Terminado cuando:* los 16 puntos tienen datos confirmados por la facultad (no de ejemplo).
 - [ ] **6.2 Nombres del mapa:** confirmar qué son CC, EMA, la zona sur (DCyTIC, US, DASU) y si el Instituto de Física tiene su propio punto.
   *Terminado cuando:* todas las zonas del mapa tienen nombre confirmado.
-- [ ] **6.3 Cuentas de administración** creadas para cada punto, con contraseñas entregadas en persona.
+- [ ] **6.3 Cuentas de administración** creadas para cada punto con `api/scripts/crear-admin.js`, con contraseñas entregadas en persona, y las cuentas `admin.*` de demostración desactivadas.
   *Terminado cuando:* cada responsable entró al menos una vez.
 - [ ] **6.4 Borrar los datos de ejemplo** antes de abrir al público.
   *Terminado cuando:* la base de producción solo tiene datos reales.
@@ -118,8 +122,8 @@ El programa está **listo** cuando todas las casillas de la sección final, [«E
 
 - [ ] **7.1 Servidor:** conseguir uno (de la BUAP o un VPS) con Docker instalado.
   *Terminado cuando:* `docker compose up -d` corre en el servidor.
-- [ ] **7.2 Dominio y HTTPS:** dirección propia con certificado (por ejemplo con Caddy o nginx + Let’s Encrypt).
-  *Terminado cuando:* la página abre con candado en el navegador.
+- [ ] **7.2 Dominio y HTTPS:** dirección propia con certificado (por ejemplo con Caddy o nginx + Let’s Encrypt). En `.env`: `COOKIE_SECURE=true`, `TRUST_PROXY=1`, `NODE_ENV=production` y un `JWT_SECRET` largo.
+  *Terminado cuando:* la página abre con candado en el navegador y se puede iniciar sesión de administración.
 - [ ] **7.3 Respaldos diarios** de la base (`pg_dump`) guardados fuera del servidor.
   *Terminado cuando:* se restauró un respaldo en una base de prueba y los datos estaban completos.
 - [ ] **7.4 Aviso de privacidad:** texto que explique qué datos se piden (nombre y matrícula al recoger), para qué y quién los ve.

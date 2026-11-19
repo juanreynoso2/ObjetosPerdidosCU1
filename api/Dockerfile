@@ -11,6 +11,7 @@ RUN npm ci && npm cache clean --force
 
 COPY api/src ./src
 COPY api/test ./test
+COPY api/scripts ./scripts
 COPY frontend ./public
 
 USER node

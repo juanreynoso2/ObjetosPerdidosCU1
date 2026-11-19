@@ -727,7 +727,13 @@ async function iniciarDatos() {
   pintarModo();
   await recargar();
   refrescarVista(true);
-  setInterval(() => { if (!document.hidden) recargar({silencioso: true}); }, 60000);
+  verificarSesion();
+  setInterval(() => {
+    if (document.hidden) return;
+    recargar({silencioso: true});
+    const escribiendo = document.activeElement?.closest?.('#adminWrap input, #adminWrap select');
+    if (SES.admin && !$('#modal').classList.contains('on') && !escribiendo) cargarInventario();
+  }, 60000);
 }
 
 function pintarModo() {
@@ -1098,7 +1104,7 @@ let RP, mapR;
 function resetReport() {
   const d = new Date();
   RP = {tipo: null, otro: '', pt: null, zona: null, lugar: '', fecha: dayStr(d), hora: pad(d.getHours()) + ':' + pad(d.getMinutes()),
-    desc: '', resg: adminDemo() ? ADM.point : '', resgManual: adminDemo(), quien: '', done: null};
+    desc: '', resg: adminActivo() ? puntoAdmin() : '', resgManual: adminActivo(), quien: '', done: null};
 }
 const SHIELD = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg>';
 function renderReport() {
@@ -1117,7 +1123,7 @@ function renderReport() {
   }
   const resgOpts = RESG_ORDER.map(id => `<option value="${id}" ${RP.resg === id ? 'selected' : ''}>${esc(RESG[id].name)}</option>`).join('');
   w.innerHTML = `
-  ${adminDemo() ? `<div class="admin-banner">Registrando como administración de ${esc(RESG[ADM.point].name)}: el objeto entra directo a «En resguardo».</div>` : ''}
+  ${adminActivo() ? `<div class="admin-banner">Registrando como administración de ${esc(RESG[puntoAdmin()].name)}: el objeto entra directo a «En resguardo».</div>` : ''}
   <form id="rpForm" novalidate class="r-wrap">
     <div class="panel step"><span class="step-n">1</span><div class="step-b">
       <h2 id="lbl-tipo">¿Qué encontraste?</h2>
@@ -1163,11 +1169,11 @@ function renderReport() {
       <h2>¿Dónde lo vas a entregar?</h2>
       <div class="field">
         <label for="rpResg">Punto de resguardo</label>
-        <select id="rpResg" ${adminDemo() ? 'disabled' : ''}><option value="">Marca el lugar en el mapa o elige uno</option>${resgOpts}</select>
+        <select id="rpResg" ${adminActivo() ? 'disabled' : ''}><option value="">Marca el lugar en el mapa o elige uno</option>${resgOpts}</select>
       </div>
       <div id="resgCard"></div>
       <p class="err" id="e-resg">Elige el punto de resguardo.</p>
-      ${adminDemo() ? '' : `<div class="field">
+      ${adminActivo() ? '' : `<div class="field">
         <label for="rpQuien">Tu nombre o matrícula <span class="sub">(opcional)</span></label>
         <input type="text" id="rpQuien" maxlength="60" value="${esc(RP.quien)}">
         <p class="privacy" style="margin-top:6px">${SHIELD}<span>Solo para la administración, por si necesitan contactarte.</span></p>
@@ -1185,7 +1191,7 @@ function renderReport() {
       $('#e-pt').classList.remove('on'); $('#e-resg').classList.remove('on');
       paintReport();
     },
-    onResg(id) { if (adminDemo()) return; RP.resg = id; RP.resgManual = true; $('#rpResg').value = id; paintReport(); }
+    onResg(id) { if (adminActivo()) return; RP.resg = id; RP.resgManual = true; $('#rpResg').value = id; paintReport(); }
   });
 
   const f = $('#rpForm');
@@ -1249,7 +1255,8 @@ async function enviarReporte() {
   const anterior = $('#e-general'); if (anterior) anterior.remove();
   btn.disabled = true; btn.textContent = 'Enviando…';
   try {
-    const r = await pedir('objetos', {method: 'POST', body: JSON.stringify({
+    const comoAdmin = !!SES.admin;
+    const r = await pedir(comoAdmin ? 'admin/objetos' : 'objetos', {method: 'POST', body: JSON.stringify({
       tipo: RP.tipo,
       tipo_otro: RP.tipo === 'otro' ? RP.otro.trim() : null,
       descripcion: RP.desc.trim() || null,
@@ -1268,8 +1275,10 @@ async function enviarReporte() {
     renderReport();
     window.scrollTo({top: 0, behavior: 'smooth'});
     recargar({silencioso: true});
+    if (comoAdmin) cargarInventario();
   } catch (err) {
     btn.disabled = false; btn.textContent = 'Registrar objeto encontrado';
+    if (err.status === 401 && SES.admin) { sesionExpirada(); err.message = 'Tu sesión de administración expiró. Inicia sesión de nuevo para registrar.'; }
     const campos = {tipo: 'tipo', tipo_otro: 'tipo', zona_id: 'pt', x: 'pt', y: 'pt', lugar: 'lugar', fecha: 'fecha', hora: 'fecha', resguardo_id: 'resg'};
     let primero = null;
     for (const d of err.detalles || []) {
@@ -1322,18 +1331,118 @@ const ADM = {user: null, point: 'fcc', tab: 'inv', filter: 'activos', q: '', all
 try { const s = JSON.parse(sessionStorage.getItem('op-cu1-adm') || 'null'); if (s) Object.assign(ADM, s); } catch (e) {}
 function saveAdm() { try { sessionStorage.setItem('op-cu1-adm', JSON.stringify({user: ADM.user, point: ADM.point})); } catch (e) {} }
 
+// Con la API: la sesión vive en una cookie que la página no puede leer; aquí solo se guarda quién entró.
+const SES = {verificada: false, admin: null, cargando: false, aviso: null};
+let ADMDB = [];
+const adminActivo = () => MODO.api ? !!SES.admin : !!ADM.user;
+const puntoAdmin = () => MODO.api ? SES.admin?.resguardo.id : ADM.point;
+const fuenteAdmin = () => MODO.api ? ADMDB : DB;
+
+function desdeAPIAdmin(o) {
+  const e = o.entrega;
+  return {
+    ...desdeAPI({...o, entregado_en: e?.entregado_en || null}),
+    desc: o.descripcion || '',
+    quien: o.reportado_por || '',
+    creado: o.creado_en,
+    recibido: o.recibido_en,
+    propio: o.propio,
+    entrega: e ? {fecha: e.entregado_en, nombre: e.nombre || '', matricula: e.matricula || '', desc: !!e.verifico_descripcion,
+      ident: !!e.verifico_identificacion, obs: e.observaciones || '', atendio: e.atendio || ''} : null
+  };
+}
+
+let verificando = null;
+function verificarSesion() {
+  verificando ??= verificarSesionAhora().finally(() => { verificando = null; });
+  return verificando;
+}
+async function verificarSesionAhora() {
+  try {
+    SES.admin = await pedir('admin/sesion');
+  } catch (e) {
+    SES.admin = null;
+    if (e.status !== 401) SES.aviso = e.message;
+  }
+  SES.verificada = true;
+  updateNav();
+  if (SES.admin) { resetReport(); await cargarInventario(); }
+  if (vistaActual() === 'admin') renderAdmin();
+}
+
+async function cargarInventario() {
+  SES.cargando = true;
+  try {
+    ADMDB = (await pedir('admin/objetos?estado=todos&todo=1')).map(desdeAPIAdmin);
+  } catch (e) {
+    if (e.status === 401) return sesionExpirada();
+    toast(e.message);
+  } finally {
+    SES.cargando = false;
+  }
+  if (vistaActual() === 'admin') renderAdmin();
+}
+
+function sesionExpirada() {
+  SES.admin = null; ADMDB = [];
+  SES.aviso = 'Tu sesión expiró. Inicia sesión de nuevo.';
+  resetReport(); updateNav();
+  if (vistaActual() === 'admin') renderAdmin();
+}
+
+/** Ejecuta una acción de administración en la API y recarga los datos. */
+async function accionAdmin(ruta, cuerpo, mensajeOk) {
+  try {
+    const r = await pedir(ruta, {method: 'POST', ...(cuerpo ? {body: JSON.stringify(cuerpo)} : {})});
+    if (mensajeOk) toast(typeof mensajeOk === 'function' ? mensajeOk(r) : mensajeOk);
+    await cargarInventario();
+    recargar({silencioso: true});
+    return r;
+  } catch (e) {
+    if (e.status === 401) { sesionExpirada(); return null; }
+    throw e;
+  }
+}
+
+function renderLoginAPI(w) {
+  w.innerHTML = `<form class="panel login" id="loginForm" novalidate>
+    <div><h1>Administración</h1><p class="sub" style="font-size:14.5px;margin-top:6px">Para el personal de cada facultad que recibe y entrega objetos perdidos.</p></div>
+    ${SES.aviso ? `<div class="aviso info" role="status">${esc(SES.aviso)}</div>` : ''}
+    <div class="field"><label for="lgUser">Usuario</label><input type="text" id="lgUser" autocomplete="username" autocapitalize="none" spellcheck="false"></div>
+    <div class="field"><label for="lgPass">Contraseña</label><input type="password" id="lgPass" autocomplete="current-password"></div>
+    <p class="err" id="lgErr">Usuario o contraseña incorrectos.</p>
+    <button class="btn primary" type="submit">Entrar</button>
+    <p class="sub">Cada punto de resguardo tiene su propia cuenta. Si no la tienes, pídela a la coordinación del proyecto.</p>
+  </form>`;
+  $('#lgUser').focus();
+  $('#loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = $('#loginForm button[type=submit]');
+    const err = $('#lgErr');
+    err.classList.remove('on');
+    btn.disabled = true; btn.textContent = 'Entrando…';
+    try {
+      SES.admin = await pedir('admin/login', {method: 'POST', body: JSON.stringify({usuario: $('#lgUser').value, contrasena: $('#lgPass').value})});
+      SES.aviso = null;
+      resetReport(); updateNav();
+      w.innerHTML = '<div class="cargando">Cargando inventario…</div>';
+      await cargarInventario();
+    } catch (ex) {
+      btn.disabled = false; btn.textContent = 'Entrar';
+      err.textContent = ex.status === 400 ? 'Escribe tu usuario y contraseña.' : ex.message;
+      err.classList.add('on');
+      $('#lgPass').select();
+    }
+  });
+}
+
 function renderAdmin() {
   const w = $('#adminWrap');
   updateNav();
   if (MODO.api) {
-    w.innerHTML = `<div class="panel login" style="max-width:680px">
-      <div><h1>Administración</h1><p class="sub" style="font-size:14.5px;margin-top:6px">El inicio de sesión de cada punto de resguardo, confirmar recepción, entregar y la bitácora se conectan a la base en la Fase 4.</p></div>
-      <p style="font-size:14px">Mientras tanto, para probar el recorrido completo, marca un objeto como recibido directamente en la base (cambia el folio):</p>
-      <pre class="code">docker compose exec db psql -U opcu1 -d objetos_perdidos -c "UPDATE objetos SET estado = 'resguardo', recibido_en = now() WHERE folio = 'CU1-0131'"</pre>
-      <p class="sub">La demostración completa de la administración sigue disponible abriendo <b>frontend/index.html</b> directamente como archivo.</p>
-    </div>`;
-    return;
-  }
+    if (!SES.verificada) { w.innerHTML = '<div class="cargando">Revisando tu sesión…</div>'; verificarSesion(); return; }
+    if (!SES.admin) { renderLoginAPI(w); return; }
+  } else
   if (!ADM.user) {
     w.innerHTML = `<form class="panel login" id="loginForm" novalidate>
       <div><h1>Administración</h1><p class="sub" style="font-size:14.5px;margin-top:6px">Para el personal de cada facultad que recibe y entrega objetos perdidos.</p></div>
@@ -1352,8 +1461,8 @@ function renderAdmin() {
     });
     return;
   }
-  const P = RESG[ADM.point];
-  const mine = DB.filter(i => i.resg === ADM.point);
+  const P = RESG[puntoAdmin()];
+  const mine = fuenteAdmin().filter(i => i.resg === puntoAdmin());
   const now = Date.now();
   const nRes = mine.filter(i => i.estado === 'resguardo').length;
   const nPend = mine.filter(i => i.estado === 'pendiente').length;
@@ -1363,9 +1472,10 @@ function renderAdmin() {
   <div class="a-head">
     <div><small>Sesión de administración</small><h1>${esc(P.name)}</h1><p class="sub" style="font-size:14px">${esc(P.lugar)} · ${esc(P.horario)}</p></div>
     <div class="a-tools">
-      <label for="adPoint" class="sub" style="margin:0">Punto</label>
-      <select id="adPoint">${RESG_ORDER.map(id => `<option value="${id}" ${ADM.point === id ? 'selected' : ''}>${esc(RESG[id].name)}</option>`).join('')}</select>
+      ${MODO.api ? `<span class="sub" style="margin:0">Sesión: <b>${esc(SES.admin.usuario)}</b></span>` : `<label for="adPoint" class="sub" style="margin:0">Punto</label>
+      <select id="adPoint">${RESG_ORDER.map(id => `<option value="${id}" ${ADM.point === id ? 'selected' : ''}>${esc(RESG[id].name)}</option>`).join('')}</select>`}
       <a class="btn primary" href="#reportar">Registrar objeto</a>
+      ${MODO.api ? '<button class="btn" type="button" id="adRefresh">Actualizar</button>' : ''}
       <button class="btn ghost" type="button" id="adOut">Cerrar sesión</button>
     </div>
   </div>
@@ -1381,8 +1491,15 @@ function renderAdmin() {
   </div>
   <div id="adBody"></div>
   <p class="sub" style="margin-top:12px">${SHIELD.replace('<svg', '<svg style="width:13px;height:13px;vertical-align:-2px;stroke:currentColor;fill:none;stroke-width:2"')} Nombre y matrícula de quien recoge un objeto solo los ve la administración. En el buscador público el objeto aparece como «Encontrado · entregado» durante ${KEEP_DAYS} días.</p>`;
-  $('#adPoint').onchange = e => { ADM.point = e.target.value; saveAdm(); resetReport(); renderAdmin(); };
-  $('#adOut').onclick = () => { ADM.user = null; saveAdm(); resetReport(); renderAdmin(); };
+  if ($('#adRefresh')) $('#adRefresh').onclick = () => { $('#adRefresh').disabled = true; cargarInventario(); };
+  if ($('#adPoint')) $('#adPoint').onchange = e => { ADM.point = e.target.value; saveAdm(); resetReport(); renderAdmin(); };
+  $('#adOut').onclick = async () => {
+    if (MODO.api) {
+      try { await pedir('admin/logout', {method: 'POST'}); } catch (e) {}
+      SES.admin = null; ADMDB = []; SES.aviso = null;
+    } else { ADM.user = null; saveAdm(); }
+    resetReport(); renderAdmin();
+  };
   $$('[data-tab]', w).forEach(b => b.onclick = () => { ADM.tab = b.dataset.tab; renderAdmin(); });
   ADM.tab === 'inv' ? renderInv() : renderLog();
 }
@@ -1402,8 +1519,14 @@ function renderInv() {
   $('#adAll').onchange = e => { ADM.all = e.target.checked; rows(); };
   $('#adRows').addEventListener('click', e => {
     const a = e.target.closest('[data-act]'); if (!a) return;
-    const it = DB.find(i => i.id === a.dataset.id);
-    if (a.dataset.act === 'recibir') { it.estado = 'resguardo'; it.recibido = new Date().toISOString(); save(); toast(`${it.id} recibido. Ya aparece como «En resguardo».`); renderAdmin(); }
+    const it = fuenteAdmin().find(i => i.id === a.dataset.id);
+    if (a.dataset.act === 'recibir') {
+      if (MODO.api) {
+        a.disabled = true;
+        accionAdmin(`admin/objetos/${it.id}/recibir`, null, `${it.id} recibido. Ya aparece como «En resguardo».`)
+          .catch(e => { a.disabled = false; toast(e.message); });
+      } else { it.estado = 'resguardo'; it.recibido = new Date().toISOString(); save(); toast(`${it.id} recibido. Ya aparece como «En resguardo».`); renderAdmin(); }
+    }
     if (a.dataset.act === 'entregar') openDeliver(it);
     if (a.dataset.act === 'descartar') openDiscard(it);
     if (a.dataset.act === 'ver') openReceipt(it);
@@ -1411,12 +1534,12 @@ function renderInv() {
   rows();
   function rows() {
     const qn = norm(ADM.q);
-    const list = DB.filter(i => (ADM.all || i.resg === ADM.point))
+    const list = fuenteAdmin().filter(i => (ADM.all || i.resg === puntoAdmin()))
       .filter(i => ADM.filter === 'todos' ? i.estado !== 'descartado' : ADM.filter === 'activos' ? (i.estado === 'pendiente' || i.estado === 'resguardo') : i.estado === ADM.filter)
       .filter(i => !qn || matchesQuery(i, ADM.q) || norm(i.id).includes(qn) || norm(i.desc).includes(qn) || norm(i.lugar).includes(qn))
       .sort((a, b) => (b.fecha + b.hora).localeCompare(a.fecha + a.hora));
     $('#adRows').innerHTML = list.length ? list.map(it => {
-      const own = it.resg === ADM.point, z = ZMAP[it.zona];
+      const own = it.resg === puntoAdmin(), z = ZMAP[it.zona];
       const age = daysSince(it.creado);
       let act = '';
       if (!own) act = `<span class="s">En ${esc(RESG[it.resg].name)}</span>`;
@@ -1435,7 +1558,7 @@ function renderInv() {
 }
 
 function renderLog() {
-  const list = DB.filter(i => i.estado === 'entregado' && i.resg === ADM.point).sort((a, b) => b.entrega.fecha.localeCompare(a.entrega.fecha));
+  const list = fuenteAdmin().filter(i => i.estado === 'entregado' && i.resg === puntoAdmin()).sort((a, b) => b.entrega.fecha.localeCompare(a.entrega.fecha));
   $('#adBody').innerHTML = `<div class="tbl-wrap"><table><thead><tr><th>Entrega</th><th>Folio</th><th>Objeto</th><th>Recogió <span class="priv-tag">privado</span></th><th>Matrícula <span class="priv-tag">privado</span></th><th>Verificación</th><th>Atendió</th></tr></thead><tbody>
     ${list.length ? list.map(it => `<tr>
       <td class="tab-num">${fmtDateTime(it.entrega.fecha)}</td>
@@ -1502,6 +1625,22 @@ function openDeliver(it) {
     const bad = {dlNombre: nombre.split(/\s+/).length < 2, dlMat: !/^\d{9}$/.test(mat), dlChk: !$('#dlDesc').checked || !$('#dlId').checked};
     for (const [k, v] of Object.entries(bad)) $('#e-' + k).classList.toggle('on', v);
     if (Object.values(bad).some(Boolean)) return;
+    if (MODO.api) {
+      const btn = $('#dlForm button[type=submit]');
+      btn.disabled = true; btn.textContent = 'Registrando…';
+      accionAdmin(`admin/objetos/${it.id}/entregar`, {
+        nombre, matricula: mat, verifico_descripcion: true, verifico_identificacion: true, observaciones: $('#dlObs').value.trim() || null
+      }, r => `Entregado. En el buscador aparece como «Encontrado» hasta el ${fmtDate(r.visible_hasta)}.`)
+        .then(() => closeModal())
+        .catch(e => {
+          btn.disabled = false; btn.textContent = 'Registrar entrega';
+          const campos = {nombre: 'dlNombre', matricula: 'dlMat', verifico_descripcion: 'dlChk', verifico_identificacion: 'dlChk'};
+          let marcado = false;
+          for (const d of e.detalles || []) { const el = $('#e-' + campos[d.campo]); if (el) { el.textContent = d.mensaje; el.classList.add('on'); marcado = true; } }
+          if (!marcado) toast(e.message);
+        });
+      return;
+    }
     it.estado = 'entregado';
     it.entrega = {nombre, matricula: mat, desc: true, ident: true, obs: $('#dlObs').value.trim(), fecha: new Date().toISOString(), atendio: 'admin · ' + RESG[ADM.point].code};
     save(); closeModal();
@@ -1528,7 +1667,16 @@ function openDiscard(it) {
   openModal(`<div class="modal-h"><div><span class="folio">${it.id}</span><h2 id="modalTitle">¿El objeto nunca llegó?</h2></div><button class="x" type="button" data-close aria-label="Cerrar">×</button></div>
     <p>Se quitará del buscador público. Úsalo solo si pasaron varios días y nadie entregó el objeto en este punto.</p>
     <div class="m-actions"><button class="btn ghost" type="button" data-close>Cancelar</button><button class="btn danger" type="button" id="dsOk">Quitar reporte</button></div>`);
-  $('#dsOk').onclick = () => { it.estado = 'descartado'; save(); closeModal(); toast(`${it.id} se quitó del buscador.`); renderAdmin(); };
+  $('#dsOk').onclick = () => {
+    if (MODO.api) {
+      $('#dsOk').disabled = true;
+      accionAdmin(`admin/objetos/${it.id}/descartar`, null, `${it.id} se quitó del buscador.`)
+        .then(() => closeModal())
+        .catch(e => { closeModal(); toast(e.message); });
+      return;
+    }
+    it.estado = 'descartado'; save(); closeModal(); toast(`${it.id} se quitó del buscador.`); renderAdmin();
+  };
 }
 
 /* =================================================================
@@ -1537,12 +1685,13 @@ function openDiscard(it) {
 const VIEWS = ['buscar', 'reportar', 'resguardo', 'admin'];
 function updateNav() {
   const a = $('#nav [data-v="admin"]');
-  a.innerHTML = 'Administración' + (adminDemo() ? '<span class="dot-live" title="Sesión iniciada"></span>' : '');
+  a.innerHTML = 'Administración' + (adminActivo() ? '<span class="dot-live" title="Sesión iniciada"></span>' : '');
 }
 function route() {
   const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'buscar';
   $$('.view').forEach(s => s.classList.toggle('on', s.id === 'view-' + v));
   $$('#nav a').forEach(a => a.dataset.v === v ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+  if (MODO.api && (v === 'buscar' || v === 'resguardo') && Date.now() - MODO.ultimaCarga > 15000) recargar({silencioso: true});
   if (v === 'buscar') renderBuscar();
   if (v === 'reportar') { if (!RP || RP.done) resetReport(); renderReport(); }
   if (v === 'resguardo') renderResg();

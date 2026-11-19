@@ -6,7 +6,7 @@ import request from 'supertest';
 import { crearApp } from '../src/app.js';
 import { pool } from '../src/db.js';
 
-const app = crearApp();
+const app = crearApp({ limiteReportes: 1000 });
 const folios = []; // objetos creados por las pruebas; se borran al final
 
 after(async () => {

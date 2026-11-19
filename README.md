@@ -10,9 +10,9 @@ Página web para recuperar objetos perdidos en Ciudad Universitaria (CU1) de la 
 
 | Parte | Estado |
 |---|---|
-| Interfaz (`frontend/index.html`) | Conectada a la API: buscar, reportar y puntos de resguardo usan la base de datos. La administración llega en la Fase 4 |
+| Interfaz (`frontend/index.html`) | Conectada a la API, incluida la administración con inicio de sesión real |
 | Base de datos (PostgreSQL) | Lista para probar: esquema, catálogos, datos de demostración y pruebas |
-| API (Node.js + Express) | Rutas públicas listas para probar: buscar, reportar, resguardos ([docs/API.md](docs/API.md)) |
+| API (Node.js + Express) | Rutas públicas y de administración, con límites y cabeceras de seguridad ([docs/API.md](docs/API.md)) |
 | Publicación | Pendiente |
 
 El plan completo y el avance están en **[docs/MANUAL_DE_TAREAS.md](docs/MANUAL_DE_TAREAS.md)**.
@@ -68,7 +68,17 @@ docker compose down -v        # ⚠ borra todos los datos de la base
 docker compose up -d
 ```
 
-**Cuentas de demostración:** `admin.fcc`, `admin.ing`, `admin.vig`… (una por punto de resguardo), contraseña `buap2026`. Se crean desde `db/init/03_datos_demo.sql`, que debe borrarse antes de publicar.
+**Administración:** entra en http://localhost:8080/#admin. Las cuentas de demostración son `admin.fcc`, `admin.ing`, `admin.vig`… (una por punto de resguardo), con contraseña `buap2026`. Se crean desde `db/init/03_datos_demo.sql`, que debe borrarse antes de publicar. Para crear cuentas reales:
+
+```bash
+docker compose exec api node scripts/crear-admin.js maria.lopez "María López" fcc
+```
+
+**Clave de sesiones:** pon una clave larga en `JWT_SECRET` dentro de `.env`. Si la dejas vacía, la API usa una temporal y las sesiones se cierran cada vez que reinicia. Para generar una:
+
+```bash
+docker compose exec api node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
 ## Tecnologías
 

@@ -20,6 +20,7 @@ services:
       # Los .sql de esta carpeta se ejecutan en orden SOLO la primera vez (con la base vacía).
       - ./db/init:/docker-entrypoint-initdb.d:ro
       - ./db/pruebas:/pruebas:ro
+      - ./db/reportes:/reportes:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
@@ -56,6 +57,7 @@ services:
       - ./api/test:/app/test:ro
       - ./frontend:/app/public:ro
       - ./api/scripts:/app/scripts:ro
+      - ./db/datos_reales:/app/datos:ro
     depends_on:
       db:
         condition: service_healthy

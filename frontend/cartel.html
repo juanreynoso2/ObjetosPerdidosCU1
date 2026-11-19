@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cartel Objetos Perdidos CU1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Cartel tamaño carta para imprimir: banda institucional, pregunta grande, QR al centro, dos columnas de pasos */
+  --brand:#0a3a6e; --ink:#0e1c2c; --muted:#4f5f73; --line:#d5dde7; --resg:#d39400; --resg-soft:#fcf1d2; --paper:#ffffff; --bg:#e9eef4;
+  --font-d:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --font-b:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-m:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-b)}
+.controles{max-width:8.5in;margin:16px auto;display:flex;gap:10px;flex-wrap:wrap;align-items:end;padding:0 16px}
+.controles label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
+.controles select,.controles input{font:inherit;font-weight:400;padding:8px 10px;border:1px solid var(--line);border-radius:8px;min-height:40px;background:#fff}
+.controles input{width:280px}
+.controles button{font:inherit;font-weight:600;padding:9px 16px;border-radius:8px;border:1px solid var(--brand);background:var(--brand);color:#fff;cursor:pointer;min-height:40px}
+.controles p{flex-basis:100%;margin:0;font-size:13px;color:var(--muted)}
+.hoja{width:8.5in;height:11in;margin:0 auto 24px;background:var(--paper);display:flex;flex-direction:column;box-shadow:0 4px 24px rgba(10,30,60,.15);overflow:hidden}
+.banda{background:var(--brand);color:#fff;padding:.35in .55in .3in;display:flex;justify-content:space-between;align-items:center}
+.banda b{font:800 22pt/1 var(--font-d);letter-spacing:-.01em}
+.banda span{font-size:11pt;opacity:.85;display:block;margin-top:4px}
+.sello{font:800 13pt/1 var(--font-d);border:2px solid #fff;border-radius:8px;padding:8px 10px;letter-spacing:.08em}
+.cuerpo{flex:1;padding:.45in .55in .4in;display:flex;flex-direction:column;gap:.28in}
+h1{font:800 40pt/1.02 var(--font-d);margin:0;letter-spacing:-.02em;text-wrap:balance}
+.qr-fila{display:grid;grid-template-columns:2.9in 1fr;gap:.35in;align-items:center}
+.qr{width:2.9in;height:2.9in;border:3px solid var(--ink);border-radius:14px;padding:.12in;display:grid;place-items:center}
+.qr svg{width:100%;height:100%;display:block}
+.qr-texto{display:flex;flex-direction:column;gap:10px}
+.qr-texto p{margin:0;font-size:15pt;line-height:1.35}
+.url{font:500 14pt var(--font-m);word-break:break-all;color:var(--brand)}
+.pasos{display:grid;grid-template-columns:1fr 1fr;gap:.3in}
+.pasos section{border-top:5px solid var(--brand);padding-top:.14in}
+.pasos h2{font:800 19pt/1.1 var(--font-d);margin:0 0 .1in}
+.pasos ol{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;font-size:12.5pt;line-height:1.35}
+.punto{background:var(--resg-soft);border:2px solid var(--resg);border-radius:12px;padding:.16in .2in;display:flex;flex-direction:column;gap:3px}
+.punto small{font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:9.5pt;color:#664700}
+.punto b{font:800 17pt/1.15 var(--font-d)}
+.punto span{font-size:12.5pt;color:var(--muted)}
+.pie{margin-top:auto;font-size:9.5pt;color:var(--muted);display:flex;justify-content:space-between;gap:12px}
+@media print{
+  @page{size:letter;margin:0}
+  html,body{background:#fff}
+  .controles{display:none}
+  .hoja{margin:0;box-shadow:none}
+}
+@media screen and (max-width:8.6in){ .hoja{transform-origin:top left;} }
+</style>
+</head>
+<body>
+<div class="controles">
+  <label for="selPunto">Punto de resguardo del cartel
+    <select id="selPunto"><option value="">Sin punto (cartel general)</option></select>
+  </label>
+  <label for="inUrl">Dirección del QR
+    <input id="inUrl" type="url" spellcheck="false">
+  </label>
+  <button type="button" id="btnImprimir">Imprimir</button>
+  <p>Escanea el QR con tu celular antes de imprimir para comprobar que abre la página. Imprime en tamaño carta, sin márgenes, y pega uno por facultad junto a su punto de resguardo y otros en espacios comunes.</p>
+</div>
+
+<main class="hoja" id="hoja">
+  <div class="banda">
+    <div><b>Objetos Perdidos CU1</b><span>Benemérita Universidad Autónoma de Puebla · Ciudad Universitaria</span></div>
+    <div class="sello" aria-hidden="true">BUAP</div>
+  </div>
+  <div class="cuerpo">
+    <h1>¿Perdiste o encontraste algo en CU?</h1>
+    <div class="qr-fila">
+      <div class="qr" id="qr" role="img" aria-label="Código QR de la página"></div>
+      <div class="qr-texto">
+        <p><b>Escanea con la cámara de tu celular.</b> Busca tu objeto en el mapa de CU1 o reporta el que encontraste.</p>
+        <div class="url" id="urlTexto"></div>
+        <p style="font-size:12pt;color:var(--muted)">Gratis, sin crear cuenta. Las fotos y descripciones no se publican, para evitar robos.</p>
+      </div>
+    </div>
+    <div class="pasos">
+      <section>
+        <h2>Si perdiste algo</h2>
+        <ol>
+          <li>Escribe qué perdiste.</li>
+          <li>Marca en el mapa dónde lo viste por última vez o la ruta que hiciste.</li>
+          <li>Si coincide, ve al punto de resguardo con tu credencial y descríbelo.</li>
+        </ol>
+      </section>
+      <section>
+        <h2>Si encontraste algo</h2>
+        <ol>
+          <li>Regístralo en un minuto: qué es, dónde y cuándo.</li>
+          <li>Llévalo al punto de resguardo que te indique la página.</li>
+          <li>Menciona el folio al entregarlo.</li>
+        </ol>
+      </section>
+    </div>
+    <div class="punto" id="punto" hidden>
+      <small>Punto de resguardo de esta facultad</small>
+      <b id="pNombre"></b>
+      <span id="pLugar"></span>
+      <span id="pHorario"></span>
+    </div>
+    <div class="pie"><span>Proyecto «Recuperación de Objetos Perdidos en CU1»</span><span id="fecha"></span></div>
+  </div>
+</main>
+
+<script src="vendor/qrcode.js"></script>
+<script>
+const $ = (s) => document.querySelector(s);
+const params = new URLSearchParams(location.search);
+const urlBase = params.get('url') || new URL('.', location.href).href;
+$('#inUrl').value = urlBase;
+let puntos = [];
+
+function pintarQR() {
+  const url = $('#inUrl').value.trim() || urlBase;
+  const qr = qrcode(0, 'M');
+  qr.addData(url);
+  qr.make();
+  $('#qr').innerHTML = qr.createSvgTag({ cellSize: 8, margin: 0, scalable: true });
+  $('#urlTexto').textContent = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+}
+
+function pintarPunto() {
+  const p = puntos.find((x) => x.id === $('#selPunto').value);
+  $('#punto').hidden = !p;
+  if (!p) return;
+  $('#pNombre').textContent = p.nombre;
+  $('#pLugar').textContent = p.ubicacion;
+  $('#pHorario').textContent = p.horario;
+}
+
+$('#inUrl').addEventListener('input', pintarQR);
+$('#selPunto').addEventListener('change', () => {
+  pintarPunto();
+  const u = new URL(location.href);
+  $('#selPunto').value ? u.searchParams.set('punto', $('#selPunto').value) : u.searchParams.delete('punto');
+  history.replaceState(null, '', u);
+});
+$('#btnImprimir').addEventListener('click', () => window.print());
+$('#fecha').textContent = new Date().toLocaleDateString('es-MX', { month: 'long', year: 'numeric' });
+
+pintarQR();
+fetch('api/resguardos')
+  .then((r) => (r.ok ? r.json() : []))
+  .then((lista) => {
+    puntos = lista;
+    for (const p of lista) $('#selPunto').insertAdjacentHTML('beforeend', `<option value="${p.id}">${p.sigla} · ${p.nombre.replace(/</g, '&lt;')}</option>`);
+    if (params.get('punto')) $('#selPunto').value = params.get('punto');
+    pintarPunto();
+  })
+  .catch(() => {});
+</script>
+</body>
+</html>

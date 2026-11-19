@@ -13,9 +13,22 @@ Página web para recuperar objetos perdidos en Ciudad Universitaria (CU1) de la 
 | Interfaz (`frontend/index.html`) | Conectada a la API, incluida la administración con inicio de sesión real |
 | Base de datos (PostgreSQL) | Lista para probar: esquema, catálogos, datos de demostración y pruebas |
 | API (Node.js + Express) | Rutas públicas y de administración, con límites y cabeceras de seguridad ([docs/API.md](docs/API.md)) |
-| Publicación | Pendiente |
+| Pruebas | 57 pruebas automáticas en GitHub Actions en cada push y pull request |
+| Publicación | Lista para desplegar: `docker-compose.prod.yml` con HTTPS (Caddy), respaldos diarios y aviso de privacidad (borrador) |
 
 El plan completo y el avance están en **[docs/MANUAL_DE_TAREAS.md](docs/MANUAL_DE_TAREAS.md)**.
+
+## Documentación
+
+| Documento | Para qué |
+|---|---|
+| [Manual de tareas](docs/MANUAL_DE_TAREAS.md) | Qué falta y cuándo está listo el proyecto |
+| [API](docs/API.md) | Rutas de la API |
+| [Pruebas](docs/PRUEBAS.md) | Pruebas automáticas, prueba a mano en celulares y prueba con usuarios |
+| [Datos reales](docs/DATOS_REALES.md) | Cargar los puntos de resguardo confirmados y crear las cuentas |
+| [Despliegue](docs/DESPLIEGUE.md) | Publicar en un servidor con HTTPS, respaldos y aviso de privacidad |
+| [Guía para el personal](docs/GUIA_ADMINISTRACION.md) | Cómo recibir y entregar objetos (para imprimir) |
+| [Lanzamiento](docs/LANZAMIENTO.md) | Capacitación, carteles con QR y seguimiento del primer mes |
 
 ## Ver la página
 
@@ -91,14 +104,19 @@ docker compose exec api node -e "console.log(require('crypto').randomBytes(32).t
 
 ```
 objetos-perdidos-cu1/
-├── frontend/          Interfaz web
+├── frontend/          Interfaz web y cartel imprimible (cartel.html)
 ├── docs/              Manual de tareas y referencia de la API
 ├── api/
 │   ├── src/           Código de la API (Express)
 │   └── test/          Pruebas (node:test + supertest)
 ├── db/
 │   ├── init/          Esquema, catálogos y datos de demostración
+│   ├── datos_reales/  Puntos de resguardo confirmados (CSV)
+│   ├── reportes/      Resumen mensual
+│   ├── mantenimiento/ Borrado de datos personales vencidos
 │   └── pruebas/       Verificación de la base
+├── deploy/            Caddy (HTTPS), respaldos y restauración
+├── docker-compose.prod.yml  Producción
 ├── .env.example       Variables de entorno (copiar a .env)
 └── docker-compose.yml
 ```

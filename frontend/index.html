@@ -241,6 +241,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;
 .resg-card b{display:block}
 .resg-card span{color:var(--muted);display:block;font-size:13.5px}
 .privacy{font-size:12.5px;color:var(--muted);display:flex;gap:6px;align-items:flex-start}
+.privacy a{color:inherit}
 .privacy svg{flex:none;width:14px;height:14px;margin-top:3px;stroke:currentColor;fill:none;stroke-width:2}
 .admin-banner{background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok);border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600}
 .confirm{text-align:left;display:flex;flex-direction:column;gap:14px;border-top:5px solid var(--ok)}
@@ -261,6 +262,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;
 .g-n span{font-size:11.5px}
 
 /* ---------- admin ---------- */
+.doc{max-width:760px;display:flex;flex-direction:column;gap:18px}
+.doc section{display:flex;flex-direction:column;gap:8px}
+.doc h2{font-size:18px}
+.doc ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.doc p,.doc li{font-size:15px;max-width:68ch}
+.pend{background:var(--resg-soft);border-radius:4px;padding:0 4px;color:var(--resg-ink)}
+footer a{color:inherit}
 .login{max-width:420px;margin:10px auto;display:flex;flex-direction:column;gap:14px}
 .demo-note{font-size:13px;background:var(--resg-soft);color:var(--resg-ink);border-radius:8px;padding:9px 12px}
 .a-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:16px}
@@ -447,13 +455,72 @@ footer{max-width:1400px;margin:0 auto;padding:0 20px 30px;color:var(--muted);fon
   </section>
 
   <!-- ================= ADMIN ================= -->
+  <!-- ================= AVISO DE PRIVACIDAD ================= -->
+  <section class="view" id="view-privacidad" aria-labelledby="h-privacidad">
+    <article class="doc">
+      <div class="intro" style="margin:0">
+        <h1 id="h-privacidad">Aviso de privacidad</h1>
+        <p>Qué datos personales usa Objetos Perdidos CU1, para qué y quién los ve.</p>
+      </div>
+      <div class="aviso info" role="note">Borrador para revisión: antes de publicar la página, este aviso debe aprobarlo el área de la BUAP responsable de la protección de datos personales. Lo marcado en amarillo está por definir.</div>
+
+      <section>
+        <h2>Quién es responsable</h2>
+        <p>La Benemérita Universidad Autónoma de Puebla, a través de <span class="pend">[área responsable del sistema]</span>, con domicilio en <span class="pend">[domicilio]</span>.</p>
+      </section>
+
+      <section>
+        <h2>Qué datos pedimos y cuándo</h2>
+        <ul>
+          <li><b>Para buscar:</b> ninguno.</li>
+          <li><b>Para reportar un objeto encontrado:</b> la descripción del objeto y, si quieres, tu nombre o matrícula. Ninguno de los dos se publica.</li>
+          <li><b>Para recoger un objeto:</b> tu nombre completo y tu matrícula. El personal revisa tu credencial o identificación, pero no guarda copia.</li>
+          <li><b>Personal de administración:</b> nombre y usuario de cada cuenta.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Para qué los usamos</h2>
+        <ul>
+          <li>Comprobar que quien reclama un objeto es su dueño.</li>
+          <li>Dejar constancia de quién se llevó cada objeto, para evitar robos y aclarar reclamaciones.</li>
+          <li>Contactar a quien reportó un objeto, si hace falta.</li>
+        </ul>
+        <p>No se usan para ningún otro fin, no se publican y no se usan para publicidad.</p>
+      </section>
+
+      <section>
+        <h2>Quién los ve</h2>
+        <p>Solo el personal del punto de resguardo que tiene el objeto. El buscador público muestra el tipo de objeto, la fecha, el lugar donde se encontró, el punto de resguardo y su estado, pero nunca la descripción, quién lo reportó ni quién lo recogió.</p>
+        <p>No compartimos estos datos con nadie fuera de la universidad, salvo que una autoridad competente los requiera conforme a la ley.</p>
+      </section>
+
+      <section>
+        <h2>Cuánto tiempo los guardamos</h2>
+        <p>Los datos de quien recogió un objeto y de quien lo reportó se conservan <span class="pend">[12 meses]</span> después de la entrega y luego se borran.</p>
+      </section>
+
+      <section>
+        <h2>Tus derechos</h2>
+        <p>Puedes pedir acceso a tus datos, corregirlos, cancelarlos u oponerte a su uso (derechos ARCO) ante la Unidad de Transparencia de la BUAP: <span class="pend">[correo, teléfono y domicilio]</span>.</p>
+      </section>
+
+      <section>
+        <h2>Cookies y almacenamiento</h2>
+        <p>La página no usa cookies de rastreo ni de publicidad. Solo el personal de administración recibe una cookie de sesión al iniciar sesión, que se borra al cerrarla o a las 8 horas.</p>
+      </section>
+
+      <p class="sub">Última actualización: <span class="pend">[fecha de aprobación]</span>.</p>
+    </article>
+  </section>
+
   <section class="view" id="view-admin" aria-labelledby="h-admin">
     <div id="adminWrap"></div>
   </section>
 </main>
 
 <footer>
-  <span id="modoTexto">Conectando…</span>
+  <span><span id="modoTexto">Conectando…</span> · <a href="#privacidad">Aviso de privacidad</a></span>
   <span>Proyecto «Recuperación de Objetos Perdidos en CU1»: Juan David Reynoso Carranza, Guillermo Martínez Hernández, Josué Benedicto Ramírez Centeno y Gabriel Flores Calderón.</span>
 </footer>
 
@@ -725,6 +792,8 @@ async function iniciarDatos() {
   }
   MODO.api = true;
   pintarModo();
+  // Los nombres de las zonas se toman de la base, por si se corrigen ahí (tarea 6.2).
+  pedir('catalogos').then(c => { for (const z of c.zonas) if (ZMAP[z.id]) ZMAP[z.id].short = z.nombre; }).catch(() => {});
   await recargar();
   refrescarVista(true);
   verificarSesion();
@@ -1176,7 +1245,7 @@ function renderReport() {
       ${adminActivo() ? '' : `<div class="field">
         <label for="rpQuien">Tu nombre o matrícula <span class="sub">(opcional)</span></label>
         <input type="text" id="rpQuien" maxlength="60" value="${esc(RP.quien)}">
-        <p class="privacy" style="margin-top:6px">${SHIELD}<span>Solo para la administración, por si necesitan contactarte.</span></p>
+        <p class="privacy" style="margin-top:6px">${SHIELD}<span>Solo para la administración, por si necesitan contactarte. <a href="#privacidad">Aviso de privacidad</a>.</span></p>
       </div>`}
     </div></div>
 
@@ -1682,7 +1751,7 @@ function openDiscard(it) {
 /* =================================================================
    Navegación
    ================================================================= */
-const VIEWS = ['buscar', 'reportar', 'resguardo', 'admin'];
+const VIEWS = ['buscar', 'reportar', 'resguardo', 'admin', 'privacidad'];
 function updateNav() {
   const a = $('#nav [data-v="admin"]');
   a.innerHTML = 'Administración' + (adminActivo() ? '<span class="dot-live" title="Sesión iniciada"></span>' : '');

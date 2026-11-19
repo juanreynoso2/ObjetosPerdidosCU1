@@ -49,7 +49,7 @@ El programa está **listo** cuando todas las casillas de la sección final, [«E
 ## Fase 2 · API pública (Node.js + Express)
 
 - [ ] **2.1 Proyecto `api/`** con Express, conexión a PostgreSQL (`pg`) y su `Dockerfile`; agregado a `docker-compose.yml`.
-  *Terminado cuando:* `docker compose up` levanta base y API, y `GET /api/salud` responde `{ "ok": true }`.
+  *Terminado cuando:* `docker compose up -d --build` levanta base y API, y http://localhost:8080/api/salud responde `{ "ok": true, ... }`.
 - [ ] **2.2 `GET /api/resguardos`** devuelve los puntos de resguardo con cuántos objetos tiene cada uno.
   *Terminado cuando:* la respuesta coincide con los datos iniciales.
 - [ ] **2.3 `GET /api/objetos?q=&desde=`** busca objetos.
@@ -59,8 +59,12 @@ El programa está **listo** cuando todas las casillas de la sección final, [«E
   *Terminado cuando:* una prueba automática confirma que la respuesta no trae `descripcion`, `nombre` ni `matricula`.
 - [ ] **2.4 `POST /api/objetos`** registra un objeto encontrado y devuelve su folio.
   *Terminado cuando:* un reporte válido crea el objeto en estado `pendiente`, y uno sin tipo o sin ubicación responde 400 con un mensaje claro.
-- [ ] **2.5 Validación de datos** en todas las rutas (por ejemplo con `zod`).
+- [ ] **2.5 Validación de datos** en todas las rutas (con `zod`).
   *Terminado cuando:* mandar texto donde va un número o un campo vacío obligatorio da 400, nunca 500.
+- [ ] **2.6 Rutas de apoyo para la página:** `GET /api/catalogos` (tipos de objeto y zonas) y `GET /api/objetos/:folio` (consultar un folio).
+  *Terminado cuando:* ambas responden y están descritas en `docs/API.md`.
+- [ ] **2.7 Pruebas de la API** en `api/test/` (31 pruebas: salud, resguardos, búsqueda, privacidad, reporte y validación).
+  *Terminado cuando:* `docker compose exec api npm test` termina con `# fail 0` en la computadora de cada integrante.
 
 ## Fase 3 · Conectar la página
 
@@ -92,7 +96,7 @@ El programa está **listo** cuando todas las casillas de la sección final, [«E
 
 ## Fase 5 · Pruebas
 
-- [ ] **5.1 Pruebas de la API** con `vitest` o `jest` + `supertest`: búsqueda, reporte, privacidad de datos, login y permisos.
+- [ ] **5.1 Pruebas de la API** con `node:test` + `supertest`: además de las de la Fase 2, login y permisos de administración.
   *Terminado cuando:* `npm test` pasa en verde.
 - [ ] **5.2 Prueba completa a mano**, de principio a fin: reportar → confirmar recepción → buscar → entregar → ver «Encontrado» en el buscador → desaparece a los 7 días.
   *Terminado cuando:* el recorrido funciona en celular Android, iPhone y computadora.

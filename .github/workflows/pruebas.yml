@@ -1,0 +1,68 @@
+# Corre todas las pruebas en cada push y en cada pull request.
+# Si algo falla, GitHub marca el pull request con una ✗ roja y no conviene unirlo.
+name: Pruebas
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      db:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: objetos_perdidos
+          POSTGRES_USER: opcu1
+          POSTGRES_PASSWORD: pruebas
+          TZ: America/Mexico_City
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U opcu1 -d objetos_perdidos"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: opcu1
+      PGPASSWORD: pruebas
+      PGDATABASE: objetos_perdidos
+      PGTZ: America/Mexico_City
+      TZ: America/Mexico_City
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Crear la base (esquema, catálogos y datos de demostración)
+        run: |
+          for f in db/init/*.sql; do
+            echo "== $f"
+            psql -v ON_ERROR_STOP=1 -q -f "$f"
+          done
+
+      - name: Verificación de la base (Fase 1)
+        run: |
+          psql -v ON_ERROR_STOP=1 -f db/pruebas/fase1.sql | tee resultado.txt
+          grep -q "TODO BIEN" resultado.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: api/package-lock.json
+
+      - name: Instalar dependencias de la API
+        working-directory: api
+        run: npm ci
+
+      - name: Pruebas de la API
+        working-directory: api
+        run: npm test
+
+      - name: Revisar que la página no tenga errores de sintaxis
+        run: |
+          node -e "const s=require('fs').readFileSync('frontend/index.html','utf8'); new Function(s.match(/<script>([\s\S]*)<\/script>/)[1]); console.log('Página sin errores de sintaxis')"

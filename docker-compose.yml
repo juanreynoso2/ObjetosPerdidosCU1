@@ -13,8 +13,8 @@ services:
       TZ: America/Mexico_City
       PGTZ: America/Mexico_City
     ports:
-      # Solo accesible desde tu computadora. Cambia DB_PORT en .env si el 5432 ya está ocupado.
-      - "127.0.0.1:${DB_PORT:-5432}:5432"
+      # Solo accesible desde tu computadora. Cambia DB_PORT en .env si el 15432 está ocupado o bloqueado.
+      - "127.0.0.1:${DB_PORT:-15432}:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
       # Los .sql de esta carpeta se ejecutan en orden SOLO la primera vez (con la base vacía).
